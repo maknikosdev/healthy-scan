@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:ns1="http://schemas.android.com/tools">
+    <style name="Theme.HealthyScan" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/brand_deep_green</item>
+        <item name="android:statusBarColor">@color/brand_deep_green</item>
+        <item name="android:navigationBarColor">@color/brand_deep_green</item>
+        <item name="android:windowLightStatusBar" ns1:targetApi="23">false</item>
+    </style>
+    <style name="Theme.HealthyScan.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/brand_deep_green</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_logo</item>
+        <item name="windowSplashScreenIconBackgroundColor">@color/brand_deep_green</item>
+        <item name="postSplashScreenTheme">@style/Theme.HealthyScan</item>
+    </style>
+</resources>

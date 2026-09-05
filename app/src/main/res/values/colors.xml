@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand colors: these two swap roles between light/dark mode -->
+    <color name="brand_deep_green">#064E3B</color>
+    <color name="brand_cream">#F8E7C9</color>
+
+    <!-- Derived tones used for surfaces, borders, disabled states -->
+    <color name="green_variant_light">#0B6B52</color>
+    <color name="green_variant_dark">#043A2C</color>
+    <color name="cream_variant_light">#FBF1DD</color>
+    <color name="cream_variant_dark">#EFD9AC</color>
+
+    <!-- Score / status colors used across the app (kept theme-neutral) -->
+    <color name="score_excellent">#1E8E5A</color>
+    <color name="score_good">#4CAF50</color>
+    <color name="score_moderate">#F5A623</color>
+    <color name="score_low">#E8791A</color>
+    <color name="score_very_low">#D9483B</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+</resources>

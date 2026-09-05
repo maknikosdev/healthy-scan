@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base application theme (Compose owns the real theming via ui/theme/Theme.kt;
+         this XML theme only needs to set the window background before Compose takes over). -->
+    <style name="Theme.HealthyScan" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/brand_cream</item>
+        <item name="android:statusBarColor">@color/brand_deep_green</item>
+        <item name="android:navigationBarColor">@color/brand_cream</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="23">false</item>
+    </style>
+
+    <!-- Splash screen theme (androidx.core.splashscreen).
+         Background = deep green, centered logo, brand cream icon background. -->
+    <style name="Theme.HealthyScan.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/brand_deep_green</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_logo</item>
+        <item name="windowSplashScreenIconBackgroundColor">@color/brand_deep_green</item>
+        <item name="postSplashScreenTheme">@style/Theme.HealthyScan</item>
+    </style>
+
+</resources>
