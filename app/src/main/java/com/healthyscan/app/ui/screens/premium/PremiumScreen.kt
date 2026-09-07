@@ -10,7 +10,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,31 +25,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.healthyscan.app.R
-
-private data class PlanColumn(val titleRes: Int, val featureResIds: List<Int>, val highlighted: Boolean)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PremiumScreen(onBack: () -> Unit) {
-    val free = PlanColumn(
-        R.string.premium_free,
-        listOf(
-            R.string.premium_free_1, R.string.premium_free_2, R.string.premium_free_3,
-            R.string.premium_free_4, R.string.premium_free_5
-        ),
-        highlighted = false
-    )
-    val premium = PlanColumn(
-        R.string.premium_premium,
-        listOf(
-            R.string.premium_paid_1, R.string.premium_paid_2, R.string.premium_paid_3,
-            R.string.premium_paid_4, R.string.premium_paid_5, R.string.premium_paid_6,
-            R.string.premium_paid_7, R.string.premium_paid_8, R.string.premium_paid_9
-        ),
-        highlighted = true
+    val premiumFeatures = listOf(
+        R.string.premium_paid_1, R.string.premium_paid_2, R.string.premium_paid_3,
+        R.string.premium_paid_4, R.string.premium_paid_5, R.string.premium_paid_6,
+        R.string.premium_paid_7, R.string.premium_paid_8, R.string.premium_paid_9
     )
 
     Scaffold(
@@ -65,52 +49,28 @@ fun PremiumScreen(onBack: () -> Unit) {
             )
         }
     ) { padding ->
-        LazyColumn(
+        Card(
+            shape = RoundedCornerShape(16.dp),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(horizontal = 20.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            contentPadding = androidx.compose.foundation.layout.PaddingValues(vertical = 16.dp)
+                .padding(20.dp)
         ) {
-            items(listOf(free, premium)) { plan ->
-                PlanCard(plan)
-            }
-            item {
-                Button(onClick = { /* Wire up Play Billing here when ready to launch Premium */ }, modifier = Modifier.fillMaxWidth()) {
-                    Text(stringResource(R.string.premium_premium))
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun PlanCard(plan: PlanColumn) {
-    Card(
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = if (plan.highlighted) {
-                MaterialTheme.colorScheme.primaryContainer
-            } else {
-                MaterialTheme.colorScheme.surfaceVariant
-            }
-        ),
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Column(Modifier.padding(16.dp)) {
-            Text(
-                stringResource(plan.titleRes),
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold
-            )
-            plan.featureResIds.forEach { res ->
-                Row(
-                    modifier = Modifier.padding(top = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(Icons.Filled.Check, contentDescription = null, modifier = Modifier.padding(end = 8.dp))
-                    Text(stringResource(res))
+            LazyColumn(
+                contentPadding = androidx.compose.foundation.layout.PaddingValues(16.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                items(premiumFeatures) { res ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(Icons.Filled.Check, contentDescription = null, modifier = Modifier.padding(end = 12.dp))
+                        Text(stringResource(res))
+                    }
                 }
             }
         }

@@ -105,9 +105,14 @@ fun LabelScanScreen(onDone: () -> Unit) {
                         val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
                         recognizer.process(image)
                             .addOnSuccessListener { result ->
-                                recognizedLines = result.textBlocks.flatMap { block ->
-                                    block.lines.map { it.text }
-                                }.ifEmpty { listOf("—") }
+                                val allLines = result.textBlocks.flatMap { it.lines }
+                                val sorted = allLines.sortedWith(
+                                    compareBy(
+                                        { (it.boundingBox?.top ?: 0) / 40 },
+                                        { it.boundingBox?.left ?: 0 }
+                                    )
+                                )
+                                recognizedLines = sorted.map { it.text }.ifEmpty { listOf("—") }
                                 isProcessing = false
                             }
                             .addOnFailureListener {

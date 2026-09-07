@@ -9,7 +9,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -17,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -29,6 +34,7 @@ import com.healthyscan.app.data.repository.ProductRepository
 import com.healthyscan.app.ui.components.HealthyScanTopBar
 import com.healthyscan.app.ui.components.ScorePill
 import com.healthyscan.app.ui.components.colorForBand
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -43,6 +49,7 @@ fun HistoryScreen(
     onOpenProduct: (String) -> Unit
 ) {
     val history by productRepository.allHistory().collectAsState(initial = emptyList())
+    val scope = rememberCoroutineScope()
     val dateFormat = remember(currentLanguage) {
         SimpleDateFormat("dd MMM, HH:mm", if (currentLanguage == "el") Locale("el") else Locale.ENGLISH)
     }
@@ -85,8 +92,13 @@ fun HistoryScreen(
                         fontWeight = FontWeight.SemiBold
                     )
                 }
-                items(history) { scan ->
-                    HistoryRow(scan, dateFormat.format(Date(scan.timestampMillis))) { onOpenProduct(scan.barcode) }
+                items(history, key = { it.id }) { scan ->
+                    HistoryRow(
+                        scan = scan,
+                        dateText = dateFormat.format(Date(scan.timestampMillis)),
+                        onClick = { onOpenProduct(scan.barcode) },
+                        onDelete = { scope.launch { productRepository.deleteHistoryItem(scan.id) } }
+                    )
                 }
             }
         }
@@ -94,7 +106,12 @@ fun HistoryScreen(
 }
 
 @Composable
-private fun HistoryRow(scan: ScanHistoryEntity, dateText: String, onClick: () -> Unit) {
+private fun HistoryRow(
+    scan: ScanHistoryEntity,
+    dateText: String,
+    onClick: () -> Unit,
+    onDelete: () -> Unit
+) {
     Card(
         onClick = onClick,
         shape = RoundedCornerShape(12.dp),
@@ -103,16 +120,21 @@ private fun HistoryRow(scan: ScanHistoryEntity, dateText: String, onClick: () ->
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(12.dp),
+                .padding(start = 12.dp, end = 4.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column {
+            Column(modifier = Modifier.padding(vertical = 12.dp)) {
                 Text(scan.name, fontWeight = FontWeight.Medium)
                 Text(dateText, style = MaterialTheme.typography.bodyMedium)
             }
-            val band = ScoreBand.forScore(scan.score)
-            ScorePill(text = "${scan.score}/100", color = colorForBand(band))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                val band = ScoreBand.forScore(scan.score)
+                ScorePill(text = "${scan.score}/100", color = colorForBand(band))
+                IconButton(onClick = onDelete) {
+                    Icon(Icons.Filled.Delete, contentDescription = null)
+                }
+            }
         }
     }
 }

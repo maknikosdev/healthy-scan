@@ -13,17 +13,20 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.DocumentScanner
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -36,7 +39,7 @@ import com.healthyscan.app.ui.components.HealthyScanTopBar
 import com.healthyscan.app.ui.components.ScorePill
 import com.healthyscan.app.ui.components.colorForBand
 import com.healthyscan.app.data.model.ScoreBand
-import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(
@@ -51,6 +54,7 @@ fun HomeScreen(
     onOpenProduct: (String) -> Unit
 ) {
     val recentScans by productRepository.recentScans(5).collectAsState(initial = emptyList())
+    val scope = rememberCoroutineScope()
 
     Scaffold(
         topBar = {
@@ -117,8 +121,12 @@ fun HomeScreen(
                         modifier = Modifier.padding(top = 12.dp)
                     )
                 }
-                items(recentScans) { scan ->
-                    RecentScanRow(scan = scan, onClick = { onOpenProduct(scan.barcode) })
+                items(recentScans, key = { it.id }) { scan ->
+                    RecentScanRow(
+                        scan = scan,
+                        onClick = { onOpenProduct(scan.barcode) },
+                        onDelete = { scope.launch { productRepository.deleteHistoryItem(scan.id) } }
+                    )
                 }
             }
             item { Spacer(Modifier.height(24.dp)) }
@@ -158,7 +166,11 @@ private fun HomeActionCard(
 }
 
 @Composable
-private fun RecentScanRow(scan: ScanHistoryEntity, onClick: () -> Unit) {
+private fun RecentScanRow(
+    scan: ScanHistoryEntity,
+    onClick: () -> Unit,
+    onDelete: () -> Unit
+) {
     Card(
         onClick = onClick,
         shape = RoundedCornerShape(12.dp),
@@ -167,16 +179,21 @@ private fun RecentScanRow(scan: ScanHistoryEntity, onClick: () -> Unit) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(12.dp),
+                .padding(start = 12.dp, end = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Column {
+            Column(modifier = Modifier.padding(vertical = 12.dp)) {
                 Text(scan.name, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Medium)
                 scan.brand?.let { Text(it, style = MaterialTheme.typography.bodyMedium) }
             }
-            val band = ScoreBand.forScore(scan.score)
-            ScorePill(text = "${scan.score}/100", color = colorForBand(band))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                val band = ScoreBand.forScore(scan.score)
+                ScorePill(text = "${scan.score}/100", color = colorForBand(band))
+                IconButton(onClick = onDelete) {
+                    Icon(Icons.Filled.Delete, contentDescription = null)
+                }
+            }
         }
     }
 }

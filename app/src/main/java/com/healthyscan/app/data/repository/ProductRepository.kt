@@ -67,6 +67,8 @@ class ProductRepository(context: Context) {
 
     suspend fun totalScanned(): Int = db.scanHistoryDao().totalScanned()
 
+    suspend fun deleteHistoryItem(id: Long) = db.scanHistoryDao().deleteById(id)
+
     suspend fun averageScoreLast7Days(): Int {
         val since = System.currentTimeMillis() - 7L * 24 * 60 * 60 * 1000
         return (db.scanHistoryDao().averageScoreSince(since) ?: 0.0).toInt()

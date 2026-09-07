@@ -195,20 +195,33 @@
 
 # End of content from C:\Users\makni\Desktop\HealthyScan\app\build\intermediates\default_proguard_files\global\proguard-android-optimize.txt-8.7.0
 # The proguard configuration file for the following section is C:\Users\makni\Desktop\HealthyScan\app\proguard-rules.pro
-# Add project specific ProGuard rules here.
-# Keep data models used by Gson/Retrofit reflection
+# --- Data models / Gson ---
 -keep class com.healthyscan.app.data.model.** { *; }
+-keep class com.healthyscan.app.data.remote.** { *; }
+-keep class com.healthyscan.app.data.local.** { *; }
 -keepattributes Signature
 -keepattributes *Annotation*
+-keepattributes EnclosingMethod
+-keepattributes InnerClasses
 
-# Retrofit / OkHttp
+-keepclassmembers,allowobfuscation class * {
+  @com.google.gson.annotations.SerializedName <fields>;
+}
+
+# --- Retrofit / suspend functions ---
 -dontwarn okhttp3.**
 -dontwarn retrofit2.**
 -keepattributes Exceptions
+-keepattributes RuntimeVisibleAnnotations, RuntimeVisibleParameterAnnotations
+-keepclassmembers,allowshrinking,allowobfuscation interface * {
+    @retrofit2.http.* <methods>;
+}
+-keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation
+-dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
+-dontwarn javax.annotation.**
 
-# ML Kit
+# --- ML Kit ---
 -keep class com.google.mlkit.** { *; }
-
 # End of content from C:\Users\makni\Desktop\HealthyScan\app\proguard-rules.pro
 # The proguard configuration file for the following section is C:\Users\makni\.gradle\caches\8.9\transforms\e4d29a0b4c25ea3d59e61e23f4c86cf6\transformed\material-1.12.0\proguard.txt
 # Copyright (C) 2015 The Android Open Source Project

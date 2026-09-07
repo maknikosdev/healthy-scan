@@ -8,6 +8,8 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -96,23 +98,25 @@ fun ScanScreen(
 @Composable
 private fun ScanOverlay() {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(bottom = 48.dp),
+        modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = androidx.compose.foundation.layout.Arrangement.Bottom
+        verticalArrangement = Arrangement.Center
     ) {
         Box(
             modifier = Modifier
-                .size(260.dp, 140.dp)
-                .background(Color.Transparent)
+                .size(280.dp, 160.dp)
+                .border(
+                    width = 3.dp,
+                    color = Color.White,
+                    shape = RoundedCornerShape(16.dp)
+                )
         )
         Text(
             text = stringResource(R.string.scan_align_barcode),
             color = Color.White,
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier
-                .padding(top = 12.dp)
+                .padding(top = 16.dp)
                 .background(Color.Black.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
                 .padding(horizontal = 16.dp, vertical = 8.dp)
         )

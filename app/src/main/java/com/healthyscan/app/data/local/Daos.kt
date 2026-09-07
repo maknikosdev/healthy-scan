@@ -24,6 +24,9 @@ interface ScanHistoryDao {
     @Query("SELECT COUNT(*) FROM scan_history")
     suspend fun totalScanned(): Int
 
+    @Query("DELETE FROM scan_history WHERE id = :id")
+    suspend fun deleteById(id: Long)
+
     @Query("DELETE FROM scan_history")
     suspend fun clear()
 }
