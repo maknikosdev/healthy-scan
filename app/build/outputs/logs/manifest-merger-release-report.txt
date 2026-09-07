@@ -36,12 +36,8 @@ MERGED from [io.coil-kt:coil:2.7.0] C:\Users\makni\.gradle\caches\8.9\transforms
 MERGED from [io.coil-kt:coil-base:2.7.0] C:\Users\makni\.gradle\caches\8.9\transforms\0d0b77907e0669340caa5504f974be24\transformed\coil-base-2.7.0\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.appcompat:appcompat-resources:1.7.0] C:\Users\makni\.gradle\caches\8.9\transforms\4e180c1f34b8f3f119277d8cb62da19e\transformed\appcompat-resources-1.7.0\AndroidManifest.xml:2:1-7:12
 MERGED from [com.google.mlkit:barcode-scanning:17.3.0] C:\Users\makni\.gradle\caches\8.9\transforms\ed67203fdc3a399bb83a5d4297260bc6\transformed\barcode-scanning-17.3.0\AndroidManifest.xml:2:1-7:12
-MERGED from [com.google.mlkit:text-recognition:16.0.1] C:\Users\makni\.gradle\caches\8.9\transforms\c169906c0bb1a163feed0aa4ff44f91c\transformed\text-recognition-16.0.1\AndroidManifest.xml:2:1-7:12
 MERGED from [com.google.android.gms:play-services-mlkit-barcode-scanning:18.3.1] C:\Users\makni\.gradle\caches\8.9\transforms\391e05ee42e4086027c9c9634bb065c0\transformed\play-services-mlkit-barcode-scanning-18.3.1\AndroidManifest.xml:2:1-18:12
 MERGED from [com.google.mlkit:barcode-scanning-common:17.0.0] C:\Users\makni\.gradle\caches\8.9\transforms\fc1de94312835f7ba2e57ffe6943e7ce\transformed\barcode-scanning-common-17.0.0\AndroidManifest.xml:2:1-7:12
-MERGED from [com.google.mlkit:text-recognition-bundled-common:17.0.0] C:\Users\makni\.gradle\caches\8.9\transforms\d9d7bc6b4197220f2c99740ed87ac891\transformed\text-recognition-bundled-common-17.0.0\AndroidManifest.xml:2:1-7:12
-MERGED from [com.google.android.gms:play-services-mlkit-text-recognition:19.0.1] C:\Users\makni\.gradle\caches\8.9\transforms\206c1c2bb28e1cb97e66da630d35fa98\transformed\play-services-mlkit-text-recognition-19.0.1\AndroidManifest.xml:2:1-8:12
-MERGED from [com.google.android.gms:play-services-mlkit-text-recognition-common:19.1.0] C:\Users\makni\.gradle\caches\8.9\transforms\89047a20aceea75cdc785e3542d30ae9\transformed\play-services-mlkit-text-recognition-common-19.1.0\AndroidManifest.xml:2:1-18:12
 MERGED from [com.google.mlkit:vision-common:17.3.0] C:\Users\makni\.gradle\caches\8.9\transforms\70e1dea155f459b281f56d1572b6b874\transformed\vision-common-17.3.0\AndroidManifest.xml:2:1-18:12
 MERGED from [com.google.mlkit:common:18.11.0] C:\Users\makni\.gradle\caches\8.9\transforms\74a9ed409e383c420edf842527aa38db\transformed\common-18.11.0\AndroidManifest.xml:2:1-26:12
 MERGED from [androidx.appcompat:appcompat:1.7.0] C:\Users\makni\.gradle\caches\8.9\transforms\98209d5c8accaca17d012261996f46c0\transformed\appcompat-1.7.0\AndroidManifest.xml:2:1-7:12
@@ -119,6 +115,8 @@ MERGED from [androidx.compose.runtime:runtime-android:1.7.2] C:\Users\makni\.gra
 MERGED from [androidx.compose.runtime:runtime-saveable-android:1.7.2] C:\Users\makni\.gradle\caches\8.9\transforms\a5c3fb7f7c2058edf869b9b28e37f131\transformed\runtime-saveable-release\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.annotation:annotation-experimental:1.4.1] C:\Users\makni\.gradle\caches\8.9\transforms\dc4c423076ace3f69af17f4608784729\transformed\annotation-experimental-1.4.1\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\makni\.gradle\caches\8.9\transforms\429f3795148272343e1b331cba7bd963\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:17:1-27:12
+MERGED from [cz.adaptech.tesseract4android:tesseract4android:4.9.0] C:\Users\makni\.gradle\caches\8.9\transforms\43bbfe9333fff2cbfaa52a551abb9015\transformed\tesseract4android-4.9.0\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.exifinterface:exifinterface:1.3.7] C:\Users\makni\.gradle\caches\8.9\transforms\12caebd4a7c7aae7d4761f783b2e8222\transformed\exifinterface-1.3.7\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.cardview:cardview:1.0.0] C:\Users\makni\.gradle\caches\8.9\transforms\f34e7e8fd8dd27a26ae604c79ea79343\transformed\cardview-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\makni\.gradle\caches\8.9\transforms\1874e8d29be4107d21f4e54200d73f30\transformed\cursoradapter-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\makni\.gradle\caches\8.9\transforms\8c1d43addde89d80699cb89851545297\transformed\profileinstaller-1.3.1\AndroidManifest.xml:17:1-55:12
@@ -134,7 +132,6 @@ MERGED from [androidx.tracing:tracing:1.0.0] C:\Users\makni\.gradle\caches\8.9\t
 MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\makni\.gradle\caches\8.9\transforms\886201fe6e99a8c1220f58c2cc467e26\transformed\documentfile-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\makni\.gradle\caches\8.9\transforms\5d8f978b448fce94a1bf404376b89fe9\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.print:print:1.0.0] C:\Users\makni\.gradle\caches\8.9\transforms\9d952db8d82de0a949da57c867a92c10\transformed\print-1.0.0\AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.exifinterface:exifinterface:1.3.7] C:\Users\makni\.gradle\caches\8.9\transforms\12caebd4a7c7aae7d4761f783b2e8222\transformed\exifinterface-1.3.7\AndroidManifest.xml:17:1-24:12
 MERGED from [com.google.android.odml:image:1.0.0-beta1] C:\Users\makni\.gradle\caches\8.9\transforms\0571f36c43c579e88a6cc5eaeb30eb71\transformed\image-1.0.0-beta1\AndroidManifest.xml:2:1-9:12
 	package
 		INJECTED from C:\Users\makni\Desktop\HealthyScan\app\src\main\AndroidManifest.xml
@@ -189,8 +186,6 @@ MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] C:\Users\makni\.g
 MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] C:\Users\makni\.gradle\caches\8.9\transforms\f1632cd35a27146adc96b85bd0d30b31\transformed\constraintlayout-2.0.1\AndroidManifest.xml:9:5-20
 MERGED from [com.google.android.gms:play-services-mlkit-barcode-scanning:18.3.1] C:\Users\makni\.gradle\caches\8.9\transforms\391e05ee42e4086027c9c9634bb065c0\transformed\play-services-mlkit-barcode-scanning-18.3.1\AndroidManifest.xml:8:5-16:19
 MERGED from [com.google.android.gms:play-services-mlkit-barcode-scanning:18.3.1] C:\Users\makni\.gradle\caches\8.9\transforms\391e05ee42e4086027c9c9634bb065c0\transformed\play-services-mlkit-barcode-scanning-18.3.1\AndroidManifest.xml:8:5-16:19
-MERGED from [com.google.android.gms:play-services-mlkit-text-recognition-common:19.1.0] C:\Users\makni\.gradle\caches\8.9\transforms\89047a20aceea75cdc785e3542d30ae9\transformed\play-services-mlkit-text-recognition-common-19.1.0\AndroidManifest.xml:8:5-16:19
-MERGED from [com.google.android.gms:play-services-mlkit-text-recognition-common:19.1.0] C:\Users\makni\.gradle\caches\8.9\transforms\89047a20aceea75cdc785e3542d30ae9\transformed\play-services-mlkit-text-recognition-common-19.1.0\AndroidManifest.xml:8:5-16:19
 MERGED from [com.google.mlkit:vision-common:17.3.0] C:\Users\makni\.gradle\caches\8.9\transforms\70e1dea155f459b281f56d1572b6b874\transformed\vision-common-17.3.0\AndroidManifest.xml:8:5-16:19
 MERGED from [com.google.mlkit:vision-common:17.3.0] C:\Users\makni\.gradle\caches\8.9\transforms\70e1dea155f459b281f56d1572b6b874\transformed\vision-common-17.3.0\AndroidManifest.xml:8:5-16:19
 MERGED from [com.google.mlkit:common:18.11.0] C:\Users\makni\.gradle\caches\8.9\transforms\74a9ed409e383c420edf842527aa38db\transformed\common-18.11.0\AndroidManifest.xml:8:5-24:19
@@ -297,18 +292,10 @@ MERGED from [androidx.appcompat:appcompat-resources:1.7.0] C:\Users\makni\.gradl
 MERGED from [androidx.appcompat:appcompat-resources:1.7.0] C:\Users\makni\.gradle\caches\8.9\transforms\4e180c1f34b8f3f119277d8cb62da19e\transformed\appcompat-resources-1.7.0\AndroidManifest.xml:5:5-44
 MERGED from [com.google.mlkit:barcode-scanning:17.3.0] C:\Users\makni\.gradle\caches\8.9\transforms\ed67203fdc3a399bb83a5d4297260bc6\transformed\barcode-scanning-17.3.0\AndroidManifest.xml:5:5-44
 MERGED from [com.google.mlkit:barcode-scanning:17.3.0] C:\Users\makni\.gradle\caches\8.9\transforms\ed67203fdc3a399bb83a5d4297260bc6\transformed\barcode-scanning-17.3.0\AndroidManifest.xml:5:5-44
-MERGED from [com.google.mlkit:text-recognition:16.0.1] C:\Users\makni\.gradle\caches\8.9\transforms\c169906c0bb1a163feed0aa4ff44f91c\transformed\text-recognition-16.0.1\AndroidManifest.xml:5:5-44
-MERGED from [com.google.mlkit:text-recognition:16.0.1] C:\Users\makni\.gradle\caches\8.9\transforms\c169906c0bb1a163feed0aa4ff44f91c\transformed\text-recognition-16.0.1\AndroidManifest.xml:5:5-44
 MERGED from [com.google.android.gms:play-services-mlkit-barcode-scanning:18.3.1] C:\Users\makni\.gradle\caches\8.9\transforms\391e05ee42e4086027c9c9634bb065c0\transformed\play-services-mlkit-barcode-scanning-18.3.1\AndroidManifest.xml:6:5-44
 MERGED from [com.google.android.gms:play-services-mlkit-barcode-scanning:18.3.1] C:\Users\makni\.gradle\caches\8.9\transforms\391e05ee42e4086027c9c9634bb065c0\transformed\play-services-mlkit-barcode-scanning-18.3.1\AndroidManifest.xml:6:5-44
 MERGED from [com.google.mlkit:barcode-scanning-common:17.0.0] C:\Users\makni\.gradle\caches\8.9\transforms\fc1de94312835f7ba2e57ffe6943e7ce\transformed\barcode-scanning-common-17.0.0\AndroidManifest.xml:5:5-44
 MERGED from [com.google.mlkit:barcode-scanning-common:17.0.0] C:\Users\makni\.gradle\caches\8.9\transforms\fc1de94312835f7ba2e57ffe6943e7ce\transformed\barcode-scanning-common-17.0.0\AndroidManifest.xml:5:5-44
-MERGED from [com.google.mlkit:text-recognition-bundled-common:17.0.0] C:\Users\makni\.gradle\caches\8.9\transforms\d9d7bc6b4197220f2c99740ed87ac891\transformed\text-recognition-bundled-common-17.0.0\AndroidManifest.xml:5:5-44
-MERGED from [com.google.mlkit:text-recognition-bundled-common:17.0.0] C:\Users\makni\.gradle\caches\8.9\transforms\d9d7bc6b4197220f2c99740ed87ac891\transformed\text-recognition-bundled-common-17.0.0\AndroidManifest.xml:5:5-44
-MERGED from [com.google.android.gms:play-services-mlkit-text-recognition:19.0.1] C:\Users\makni\.gradle\caches\8.9\transforms\206c1c2bb28e1cb97e66da630d35fa98\transformed\play-services-mlkit-text-recognition-19.0.1\AndroidManifest.xml:6:5-44
-MERGED from [com.google.android.gms:play-services-mlkit-text-recognition:19.0.1] C:\Users\makni\.gradle\caches\8.9\transforms\206c1c2bb28e1cb97e66da630d35fa98\transformed\play-services-mlkit-text-recognition-19.0.1\AndroidManifest.xml:6:5-44
-MERGED from [com.google.android.gms:play-services-mlkit-text-recognition-common:19.1.0] C:\Users\makni\.gradle\caches\8.9\transforms\89047a20aceea75cdc785e3542d30ae9\transformed\play-services-mlkit-text-recognition-common-19.1.0\AndroidManifest.xml:6:5-44
-MERGED from [com.google.android.gms:play-services-mlkit-text-recognition-common:19.1.0] C:\Users\makni\.gradle\caches\8.9\transforms\89047a20aceea75cdc785e3542d30ae9\transformed\play-services-mlkit-text-recognition-common-19.1.0\AndroidManifest.xml:6:5-44
 MERGED from [com.google.mlkit:vision-common:17.3.0] C:\Users\makni\.gradle\caches\8.9\transforms\70e1dea155f459b281f56d1572b6b874\transformed\vision-common-17.3.0\AndroidManifest.xml:6:5-44
 MERGED from [com.google.mlkit:vision-common:17.3.0] C:\Users\makni\.gradle\caches\8.9\transforms\70e1dea155f459b281f56d1572b6b874\transformed\vision-common-17.3.0\AndroidManifest.xml:6:5-44
 MERGED from [com.google.mlkit:common:18.11.0] C:\Users\makni\.gradle\caches\8.9\transforms\74a9ed409e383c420edf842527aa38db\transformed\common-18.11.0\AndroidManifest.xml:6:5-44
@@ -463,6 +450,10 @@ MERGED from [androidx.annotation:annotation-experimental:1.4.1] C:\Users\makni\.
 MERGED from [androidx.annotation:annotation-experimental:1.4.1] C:\Users\makni\.gradle\caches\8.9\transforms\dc4c423076ace3f69af17f4608784729\transformed\annotation-experimental-1.4.1\AndroidManifest.xml:5:5-44
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\makni\.gradle\caches\8.9\transforms\429f3795148272343e1b331cba7bd963\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\makni\.gradle\caches\8.9\transforms\429f3795148272343e1b331cba7bd963\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [cz.adaptech.tesseract4android:tesseract4android:4.9.0] C:\Users\makni\.gradle\caches\8.9\transforms\43bbfe9333fff2cbfaa52a551abb9015\transformed\tesseract4android-4.9.0\AndroidManifest.xml:5:5-44
+MERGED from [cz.adaptech.tesseract4android:tesseract4android:4.9.0] C:\Users\makni\.gradle\caches\8.9\transforms\43bbfe9333fff2cbfaa52a551abb9015\transformed\tesseract4android-4.9.0\AndroidManifest.xml:5:5-44
+MERGED from [androidx.exifinterface:exifinterface:1.3.7] C:\Users\makni\.gradle\caches\8.9\transforms\12caebd4a7c7aae7d4761f783b2e8222\transformed\exifinterface-1.3.7\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.exifinterface:exifinterface:1.3.7] C:\Users\makni\.gradle\caches\8.9\transforms\12caebd4a7c7aae7d4761f783b2e8222\transformed\exifinterface-1.3.7\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.cardview:cardview:1.0.0] C:\Users\makni\.gradle\caches\8.9\transforms\f34e7e8fd8dd27a26ae604c79ea79343\transformed\cardview-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.cardview:cardview:1.0.0] C:\Users\makni\.gradle\caches\8.9\transforms\f34e7e8fd8dd27a26ae604c79ea79343\transformed\cardview-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\makni\.gradle\caches\8.9\transforms\1874e8d29be4107d21f4e54200d73f30\transformed\cursoradapter-1.0.0\AndroidManifest.xml:20:5-44
@@ -493,8 +484,6 @@ MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\User
 MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\makni\.gradle\caches\8.9\transforms\5d8f978b448fce94a1bf404376b89fe9\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.print:print:1.0.0] C:\Users\makni\.gradle\caches\8.9\transforms\9d952db8d82de0a949da57c867a92c10\transformed\print-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.print:print:1.0.0] C:\Users\makni\.gradle\caches\8.9\transforms\9d952db8d82de0a949da57c867a92c10\transformed\print-1.0.0\AndroidManifest.xml:20:5-44
-MERGED from [androidx.exifinterface:exifinterface:1.3.7] C:\Users\makni\.gradle\caches\8.9\transforms\12caebd4a7c7aae7d4761f783b2e8222\transformed\exifinterface-1.3.7\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.exifinterface:exifinterface:1.3.7] C:\Users\makni\.gradle\caches\8.9\transforms\12caebd4a7c7aae7d4761f783b2e8222\transformed\exifinterface-1.3.7\AndroidManifest.xml:20:5-22:41
 MERGED from [com.google.android.odml:image:1.0.0-beta1] C:\Users\makni\.gradle\caches\8.9\transforms\0571f36c43c579e88a6cc5eaeb30eb71\transformed\image-1.0.0-beta1\AndroidManifest.xml:5:5-44
 MERGED from [com.google.android.odml:image:1.0.0-beta1] C:\Users\makni\.gradle\caches\8.9\transforms\0571f36c43c579e88a6cc5eaeb30eb71\transformed\image-1.0.0-beta1\AndroidManifest.xml:5:5-44
 	android:targetSdkVersion
@@ -523,8 +512,6 @@ ADDED from [androidx.camera:camera-camera2:1.3.4] C:\Users\makni\.gradle\caches\
 		ADDED from [androidx.camera:camera-camera2:1.3.4] C:\Users\makni\.gradle\caches\8.9\transforms\e951f0a3879a3d5d9e62e7f88c7df7bf\transformed\camera-camera2-1.3.4\AndroidManifest.xml:31:17-103
 service#com.google.mlkit.common.internal.MlKitComponentDiscoveryService
 ADDED from [com.google.android.gms:play-services-mlkit-barcode-scanning:18.3.1] C:\Users\makni\.gradle\caches\8.9\transforms\391e05ee42e4086027c9c9634bb065c0\transformed\play-services-mlkit-barcode-scanning-18.3.1\AndroidManifest.xml:9:9-15:19
-MERGED from [com.google.android.gms:play-services-mlkit-text-recognition-common:19.1.0] C:\Users\makni\.gradle\caches\8.9\transforms\89047a20aceea75cdc785e3542d30ae9\transformed\play-services-mlkit-text-recognition-common-19.1.0\AndroidManifest.xml:9:9-15:19
-MERGED from [com.google.android.gms:play-services-mlkit-text-recognition-common:19.1.0] C:\Users\makni\.gradle\caches\8.9\transforms\89047a20aceea75cdc785e3542d30ae9\transformed\play-services-mlkit-text-recognition-common-19.1.0\AndroidManifest.xml:9:9-15:19
 MERGED from [com.google.mlkit:vision-common:17.3.0] C:\Users\makni\.gradle\caches\8.9\transforms\70e1dea155f459b281f56d1572b6b874\transformed\vision-common-17.3.0\AndroidManifest.xml:9:9-15:19
 MERGED from [com.google.mlkit:vision-common:17.3.0] C:\Users\makni\.gradle\caches\8.9\transforms\70e1dea155f459b281f56d1572b6b874\transformed\vision-common-17.3.0\AndroidManifest.xml:9:9-15:19
 MERGED from [com.google.mlkit:common:18.11.0] C:\Users\makni\.gradle\caches\8.9\transforms\74a9ed409e383c420edf842527aa38db\transformed\common-18.11.0\AndroidManifest.xml:15:9-23:19
@@ -543,12 +530,6 @@ ADDED from [com.google.android.gms:play-services-mlkit-barcode-scanning:18.3.1] 
 		ADDED from [com.google.android.gms:play-services-mlkit-barcode-scanning:18.3.1] C:\Users\makni\.gradle\caches\8.9\transforms\391e05ee42e4086027c9c9634bb065c0\transformed\play-services-mlkit-barcode-scanning-18.3.1\AndroidManifest.xml:14:17-82
 	android:name
 		ADDED from [com.google.android.gms:play-services-mlkit-barcode-scanning:18.3.1] C:\Users\makni\.gradle\caches\8.9\transforms\391e05ee42e4086027c9c9634bb065c0\transformed\play-services-mlkit-barcode-scanning-18.3.1\AndroidManifest.xml:13:17-120
-meta-data#com.google.firebase.components:com.google.mlkit.vision.text.internal.TextRegistrar
-ADDED from [com.google.android.gms:play-services-mlkit-text-recognition-common:19.1.0] C:\Users\makni\.gradle\caches\8.9\transforms\89047a20aceea75cdc785e3542d30ae9\transformed\play-services-mlkit-text-recognition-common-19.1.0\AndroidManifest.xml:12:13-14:85
-	android:value
-		ADDED from [com.google.android.gms:play-services-mlkit-text-recognition-common:19.1.0] C:\Users\makni\.gradle\caches\8.9\transforms\89047a20aceea75cdc785e3542d30ae9\transformed\play-services-mlkit-text-recognition-common-19.1.0\AndroidManifest.xml:14:17-82
-	android:name
-		ADDED from [com.google.android.gms:play-services-mlkit-text-recognition-common:19.1.0] C:\Users\makni\.gradle\caches\8.9\transforms\89047a20aceea75cdc785e3542d30ae9\transformed\play-services-mlkit-text-recognition-common-19.1.0\AndroidManifest.xml:13:17-114
 meta-data#com.google.firebase.components:com.google.mlkit.vision.common.internal.VisionCommonRegistrar
 ADDED from [com.google.mlkit:vision-common:17.3.0] C:\Users\makni\.gradle\caches\8.9\transforms\70e1dea155f459b281f56d1572b6b874\transformed\vision-common-17.3.0\AndroidManifest.xml:12:13-14:85
 	android:value

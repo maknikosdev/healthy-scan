@@ -15,7 +15,12 @@ data class Product(
     val ingredientsText: String?,
     val ingredients: List<Ingredient> = emptyList(),
     val additives: List<Additive> = emptyList(),
-    val allergens: List<String> = emptyList()
+    val allergens: List<String> = emptyList(),
+    // false when this Product came from a fallback source (e.g. UPCitemdb)
+    // that only has identification data, no real nutrition/ingredients.
+    // The Health Score must never be computed on this — zero-filled
+    // nutrition would look artificially "perfect".
+    val hasNutritionData: Boolean = true
 )
 
 /**

@@ -1,15 +1,18 @@
 package com.healthyscan.app.data.remote
 
 import com.google.gson.annotations.SerializedName
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
 /**
  * Open Food Facts (https://world.openfoodfacts.org) is a free, open, crowdsourced
  * food-products database with no API key required. It's used here as the default
- * barcode lookup source. Swap this out (or add a second source) for regional
- * product coverage if needed.
+ * barcode lookup source, combined with UPCitemdb as a fallback (see
+ * UpcItemDbApi.kt) for products OFF doesn't have yet.
  */
 interface OpenFoodFactsApi {
 
@@ -26,6 +29,25 @@ interface OpenFoodFactsApi {
         @Query("page_size") pageSize: Int = 20
     ): OffSearchResponse
 
+    /**
+     * Contributes a new/updated product back to Open Food Facts — the classic,
+     * long-stable "product_jqm2" write endpoint. Requires a free Open Food
+     * Facts account (create one at https://world.openfoodfacts.org/cgi/user.pl).
+     * This is what lets the app's coverage gap for local Greek products shrink
+     * over time, for everyone, at no cost.
+     */
+    @FormUrlEncoded
+    @POST("cgi/product_jqm2.cgi")
+    suspend fun submitProduct(
+        @Field("code") code: String,
+        @Field("user_id") userId: String,
+        @Field("password") password: String,
+        @Field("product_name") productName: String?,
+        @Field("brands") brands: String?,
+        @Field("ingredients_text") ingredientsText: String?,
+        @Field("comment") comment: String = "Added via Healthy Scan Android app"
+    ): OffWriteResponse
+
     companion object {
         private const val FIELDS = "code,product_name,brands,image_url,image_front_url," +
             "categories_tags,serving_size,serving_quantity,ingredients_text," +
@@ -40,6 +62,11 @@ data class OffProductResponse(
 
 data class OffSearchResponse(
     @SerializedName("products") val products: List<OffProduct> = emptyList()
+)
+
+data class OffWriteResponse(
+    @SerializedName("status") val status: Int?,
+    @SerializedName("status_verbose") val statusVerbose: String?
 )
 
 data class OffProduct(

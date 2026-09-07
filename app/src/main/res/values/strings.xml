@@ -146,7 +146,27 @@
     <string name="action_photograph_label">Photograph the label</string>
     <string name="action_add_product">Add this product</string>
 
+    <!-- Basic info only (found via fallback source, no nutrition data) -->
+    <string name="basic_info_title">Basic info found</string>
+    <string name="basic_info_body">We found the product name, but no nutrition data exists for it yet anywhere. You can scan the label or add it manually.</string>
+
+    <!-- Add / contribute product -->
+    <string name="add_product_title">Add this product</string>
+    <string name="add_product_barcode">Barcode</string>
+    <string name="add_product_name">Product name</string>
+    <string name="add_product_brand">Brand</string>
+    <string name="add_product_ingredients">Ingredients (paste from label scan or type)</string>
+    <string name="add_product_off_account_title">Open Food Facts account</string>
+    <string name="add_product_off_account_body">Free forever — create one at world.openfoodfacts.org if you don\'t have one yet. Saved on this device only.</string>
+    <string name="add_product_username">Username</string>
+    <string name="add_product_password">Password</string>
+    <string name="add_product_submit">Send to Open Food Facts</string>
+    <string name="add_product_success">Thanks! The product was submitted successfully.</string>
+    <string name="add_product_error">Couldn\'t submit the product. Check your account details and try again.</string>
+    <string name="add_product_missing_credentials">Enter your Open Food Facts username and password first.</string>
+
     <!-- AI Label scanner -->
+    <string name="label_scan_tip">Fill the frame with the ingredients text only, flat and well lit, for best accuracy</string>
     <string name="label_reading">Reading the label…</string>
     <string name="label_check_calories">Calories</string>
     <string name="label_check_sugar">Sugar</string>

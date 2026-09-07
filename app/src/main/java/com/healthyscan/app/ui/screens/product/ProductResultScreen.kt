@@ -1,7 +1,5 @@
 package com.healthyscan.app.ui.screens.product
 
-
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Button
@@ -64,7 +63,9 @@ fun ProductResultScreen(
     avoidedAllergens: Set<String>,
     userDietaryPreferences: Set<String>,
     onBack: () -> Unit,
-    onOpenAlternative: (String) -> Unit
+    onOpenAlternative: (String) -> Unit,
+    onScanLabel: () -> Unit,
+    onAddProduct: (name: String, brand: String) -> Unit
 ) {
     var state by remember { mutableStateOf<ProductLookupResult?>(null) }
     val scope = rememberCoroutineScope()
@@ -95,7 +96,15 @@ fun ProductResultScreen(
                 is ProductLookupResult.Error -> ErrorState(onRetry = {
                     scope.launch { state = productRepository.lookupByBarcode(barcode) }
                 })
-                is ProductLookupResult.NotFound -> UnknownProductState()
+                is ProductLookupResult.NotFound -> UnknownProductState(
+                    onScanLabel = onScanLabel,
+                    onAddProduct = { onAddProduct("", "") }
+                )
+                is ProductLookupResult.FoundBasicInfo -> BasicInfoState(
+                    product = s.product,
+                    onScanLabel = onScanLabel,
+                    onAddProduct = { onAddProduct(s.product.name, s.product.brand ?: "") }
+                )
                 is ProductLookupResult.Found -> ProductFound(
                     product = s.product,
                     score = s.score,
@@ -144,7 +153,10 @@ private fun ErrorState(onRetry: () -> Unit) {
 }
 
 @Composable
-private fun UnknownProductState() {
+private fun UnknownProductState(
+    onScanLabel: () -> Unit,
+    onAddProduct: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -162,12 +174,57 @@ private fun UnknownProductState() {
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.padding(top = 8.dp, bottom = 16.dp)
         )
-        Button(onClick = { /* navigate to label scanner - wired in NavGraph */ }, modifier = Modifier.fillMaxWidth()) {
+        Button(onClick = onScanLabel, modifier = Modifier.fillMaxWidth()) {
             Text(stringResource(R.string.action_photograph_label))
         }
-        OutlinedButton(onClick = { /* TODO: contribute-a-product flow */ }, modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 8.dp)) {
+        OutlinedButton(
+            onClick = onAddProduct,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp)
+        ) {
+            Text(stringResource(R.string.action_add_product))
+        }
+    }
+}
+
+@Composable
+private fun BasicInfoState(
+    product: Product,
+    onScanLabel: () -> Unit,
+    onAddProduct: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(product.name, style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
+        product.brand?.let {
+            Text(it, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(top = 4.dp))
+        }
+        Text(
+            stringResource(R.string.basic_info_title),
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier.padding(top = 20.dp)
+        )
+        Text(
+            stringResource(R.string.basic_info_body),
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.padding(top = 8.dp, bottom = 16.dp)
+        )
+        Button(onClick = onScanLabel, modifier = Modifier.fillMaxWidth()) {
+            Text(stringResource(R.string.action_photograph_label))
+        }
+        OutlinedButton(
+            onClick = onAddProduct,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp)
+        ) {
             Text(stringResource(R.string.action_add_product))
         }
     }

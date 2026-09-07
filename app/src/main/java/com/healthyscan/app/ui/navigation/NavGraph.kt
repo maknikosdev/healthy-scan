@@ -22,6 +22,7 @@ import com.healthyscan.app.data.repository.ProductRepository
 import com.healthyscan.app.data.repository.SettingsRepository
 import com.healthyscan.app.locale.LocaleManager
 import com.healthyscan.app.ui.components.HealthyScanBottomBar
+import com.healthyscan.app.ui.screens.addproduct.AddProductScreen
 import com.healthyscan.app.ui.screens.favorites.FavoritesScreen
 import com.healthyscan.app.ui.screens.history.HistoryScreen
 import com.healthyscan.app.ui.screens.home.HomeScreen
@@ -169,7 +170,32 @@ fun HealthyScanNavHost(
                     onBack = { navController.popBackStack() },
                     onOpenAlternative = { altBarcode ->
                         navController.navigate(Screen.ProductResult.createRoute(altBarcode))
+                    },
+                    onScanLabel = { navController.navigate("label_scan") },
+                    onAddProduct = { name, brand ->
+                        navController.navigate(Screen.AddProduct.createRoute(barcode, name, brand))
                     }
+                )
+            }
+
+            composable(
+                route = Screen.AddProduct.route,
+                arguments = listOf(
+                    navArgument(Screen.ARG_BARCODE) { type = NavType.StringType },
+                    navArgument(Screen.ARG_NAME) { type = NavType.StringType; defaultValue = "" },
+                    navArgument(Screen.ARG_BRAND) { type = NavType.StringType; defaultValue = "" }
+                )
+            ) { entry ->
+                val barcode = entry.arguments?.getString(Screen.ARG_BARCODE).orEmpty()
+                val name = entry.arguments?.getString(Screen.ARG_NAME).orEmpty()
+                val brand = entry.arguments?.getString(Screen.ARG_BRAND).orEmpty()
+                AddProductScreen(
+                    barcode = barcode,
+                    productRepository = productRepository,
+                    settingsRepository = settingsRepository,
+                    prefilledName = name,
+                    prefilledBrand = brand,
+                    onBack = { navController.popBackStack() }
                 )
             }
 

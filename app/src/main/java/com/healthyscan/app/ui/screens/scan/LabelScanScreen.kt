@@ -2,21 +2,25 @@ package com.healthyscan.app.ui.screens.scan
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.net.Uri
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material3.Button
@@ -30,9 +34,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
@@ -40,26 +46,26 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.text.TextRecognition
-import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import com.healthyscan.app.R
+import com.healthyscan.app.ocr.TesseractOcrHelper
+import kotlinx.coroutines.launch
 import java.io.File
-import java.util.concurrent.Executors
 
 /**
- * "Scan Label" flow. Captures a photo of a nutrition label with CameraX and
- * runs on-device OCR (ML Kit Text Recognition) on it.
+ * "Scan Label" flow. Captures a photo of a nutrition/ingredients label with
+ * CameraX and runs fully offline OCR on it using Tesseract (see
+ * ocr/TesseractOcrHelper.kt) — it has real Greek + English trained models,
+ * unlike ML Kit's text recognizer which only supports Latin script.
  *
- * This shows the raw recognized text with an editable review step, matching
- * the "Confirm the details" step from the product spec. Turning the raw OCR
- * text into structured nutrition fields (calories/sugar/protein/etc.) is left
- * as a parsing step you can plug in — the text lines are already split out
- * and ready to feed into a parser or into a backend LLM call for extraction.
+ * Turning the raw recognized lines into structured nutrition fields
+ * (calories/sugar/protein/etc.) is left as a parsing step you can plug in —
+ * the lines are already split out and ready to feed into a parser.
  */
 @Composable
 fun LabelScanScreen(onDone: () -> Unit) {
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
     var hasCameraPermission by remember {
         mutableStateOf(
             ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA) ==
@@ -74,7 +80,6 @@ fun LabelScanScreen(onDone: () -> Unit) {
         if (!hasCameraPermission) permissionLauncher.launch(Manifest.permission.CAMERA)
     }
 
-    var capturedImageUri by remember { mutableStateOf<Uri?>(null) }
     var recognizedLines by remember { mutableStateOf<List<String>?>(null) }
     var isProcessing by remember { mutableStateOf(false) }
 
@@ -82,11 +87,16 @@ fun LabelScanScreen(onDone: () -> Unit) {
         when {
             !hasCameraPermission -> {
                 Column(
-                    modifier = Modifier.fillMaxSize().padding(24.dp),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(24.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(stringResource(R.string.scan_camera_permission_needed))
-                    Button(onClick = { permissionLauncher.launch(Manifest.permission.CAMERA) }, modifier = Modifier.padding(top = 16.dp)) {
+                    Button(
+                        onClick = { permissionLauncher.launch(Manifest.permission.CAMERA) },
+                        modifier = Modifier.padding(top = 16.dp)
+                    ) {
                         Text(stringResource(R.string.scan_grant_permission))
                     }
                 }
@@ -97,28 +107,12 @@ fun LabelScanScreen(onDone: () -> Unit) {
             else -> {
                 LabelCaptureView(
                     isProcessing = isProcessing,
-                    onCapture = { imageProxyFile ->
+                    onCapture = { imageFile ->
                         isProcessing = true
-                        val uri = Uri.fromFile(imageProxyFile)
-                        capturedImageUri = uri
-                        val image = InputImage.fromFilePath(context, uri)
-                        val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
-                        recognizer.process(image)
-                            .addOnSuccessListener { result ->
-                                val allLines = result.textBlocks.flatMap { it.lines }
-                                val sorted = allLines.sortedWith(
-                                    compareBy(
-                                        { (it.boundingBox?.top ?: 0) / 40 },
-                                        { it.boundingBox?.left ?: 0 }
-                                    )
-                                )
-                                recognizedLines = sorted.map { it.text }.ifEmpty { listOf("—") }
-                                isProcessing = false
-                            }
-                            .addOnFailureListener {
-                                recognizedLines = listOf("—")
-                                isProcessing = false
-                            }
+                        scope.launch {
+                            recognizedLines = TesseractOcrHelper.recognizeLines(context, imageFile)
+                            isProcessing = false
+                        }
                     }
                 )
             }
@@ -128,16 +122,28 @@ fun LabelScanScreen(onDone: () -> Unit) {
 
 @Composable
 private fun LabelReviewList(lines: List<String>, onDone: () -> Unit) {
-    Column(modifier = Modifier.fillMaxSize().padding(20.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(20.dp)
+    ) {
         Text(stringResource(R.string.confirm_details), style = MaterialTheme.typography.headlineMedium)
-        Text(stringResource(R.string.confirm_details_body), modifier = Modifier.padding(top = 4.dp, bottom = 12.dp))
+        Text(
+            stringResource(R.string.confirm_details_body),
+            modifier = Modifier.padding(top = 4.dp, bottom = 12.dp)
+        )
         LazyColumn(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.weight(1f, fill = true),
             contentPadding = PaddingValues(vertical = 4.dp)
         ) {
             items(lines) { line -> Text("• $line", modifier = Modifier.padding(vertical = 2.dp)) }
         }
-        Button(onClick = onDone, modifier = Modifier.fillMaxWidth().padding(top = 12.dp)) {
+        Button(
+            onClick = onDone,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 12.dp)
+        ) {
             Text(stringResource(R.string.action_continue))
         }
     }
@@ -170,13 +176,49 @@ private fun LabelCaptureView(isProcessing: Boolean, onCapture: (File) -> Unit) {
     Box(modifier = Modifier.fillMaxSize()) {
         androidx.compose.ui.viewinterop.AndroidView(factory = { previewView }, modifier = Modifier.fillMaxSize())
 
+        // Guidance frame: helps the person fill the frame with just the
+        // ingredients paragraph, which is what actually gets OCR'd well.
+        if (!isProcessing) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(0.85f)
+                        .size(width = 320.dp, height = 220.dp)
+                        .border(width = 3.dp, color = Color.White, shape = RoundedCornerShape(16.dp))
+                )
+                Text(
+                    text = stringResource(R.string.label_scan_tip),
+                    color = Color.White,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier
+                        .padding(top = 16.dp)
+                        .background(Color.Black.copy(alpha = 0.55f), RoundedCornerShape(8.dp))
+                        .padding(horizontal = 16.dp, vertical = 10.dp)
+                )
+            }
+        }
+
         Column(
-            modifier = Modifier.fillMaxSize().padding(bottom = 32.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = 32.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = androidx.compose.foundation.layout.Arrangement.Bottom
+            verticalArrangement = Arrangement.Bottom
         ) {
             if (isProcessing) {
-                CircularProgressIndicator()
+                CircularProgressIndicator(color = Color.White)
+                Text(
+                    text = stringResource(R.string.label_reading),
+                    color = Color.White,
+                    modifier = Modifier
+                        .padding(top = 12.dp)
+                        .background(Color.Black.copy(alpha = 0.55f), RoundedCornerShape(8.dp))
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                )
             } else {
                 Button(onClick = {
                     val capture = imageCapture ?: return@Button

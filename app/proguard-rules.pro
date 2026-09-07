@@ -25,3 +25,9 @@
 
 # --- ML Kit ---
 -keep class com.google.mlkit.** { *; }
+
+# --- Tesseract4Android (JNI bindings, must not be renamed/stripped) ---
+-keep class com.googlecode.tesseract.android.** { *; }
+-keep class com.googlecode.leptonica.android.** { *; }
+-dontwarn com.googlecode.tesseract.android.**
+-dontwarn com.googlecode.leptonica.android.**

@@ -222,6 +222,13 @@
 
 # --- ML Kit ---
 -keep class com.google.mlkit.** { *; }
+
+# --- Tesseract4Android (JNI bindings, must not be renamed/stripped) ---
+-keep class com.googlecode.tesseract.android.** { *; }
+-keep class com.googlecode.leptonica.android.** { *; }
+-dontwarn com.googlecode.tesseract.android.**
+-dontwarn com.googlecode.leptonica.android.**
+
 # End of content from C:\Users\makni\Desktop\HealthyScan\app\proguard-rules.pro
 # The proguard configuration file for the following section is C:\Users\makni\.gradle\caches\8.9\transforms\e4d29a0b4c25ea3d59e61e23f4c86cf6\transformed\material-1.12.0\proguard.txt
 # Copyright (C) 2015 The Android Open Source Project
@@ -326,29 +333,6 @@
 }
 
 # End of content from C:\Users\makni\.gradle\caches\8.9\transforms\ed67203fdc3a399bb83a5d4297260bc6\transformed\barcode-scanning-17.3.0\proguard.txt
-# The proguard configuration file for the following section is C:\Users\makni\.gradle\caches\8.9\transforms\c169906c0bb1a163feed0aa4ff44f91c\transformed\text-recognition-16.0.1\proguard.txt
-# This prevents the names of native methods from being obfuscated and prevents
-# UnsatisfiedLinkErrors.
--keepclasseswithmembernames class * {
-    native <methods>;
-}
-
-# End of content from C:\Users\makni\.gradle\caches\8.9\transforms\c169906c0bb1a163feed0aa4ff44f91c\transformed\text-recognition-16.0.1\proguard.txt
-# The proguard configuration file for the following section is C:\Users\makni\.gradle\caches\8.9\transforms\d9d7bc6b4197220f2c99740ed87ac891\transformed\text-recognition-bundled-common-17.0.0\proguard.txt
-# We keep all fields for every generated proto file as the runtime uses
-# reflection over them that ProGuard cannot detect. Without this keep
-# rule, fields may be removed that would cause runtime failures.
--keepclassmembers class * extends com.google.android.gms.internal.mlkit_vision_text_bundled_common.zbuf {
-  <fields>;
-}
-
-# This prevents the names of native methods from being obfuscated and prevents
-# UnsatisfiedLinkErrors.
--keepclasseswithmembernames class * {
-    native <methods>;
-}
-
-# End of content from C:\Users\makni\.gradle\caches\8.9\transforms\d9d7bc6b4197220f2c99740ed87ac891\transformed\text-recognition-bundled-common-17.0.0\proguard.txt
 # The proguard configuration file for the following section is C:\Users\makni\.gradle\caches\8.9\transforms\74a9ed409e383c420edf842527aa38db\transformed\common-18.11.0\proguard.txt
 # Annotations are implemented as attributes, so we have to explicitly keep them.
 # Catch all which encompasses attributes like RuntimeVisibleParameterAnnotations

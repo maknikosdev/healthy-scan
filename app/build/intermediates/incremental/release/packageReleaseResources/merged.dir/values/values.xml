@@ -17,6 +17,19 @@
     <string name="action_continue">Continue</string>
     <string name="action_photograph_label">Photograph the label</string>
     <string name="action_skip">Skip</string>
+    <string name="add_product_barcode">Barcode</string>
+    <string name="add_product_brand">Brand</string>
+    <string name="add_product_error">Couldn\'t submit the product. Check your account details and try again.</string>
+    <string name="add_product_ingredients">Ingredients (paste from label scan or type)</string>
+    <string name="add_product_missing_credentials">Enter your Open Food Facts username and password first.</string>
+    <string name="add_product_name">Product name</string>
+    <string name="add_product_off_account_body">Free forever — create one at world.openfoodfacts.org if you don\'t have one yet. Saved on this device only.</string>
+    <string name="add_product_off_account_title">Open Food Facts account</string>
+    <string name="add_product_password">Password</string>
+    <string name="add_product_submit">Send to Open Food Facts</string>
+    <string name="add_product_success">Thanks! The product was submitted successfully.</string>
+    <string name="add_product_title">Add this product</string>
+    <string name="add_product_username">Username</string>
     <string name="additive_role">Role in this product</string>
     <string name="additive_use">Use</string>
     <string name="additives_title">Additives</string>
@@ -28,6 +41,8 @@
     <string name="allergens_title">Allergens</string>
     <string name="app_name">Healthy Scan</string>
     <string name="app_tagline">Scan it. Understand it. Choose better.</string>
+    <string name="basic_info_body">We found the product name, but no nutrition data exists for it yet anywhere. You can scan the label or add it manually.</string>
+    <string name="basic_info_title">Basic info found</string>
     <string name="basket_improve_body">Replace this item with one of these 3 alternatives.</string>
     <string name="basket_improve_title">You can improve your basket</string>
     <string name="basket_title">My basket</string>
@@ -91,6 +106,7 @@
     <string name="label_check_protein">Protein</string>
     <string name="label_check_sugar">Sugar</string>
     <string name="label_reading">Reading the label…</string>
+    <string name="label_scan_tip">Fill the frame with the ingredients text only, flat and well lit, for best accuracy</string>
     <string name="level_good">Good</string>
     <string name="level_high">High</string>
     <string name="level_low">Low</string>
@@ -185,15 +201,23 @@
     <string name="whats_to_watch">What to watch out for</string>
     <string name="why_this_score">Why this score?</string>
     <string name="winner">Winner</string>
+    <style name="HealthyScanWindowAnimation" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/fade_in</item>
+        <item name="android:activityOpenExitAnimation">@anim/fade_out</item>
+        <item name="android:activityCloseEnterAnimation">@anim/fade_in</item>
+        <item name="android:activityCloseExitAnimation">@anim/fade_out</item>
+    </style>
     <style name="Theme.HealthyScan" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:windowBackground">@color/brand_cream</item>
         <item name="android:statusBarColor">@color/brand_deep_green</item>
         <item name="android:navigationBarColor">@color/brand_cream</item>
         <item name="android:windowLightStatusBar" ns1:targetApi="23">false</item>
+        
+        <item name="android:windowAnimationStyle">@style/HealthyScanWindowAnimation</item>
     </style>
     <style name="Theme.HealthyScan.Splash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/brand_deep_green</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_logo</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_placeholder</item>
         <item name="windowSplashScreenIconBackgroundColor">@color/brand_deep_green</item>
         <item name="postSplashScreenTheme">@style/Theme.HealthyScan</item>
     </style>

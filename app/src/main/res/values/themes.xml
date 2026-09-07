@@ -8,15 +8,25 @@
         <item name="android:statusBarColor">@color/brand_deep_green</item>
         <item name="android:navigationBarColor">@color/brand_cream</item>
         <item name="android:windowLightStatusBar" tools:targetApi="23">false</item>
+        <!-- Smooth fade instead of a black flash when the Activity recreates
+             (needed on API < 33 when the EL/EN language toggle is used). -->
+        <item name="android:windowAnimationStyle">@style/HealthyScanWindowAnimation</item>
     </style>
 
     <!-- Splash screen theme (androidx.core.splashscreen).
          Background = deep green, centered logo, brand cream icon background. -->
     <style name="Theme.HealthyScan.Splash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/brand_deep_green</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_logo</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_placeholder</item>
         <item name="windowSplashScreenIconBackgroundColor">@color/brand_deep_green</item>
         <item name="postSplashScreenTheme">@style/Theme.HealthyScan</item>
+    </style>
+
+    <style name="HealthyScanWindowAnimation" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/fade_in</item>
+        <item name="android:activityOpenExitAnimation">@anim/fade_out</item>
+        <item name="android:activityCloseEnterAnimation">@anim/fade_in</item>
+        <item name="android:activityCloseExitAnimation">@anim/fade_out</item>
     </style>
 
 </resources>

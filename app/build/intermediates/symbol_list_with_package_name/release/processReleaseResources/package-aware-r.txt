@@ -27,6 +27,8 @@ anim design_bottom_sheet_slide_in
 anim design_bottom_sheet_slide_out
 anim design_snackbar_in
 anim design_snackbar_out
+anim fade_in
+anim fade_out
 anim fragment_fast_out_extra_slow_in
 anim linear_indeterminate_line1_head_interpolator
 anim linear_indeterminate_line1_tail_interpolator
@@ -3097,6 +3099,7 @@ drawable notification_template_icon_low_bg
 drawable notification_tile_bg
 drawable notify_panel_notification_icon_bg
 drawable splash_logo
+drawable splash_placeholder
 drawable test_level_drawable
 drawable tooltip_frame_dark
 drawable tooltip_frame_light
@@ -3808,6 +3811,19 @@ string action_add_product
 string action_continue
 string action_photograph_label
 string action_skip
+string add_product_barcode
+string add_product_brand
+string add_product_error
+string add_product_ingredients
+string add_product_missing_credentials
+string add_product_name
+string add_product_off_account_body
+string add_product_off_account_title
+string add_product_password
+string add_product_submit
+string add_product_success
+string add_product_title
+string add_product_username
 string additive_role
 string additive_use
 string additives_title
@@ -3821,6 +3837,8 @@ string androidx_startup
 string app_name
 string app_tagline
 string appbar_scrolling_view_behavior
+string basic_info_body
+string basic_info_title
 string basket_improve_body
 string basket_improve_title
 string basket_title
@@ -3934,6 +3952,7 @@ string label_check_ingredients
 string label_check_protein
 string label_check_sugar
 string label_reading
+string label_scan_tip
 string level_good
 string level_high
 string level_low
@@ -4512,6 +4531,7 @@ style EdgeToEdgeFloatingDialogTheme
 style EdgeToEdgeFloatingDialogWindowTheme
 style FloatingDialogTheme
 style FloatingDialogWindowTheme
+style HealthyScanWindowAnimation
 style MaterialAlertDialog_Material3
 style MaterialAlertDialog_Material3_Animation
 style MaterialAlertDialog_Material3_Body_Text

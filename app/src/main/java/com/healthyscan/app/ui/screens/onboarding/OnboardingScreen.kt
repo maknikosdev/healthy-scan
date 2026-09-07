@@ -73,10 +73,7 @@ fun OnboardingScreen(
                 modifier = Modifier.padding(bottom = 8.dp)
             )
 
-            LazyColumn(
-                modifier = Modifier.weight(1f),
-                contentPadding = PaddingValues(vertical = 4.dp)
-            ) {
+            LazyColumn(modifier = Modifier.weight(1f), contentPadding = PaddingValues(vertical = 4.dp)) {
                 items(allPreferenceOptions) { option ->
                     val isChecked = option.key in selected.value
                     Row(

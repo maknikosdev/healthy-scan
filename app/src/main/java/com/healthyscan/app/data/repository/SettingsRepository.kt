@@ -24,6 +24,8 @@ class SettingsRepository(private val context: Context) {
         val ONBOARDING_DONE = booleanPreferencesKey("onboarding_done")
         val DIETARY_PREFERENCES = stringSetPreferencesKey("dietary_preferences")
         val AVOIDED_ALLERGENS = stringSetPreferencesKey("avoided_allergens")
+        val OFF_USERNAME = stringPreferencesKey("off_username")
+        val OFF_PASSWORD = stringPreferencesKey("off_password")
     }
 
     val themeMode: Flow<ThemeMode> = context.dataStore.data.map { prefs ->
@@ -60,5 +62,21 @@ class SettingsRepository(private val context: Context) {
 
     suspend fun setAvoidedAllergens(allergens: Set<String>) {
         context.dataStore.edit { it[Keys.AVOIDED_ALLERGENS] = allergens }
+    }
+
+    // --- Open Food Facts account (optional, free forever) ---
+    // Only needed if the user wants to contribute missing products back to
+    // Open Food Facts from the "add product" flow. Stored locally on-device
+    // only — never sent anywhere except directly to the OFF API when the
+    // user explicitly submits a product.
+
+    val offUsername: Flow<String> = context.dataStore.data.map { it[Keys.OFF_USERNAME] ?: "" }
+    val offPassword: Flow<String> = context.dataStore.data.map { it[Keys.OFF_PASSWORD] ?: "" }
+
+    suspend fun setOffCredentials(username: String, password: String) {
+        context.dataStore.edit {
+            it[Keys.OFF_USERNAME] = username
+            it[Keys.OFF_PASSWORD] = password
+        }
     }
 }

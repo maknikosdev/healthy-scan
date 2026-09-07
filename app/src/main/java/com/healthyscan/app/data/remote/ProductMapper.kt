@@ -59,7 +59,8 @@ object ProductMapper {
         return Ingredient(name = text.trim(), category = category, assessment = assessment)
     }
 
-    private fun classifyCategory(tags: List<String>): ProductCategory {
+    // internal (not private) so UpcItemDbMapper can reuse the same keyword logic
+    internal fun classifyCategory(tags: List<String>): ProductCategory {
         val joined = tags.joinToString(" ").lowercase()
         return when {
             listOf("beverage", "drink", "soda", "juice", "water").any { it in joined } -> ProductCategory.BEVERAGE

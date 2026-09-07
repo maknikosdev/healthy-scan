@@ -1,5 +1,7 @@
 R_DEF: Internal format may change without notice
 local
+anim fade_in
+anim fade_out
 color black
 color brand_cream
 color brand_deep_green
@@ -15,6 +17,7 @@ color score_very_low
 color white
 drawable ic_launcher_background
 drawable splash_logo
+drawable splash_placeholder
 mipmap ic_launcher
 mipmap ic_launcher_foreground
 mipmap ic_launcher_round
@@ -22,6 +25,19 @@ string action_add_product
 string action_continue
 string action_photograph_label
 string action_skip
+string add_product_barcode
+string add_product_brand
+string add_product_error
+string add_product_ingredients
+string add_product_missing_credentials
+string add_product_name
+string add_product_off_account_body
+string add_product_off_account_title
+string add_product_password
+string add_product_submit
+string add_product_success
+string add_product_title
+string add_product_username
 string additive_role
 string additive_use
 string additives_title
@@ -33,6 +49,8 @@ string allergens_contains
 string allergens_title
 string app_name
 string app_tagline
+string basic_info_body
+string basic_info_title
 string basket_improve_body
 string basket_improve_title
 string basket_title
@@ -96,6 +114,7 @@ string label_check_ingredients
 string label_check_protein
 string label_check_sugar
 string label_reading
+string label_scan_tip
 string level_good
 string level_high
 string level_low
@@ -190,6 +209,7 @@ string whats_good
 string whats_to_watch
 string why_this_score
 string winner
+style HealthyScanWindowAnimation
 style Theme.HealthyScan
 style Theme.HealthyScan.Splash
 xml backup_rules
