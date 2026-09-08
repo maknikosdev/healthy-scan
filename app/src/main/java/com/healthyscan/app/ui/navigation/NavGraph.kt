@@ -32,7 +32,6 @@ import com.healthyscan.app.ui.screens.premium.PremiumScreen
 import com.healthyscan.app.ui.screens.preferences.EditPreferencesScreen
 import com.healthyscan.app.ui.screens.product.ProductResultScreen
 import com.healthyscan.app.ui.screens.profile.ProfileScreen
-import com.healthyscan.app.ui.screens.scan.LabelScanScreen
 import com.healthyscan.app.ui.screens.scan.ScanScreen
 import com.healthyscan.app.ui.theme.ThemeMode
 import kotlinx.coroutines.launch
@@ -110,7 +109,6 @@ fun HealthyScanNavHost(
                     onToggleLanguage = onToggleLanguage,
                     onScanBarcode = { navController.navigate(Screen.Scan.route) },
                     onSearch = { navController.navigate("search") },
-                    onScanLabel = { navController.navigate("label_scan") },
                     onOpenProduct = { barcode ->
                         navController.navigate(Screen.ProductResult.createRoute(barcode, record = false))
                     }
@@ -186,7 +184,6 @@ fun HealthyScanNavHost(
                     onOpenAlternative = { altBarcode ->
                         navController.navigate(Screen.ProductResult.createRoute(altBarcode))
                     },
-                    onScanLabel = { navController.navigate("label_scan") },
                     onAddProduct = { name, brand ->
                         navController.navigate(Screen.AddProduct.createRoute(barcode, name, brand))
                     }
@@ -220,10 +217,6 @@ fun HealthyScanNavHost(
                     onBack = { navController.popBackStack() },
                     onOpenProduct = { barcode -> navController.navigate(Screen.ProductResult.createRoute(barcode)) }
                 )
-            }
-
-            composable("label_scan") {
-                LabelScanScreen(onDone = { navController.popBackStack() })
             }
 
             composable(Screen.Premium.route) {

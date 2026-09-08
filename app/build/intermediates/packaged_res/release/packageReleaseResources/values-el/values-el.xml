@@ -2,12 +2,11 @@
 <resources>
     <string name="action_add_product">Πρόσθεσε το προϊόν</string>
     <string name="action_continue">Συνέχεια</string>
-    <string name="action_photograph_label">Φωτογράφισε την ετικέτα</string>
     <string name="action_skip">Παράλειψη</string>
     <string name="add_product_barcode">Barcode</string>
     <string name="add_product_brand">Μάρκα</string>
     <string name="add_product_error">Δεν μπορέσαμε να υποβάλουμε το προϊόν. Έλεγξε τα στοιχεία λογαριασμού και δοκίμασε ξανά.</string>
-    <string name="add_product_ingredients">Συστατικά (επικόλλησε από τη σάρωση ετικέτας ή πληκτρολόγησε)</string>
+    <string name="add_product_ingredients">Συστατικά</string>
     <string name="add_product_missing_credentials">Συμπλήρωσε πρώτα το όνομα χρήστη και τον κωδικό σου στο Open Food Facts.</string>
     <string name="add_product_name">Όνομα προϊόντος</string>
     <string name="add_product_off_account_body">Δωρεάν για πάντα — φτιάξε έναν στο world.openfoodfacts.org αν δεν έχεις ήδη. Αποθηκεύεται μόνο σε αυτή τη συσκευή.</string>
@@ -42,7 +41,7 @@
     <string name="allergens_title">Αλλεργιογόνα</string>
     <string name="app_name">Healthy Scan</string>
     <string name="app_tagline">Σκάναρε. Κατάλαβε. Επίλεξε καλύτερα.</string>
-    <string name="basic_info_body">Βρήκαμε το όνομα του προϊόντος, αλλά δεν υπάρχουν ακόμα διατροφικά στοιχεία πουθενά. Μπορείς να σαρώσεις την ετικέτα ή να το προσθέσεις χειροκίνητα.</string>
+    <string name="basic_info_body">Βρήκαμε το όνομα του προϊόντος, αλλά δεν υπάρχουν ακόμα διατροφικά στοιχεία πουθενά. Μπορείς να το προσθέσεις χειροκίνητα.</string>
     <string name="basic_info_title">Βρέθηκαν βασικά στοιχεία</string>
     <string name="basket_improve_body">Αντικατάστησε αυτό το προϊόν με μία από αυτές τις 3 εναλλακτικές.</string>
     <string name="basket_improve_title">Μπορείς να βελτιώσεις το καλάθι σου</string>
@@ -56,8 +55,6 @@
     <string name="close">Κλείσιμο</string>
     <string name="compare_all">Σύγκρινε όλα</string>
     <string name="comparison_title">Σύγκριση</string>
-    <string name="confirm_details">Επιβεβαίωσε τα στοιχεία</string>
-    <string name="confirm_details_body">Αυτό διαβάσαμε. Μπορείς να διορθώσεις ό,τι φαίνεται λάθος για καλύτερη ακρίβεια.</string>
     <string name="cta_or_search">Ή αναζήτησε ένα προϊόν</string>
     <string name="cta_scan_product">ΣΚΑΝΑΡΕ ΠΡΟΪΟΝ</string>
     <string name="disclaimer_not_medical">Το Healthy Scan δεν κάνει ιατρική διάγνωση και δεν αντικαθιστά γιατρό ή διαιτολόγο.</string>
@@ -90,8 +87,6 @@
     <string name="home_recent_scans">Τα τελευταία σου scans</string>
     <string name="home_scan_barcode_subtitle">Σκάναρε ένα προϊόν</string>
     <string name="home_scan_barcode_title">Σάρωση Barcode</string>
-    <string name="home_scan_label_subtitle">Φωτογράφισε τη διατροφική ετικέτα</string>
-    <string name="home_scan_label_title">Σάρωση Ετικέτας</string>
     <string name="home_search_subtitle">Αναζήτησε προϊόν</string>
     <string name="home_search_title">Αναζήτηση</string>
     <string name="home_subtitle">Τι θα ήθελες να ελέγξεις;</string>
@@ -103,14 +98,6 @@
     <string name="ingredients_sweeteners">Γλυκαντικά / σάκχαρα</string>
     <string name="ingredients_title">Συστατικά</string>
     <string name="is_it_good_for_me">❤️ Είναι καλή επιλογή για μένα;</string>
-    <string name="label_check_calories">Θερμίδες</string>
-    <string name="label_check_fat">Λιπαρά</string>
-    <string name="label_check_fiber">Ίνες</string>
-    <string name="label_check_ingredients">Συστατικά</string>
-    <string name="label_check_protein">Πρωτεΐνη</string>
-    <string name="label_check_sugar">Σάκχαρα</string>
-    <string name="label_reading">Διαβάζουμε την ετικέτα…</string>
-    <string name="label_scan_tip">Γέμισε το πλαίσιο με το κείμενο των συστατικών, απόφυγε τις αντανακλάσεις — δουλεύει και σε κυρτά βάζα/μπουκάλια</string>
     <string name="level_good">Καλή</string>
     <string name="level_high">Υψηλή</string>
     <string name="level_low">Χαμηλά</string>

@@ -23,7 +23,6 @@ mipmap ic_launcher_foreground
 mipmap ic_launcher_round
 string action_add_product
 string action_continue
-string action_photograph_label
 string action_skip
 string add_product_barcode
 string add_product_brand
@@ -77,8 +76,6 @@ string cd_toggle_theme
 string close
 string compare_all
 string comparison_title
-string confirm_details
-string confirm_details_body
 string cta_or_search
 string cta_scan_product
 string disclaimer_not_medical
@@ -111,8 +108,6 @@ string home_greeting
 string home_recent_scans
 string home_scan_barcode_subtitle
 string home_scan_barcode_title
-string home_scan_label_subtitle
-string home_scan_label_title
 string home_search_subtitle
 string home_search_title
 string home_subtitle
@@ -124,14 +119,6 @@ string ingredients_core
 string ingredients_sweeteners
 string ingredients_title
 string is_it_good_for_me
-string label_check_calories
-string label_check_fat
-string label_check_fiber
-string label_check_ingredients
-string label_check_protein
-string label_check_sugar
-string label_reading
-string label_scan_tip
 string level_good
 string level_high
 string level_low

@@ -3518,16 +3518,30 @@ androidx.camera.core.ImageCapture$FlashType
 androidx.camera.core.ImageCapture$ImageCaptureError
 androidx.camera.core.ImageCapture$ImageCaptureRequest
 androidx.camera.core.ImageCapture$Metadata:
+    private boolean mIsReversedHorizontal
+    private boolean mIsReversedHorizontalSet
+    private boolean mIsReversedVertical
+    private android.location.Location mLocation
+    public void <init>()
     public boolean isReversedHorizontalSet()
     public void setLocation(android.location.Location)
     public void setReversedHorizontal(boolean)
     public void setReversedVertical(boolean)
-androidx.camera.core.ImageCapture$OnImageCapturedCallback:
-    public void <init>()
-androidx.camera.core.ImageCapture$OutputFileOptions$Builder:
-    public void <init>(android.content.ContentResolver,android.net.Uri,android.content.ContentValues)
-    public void <init>(java.io.OutputStream)
-    public androidx.camera.core.ImageCapture$OutputFileOptions$Builder setMetadata(androidx.camera.core.ImageCapture$Metadata)
+    public java.lang.String toString()
+androidx.camera.core.ImageCapture$OnImageCapturedCallback
+androidx.camera.core.ImageCapture$OnImageSavedCallback:
+    public abstract void onError(androidx.camera.core.ImageCaptureException)
+    public abstract void onImageSaved(androidx.camera.core.ImageCapture$OutputFileResults)
+androidx.camera.core.ImageCapture$OutputFileOptions$Builder
+androidx.camera.core.ImageCapture$OutputFileOptions:
+    private final android.content.ContentResolver mContentResolver
+    private final android.content.ContentValues mContentValues
+    private final java.io.File mFile
+    private final androidx.camera.core.ImageCapture$Metadata mMetadata
+    private final java.io.OutputStream mOutputStream
+    private final android.net.Uri mSaveCollection
+    void <init>(java.io.File,android.content.ContentResolver,android.net.Uri,android.content.ContentValues,java.io.OutputStream,androidx.camera.core.ImageCapture$Metadata)
+    public java.lang.String toString()
 androidx.camera.core.ImageCapture$OutputFileResults:
     public android.net.Uri getSavedUri()
 androidx.camera.core.ImageCapture:
@@ -3555,17 +3569,23 @@ androidx.camera.core.ImageCapture:
     static int getError(java.lang.Throwable)
     androidx.camera.core.imagecapture.ImagePipeline getImagePipeline()
     public int getJpegQuality()
+    private int getJpegQualityInternal()
     public androidx.camera.core.ImageCaptureLatencyEstimate getRealtimeCaptureLatencyEstimate()
     public androidx.camera.core.ResolutionInfo getResolutionInfo()
     protected androidx.camera.core.ResolutionInfo getResolutionInfoInternal()
     public androidx.camera.core.resolutionselector.ResolutionSelector getResolutionSelector()
+    private android.graphics.Rect getTakePictureCropRect()
     androidx.camera.core.imagecapture.TakePictureManager getTakePictureManager()
     public int getTargetRotation()
     boolean isProcessingPipelineEnabled()
     private synthetic void lambda$takePicture$1(java.util.concurrent.Executor,androidx.camera.core.ImageCapture$OnImageCapturedCallback)
+    private synthetic void lambda$takePicture$2(androidx.camera.core.ImageCapture$OutputFileOptions,java.util.concurrent.Executor,androidx.camera.core.ImageCapture$OnImageSavedCallback)
+    private void sendInvalidCameraError(java.util.concurrent.Executor,androidx.camera.core.ImageCapture$OnImageCapturedCallback,androidx.camera.core.ImageCapture$OnImageSavedCallback)
     public void setFlashMode(int)
     public void setTargetRotation(int)
+    public void takePicture(androidx.camera.core.ImageCapture$OutputFileOptions,java.util.concurrent.Executor,androidx.camera.core.ImageCapture$OnImageSavedCallback)
     public void takePicture(java.util.concurrent.Executor,androidx.camera.core.ImageCapture$OnImageCapturedCallback)
+    private void takePictureInternal(java.util.concurrent.Executor,androidx.camera.core.ImageCapture$OnImageCapturedCallback,androidx.camera.core.ImageCapture$OnImageSavedCallback,androidx.camera.core.ImageCapture$OutputFileOptions)
 androidx.camera.core.ImageCaptureException:
     public int getImageCaptureError()
 androidx.camera.core.ImageCaptureLatencyEstimate
@@ -3736,6 +3756,7 @@ androidx.camera.core.concurrent.CameraCoordinator:
     public abstract void removeListener(androidx.camera.core.concurrent.CameraCoordinator$ConcurrentCameraModeListener)
     public abstract void setActiveConcurrentCameraInfos(java.util.List)
     public abstract void shutdown()
+androidx.camera.core.imagecapture.AutoValue_TakePictureRequest
 androidx.camera.core.imagecapture.BundlingNode
 androidx.camera.core.imagecapture.CaptureNode:
     static final int MAX_IMAGES
@@ -3774,9 +3795,18 @@ androidx.camera.core.imagecapture.TakePictureManager:
     private static final java.lang.String TAG
     public androidx.camera.core.imagecapture.ImagePipeline getImagePipeline()
     java.util.List getIncompleteRequests()
+    public void offerRequest(androidx.camera.core.imagecapture.TakePictureRequest)
 androidx.camera.core.imagecapture.TakePictureRequest:
+    private int mRemainingRetires
+    public void <init>()
+    abstract java.util.concurrent.Executor getAppExecutor()
+    abstract androidx.camera.core.ImageCapture$OnImageCapturedCallback getInMemoryCallback()
     int getRemainingRetries()
     void incrementRetryCounter()
+    private synthetic void lambda$onError$0(androidx.camera.core.ImageCaptureException)
+    private synthetic void lambda$onResult$1(androidx.camera.core.ImageCapture$OutputFileResults)
+    private synthetic void lambda$onResult$2(androidx.camera.core.ImageProxy)
+    public static androidx.camera.core.imagecapture.TakePictureRequest of(java.util.concurrent.Executor,androidx.camera.core.ImageCapture$OnImageCapturedCallback,androidx.camera.core.ImageCapture$OnImageSavedCallback,androidx.camera.core.ImageCapture$OutputFileOptions,android.graphics.Rect,android.graphics.Matrix,int,int,int,java.util.List)
 androidx.camera.core.imagecapture.package-info
 androidx.camera.core.impl.AutoValue_DeviceProperties
 androidx.camera.core.impl.AutoValue_EncoderProfilesProxy_AudioProfileProxy
@@ -3934,6 +3964,7 @@ androidx.camera.core.impl.ImageCaptureConfig:
     public int getFlashMode()
     public int getFlashType()
     public java.util.concurrent.Executor getIoExecutor()
+    public int getJpegQuality()
     public int getJpegQuality(int)
     public int getMaxCaptureStages()
     public int getMaxCaptureStages(int)
@@ -4013,6 +4044,7 @@ androidx.camera.core.impl.SessionConfig$Builder:
     public androidx.camera.core.impl.SessionConfig$Builder addAllCameraCaptureCallbacks(java.util.Collection)
     public androidx.camera.core.impl.SessionConfig$Builder addOutputConfig(androidx.camera.core.impl.SessionConfig$OutputConfig)
     public androidx.camera.core.impl.SessionConfig$Builder clearSurfaces()
+    public java.util.List getSingleCameraCaptureCallbacks()
     public boolean removeCameraCaptureCallback(androidx.camera.core.impl.CameraCaptureCallback)
     public androidx.camera.core.impl.SessionConfig$Builder removeSurface(androidx.camera.core.impl.DeferrableSurface)
 androidx.camera.core.impl.SessionConfig$OutputConfig$Builder:
@@ -4277,11 +4309,14 @@ androidx.camera.core.internal.compat.ImageWriterCompatApi23Impl:
 androidx.camera.core.internal.compat.ImageWriterCompatApi26Impl
 androidx.camera.core.internal.compat.ImageWriterCompatApi29Impl
 androidx.camera.core.internal.compat.package-info
+androidx.camera.core.internal.compat.quirk.CaptureFailedRetryQuirk:
+    public int getRetryCount()
 androidx.camera.core.internal.compat.quirk.DeviceQuirks:
     private void <init>()
 androidx.camera.core.internal.compat.quirk.DeviceQuirksLoader:
     private void <init>()
 androidx.camera.core.internal.compat.quirk.package-info
+androidx.camera.core.internal.compat.workaround.CaptureFailedRetryEnabler
 androidx.camera.core.internal.compat.workaround.JpegMetadataCorrector:
     public boolean needCorrectJpegMetadata()
 androidx.camera.core.internal.compat.workaround.SurfaceSorter:
@@ -4301,11 +4336,13 @@ androidx.camera.core.internal.utils.ImageUtil:
     public static final int DEFAULT_RGBA_PIXEL_STRIDE
     private static final java.lang.String TAG
     private void <init>()
+    public static android.graphics.Rect computeCropRectFromAspectRatio(android.util.Size,android.util.Rational)
     public static android.graphics.Rect computeCropRectFromDispatchInfo(android.graphics.Rect,int,android.util.Size,int)
     public static android.graphics.Bitmap createBitmapFromImageProxy(androidx.camera.core.ImageProxy)
     private static android.graphics.Bitmap createBitmapFromJpegImage(androidx.camera.core.ImageProxy)
     private static android.graphics.Bitmap createBitmapFromRgbaImage(androidx.camera.core.ImageProxy)
     private static byte[] cropJpegByteArray(byte[],android.graphics.Rect,int)
+    public static boolean isAspectRatioValid(android.util.Rational)
     public static boolean isAspectRatioValid(android.util.Size,android.util.Rational)
     private static boolean isCropAspectRatioHasEffect(android.util.Size,android.util.Rational)
     public static byte[] jpegImageToJpegByteArray(androidx.camera.core.ImageProxy)
@@ -11275,6 +11312,7 @@ androidx.compose.material.icons.filled.DoNotDisturbOnTotalSilenceKt
 androidx.compose.material.icons.filled.DoNotStepKt
 androidx.compose.material.icons.filled.DoNotTouchKt
 androidx.compose.material.icons.filled.DockKt
+androidx.compose.material.icons.filled.DocumentScannerKt
 androidx.compose.material.icons.filled.DomainAddKt
 androidx.compose.material.icons.filled.DomainDisabledKt
 androidx.compose.material.icons.filled.DomainKt
@@ -54329,12 +54367,6 @@ com.healthyscan.app.R$string:
     public static int ingredient_what_is_it
     public static int ingredient_what_it_means
     public static int ingredients_additives
-    public static int label_check_calories
-    public static int label_check_fat
-    public static int label_check_fiber
-    public static int label_check_ingredients
-    public static int label_check_protein
-    public static int label_check_sugar
     public static int level_good
     public static int level_high
     public static int level_low
@@ -54422,15 +54454,6 @@ com.healthyscan.app.locale.LocaleManager:
     public static final int $stable
     public static final java.lang.String LANGUAGE_ENGLISH
     public static final java.lang.String LANGUAGE_GREEK
-com.healthyscan.app.ocr.TesseractOcrHelper$Attempt:
-    public final java.lang.String component1()
-    public final int component2()
-    public final com.healthyscan.app.ocr.TesseractOcrHelper$Attempt copy(java.lang.String,int)
-    public static synthetic com.healthyscan.app.ocr.TesseractOcrHelper$Attempt copy$default(com.healthyscan.app.ocr.TesseractOcrHelper$Attempt,java.lang.String,int,int,java.lang.Object)
-com.healthyscan.app.ocr.TesseractOcrHelper:
-    private static final int CONFIDENCE_RETRY_THRESHOLD
-    private static final java.lang.String LANGUAGES
-    private static final int MAX_DIMENSION
 com.healthyscan.app.scoring.ExplanationGenerator:
     public static final int $stable
 com.healthyscan.app.scoring.HealthScoreEngine$Thresholds:
@@ -54500,13 +54523,10 @@ com.healthyscan.app.ui.screens.preferences.EditPreferencesScreenKt$EditPreferenc
 com.healthyscan.app.ui.screens.premium.PremiumScreenKt$PremiumScreen$2$1$invoke$lambda$3$lambda$2$$inlined$items$default$2
 com.healthyscan.app.ui.screens.profile.BackupStatus:
     public static kotlin.enums.EnumEntries getEntries()
-com.healthyscan.app.ui.screens.scan.LabelScanScreenKt$LabelReviewList$lambda$22$lambda$21$lambda$20$$inlined$items$default$2
 com.healthyscan.app.ui.theme.ColorKt:
     public static final long getCreamVariantLight()
 com.healthyscan.app.ui.theme.ThemeMode:
     public static kotlin.enums.EnumEntries getEntries()
-cz.adaptech.tesseract4android.BuildConfig
-cz.adaptech.tesseract4android.R
 javax.inject.Inject
 javax.inject.Named
 javax.inject.Qualifier
@@ -66663,6 +66683,11 @@ androidx.camera.camera2.internal.AutoValue_SupportedSurfaceCombination_FeatureSe
     public static int getCameraMode()
     public static int getRequiredMaxBitDepth()
 androidx.camera.camera2.internal.CamcorderProfileHelper
+androidx.camera.camera2.internal.Camera2CameraCaptureResult:
+    public final int getAfMode()
+    public final int getFlashState()
+    public final void populateExifData(androidx.camera.core.impl.utils.ExifData$Builder)
+androidx.camera.camera2.internal.Camera2CameraControlImpl$$InternalSyntheticLambda$14$21ccf37e6c97603705d650c6a493daf6d7d6602d4d1d441237f2b9168db7f8da$0
 androidx.camera.camera2.internal.Camera2CameraControlImpl$CameraCaptureCallbackSet:
     public static void addCaptureCallback()
     public static void removeCaptureCallback()
@@ -66671,6 +66696,7 @@ androidx.camera.camera2.internal.Camera2CameraControlImpl$CameraControlSessionCa
     public static synthetic void lambda$onCaptureCompleted$0()
     public static void removeListener()
 androidx.camera.camera2.internal.Camera2CameraControlImpl:
+    public volatile com.google.common.util.concurrent.ListenableFuture mFlashModeChangeSessionUpdateFuture
     public final void addSessionCameraCaptureCallback(java.util.concurrent.Executor,androidx.camera.core.impl.CameraCaptureCallback)
     public static int getFlashMode()
     public static androidx.camera.camera2.internal.FocusMeteringControl getFocusMeteringControl()
@@ -66697,6 +66723,7 @@ androidx.camera.camera2.internal.Camera2CameraControlImpl:
     public final void setPreviewAspectRatio()
     public final void setTemplate(int)
     public final void setZslDisabledByUserCaseConfig(boolean)
+    public final com.google.common.util.concurrent.ListenableFuture submitStillCaptureRequests()
     public static void updateSessionConfig()
     public static com.google.common.util.concurrent.ListenableFuture updateSessionConfigAsync()
     public static com.google.common.util.concurrent.ListenableFuture waitForSessionUpdateId()
@@ -66796,34 +66823,43 @@ androidx.camera.camera2.internal.Camera2CameraInfoImpl:
     public static void logDeviceLevel()
     public static void setCameraStateSource()
 androidx.camera.camera2.internal.Camera2CaptureCallbacks
-androidx.camera.camera2.internal.Camera2CapturePipeline$AePreCaptureTask:
-    public static synthetic java.lang.Boolean $r8$lambda$97iNoPow59kgNniUrhrtfXV003A()
-    public static java.lang.Object lambda$preCapture$0()
-    public static synthetic java.lang.Boolean lambda$preCapture$1()
-androidx.camera.camera2.internal.Camera2CapturePipeline$Pipeline$$InternalSyntheticLambda$16$2e4643555f10556d0f546915c92fa97bc9a957078d7f2c20eb3ad9b2689f1c34$0:
-    public final synthetic androidx.camera.camera2.internal.Camera2CapturePipeline$Pipeline f$0
-androidx.camera.camera2.internal.Camera2CapturePipeline$Pipeline$2:
-    public final synthetic androidx.camera.camera2.internal.Camera2CapturePipeline$Pipeline this$0
-androidx.camera.camera2.internal.Camera2CapturePipeline$Pipeline:
-    public final void addTask(androidx.camera.camera2.internal.Camera2CapturePipeline$PipelineTask)
-    public static void applyAeModeQuirk()
-    public static void applyStillCaptureTemplate()
-    public static com.google.common.util.concurrent.ListenableFuture executeCapture()
-    public static com.google.common.util.concurrent.ListenableFuture lambda$executeCapture$0()
-    public static com.google.common.util.concurrent.ListenableFuture lambda$executeCapture$2()
-    public static com.google.common.util.concurrent.ListenableFuture lambda$executeCapture$3()
-    public static synthetic java.lang.Object lambda$submitConfigsInternal$4()
-    public static void setTimeout3A()
-    public static com.google.common.util.concurrent.ListenableFuture submitConfigsInternal()
-androidx.camera.camera2.internal.Camera2CapturePipeline$ResultListener:
-    public static com.google.common.util.concurrent.ListenableFuture getFuture()
-    public static synthetic java.lang.Object lambda$new$0()
-androidx.camera.camera2.internal.Camera2CapturePipeline$TorchTask:
-    public static synthetic java.lang.Boolean $r8$lambda$zf9Lnf0nxqpA71ey_wOMmJo4ptY()
-    public static java.lang.Object lambda$preCapture$0$1()
-    public static synthetic com.google.common.util.concurrent.ListenableFuture lambda$preCapture$2()
-    public static synthetic java.lang.Boolean lambda$preCapture$3()
+androidx.camera.camera2.internal.Camera2CapturePipeline$AePreCaptureTask$$InternalSyntheticLambda$16$c128941690222bba6a11a1043665ff433c30586f87b3e092f3d20f4b0bf37122$0
+androidx.camera.camera2.internal.Camera2CapturePipeline$AePreCaptureTask$$InternalSyntheticLambda$16$c128941690222bba6a11a1043665ff433c30586f87b3e092f3d20f4b0bf37122$1
+androidx.camera.camera2.internal.Camera2CapturePipeline$AePreCaptureTask
+androidx.camera.camera2.internal.Camera2CapturePipeline$AfTask
+androidx.camera.camera2.internal.Camera2CapturePipeline$Pipeline$$InternalSyntheticLambda$15$585407664e4dc2fd6e03ce759105694f96e879fec85f0d614a92d47aafc3fc09$0
+androidx.camera.camera2.internal.Camera2CapturePipeline$Pipeline$$InternalSyntheticLambda$15$585407664e4dc2fd6e03ce759105694f96e879fec85f0d614a92d47aafc3fc09$1
+androidx.camera.camera2.internal.Camera2CapturePipeline$Pipeline$$InternalSyntheticLambda$15$585407664e4dc2fd6e03ce759105694f96e879fec85f0d614a92d47aafc3fc09$2
+androidx.camera.camera2.internal.Camera2CapturePipeline$Pipeline$$InternalSyntheticLambda$15$585407664e4dc2fd6e03ce759105694f96e879fec85f0d614a92d47aafc3fc09$3
+androidx.camera.camera2.internal.Camera2CapturePipeline$Pipeline$$InternalSyntheticLambda$16$0b22ae9eac92d0b96d5fc46095bdde66b50111386fe3b2534045ab1cfb21f284$0
+androidx.camera.camera2.internal.Camera2CapturePipeline$Pipeline$$InternalSyntheticLambda$16$2e4643555f10556d0f546915c92fa97bc9a957078d7f2c20eb3ad9b2689f1c34$0
+androidx.camera.camera2.internal.Camera2CapturePipeline$Pipeline$1$$InternalSyntheticLambda$16$73b1f1283ca71743852118cc403c94f0ebcfd7fb8fb9516b094a0d81308fd096$0
+androidx.camera.camera2.internal.Camera2CapturePipeline$Pipeline$1
+androidx.camera.camera2.internal.Camera2CapturePipeline$Pipeline$2
+androidx.camera.camera2.internal.Camera2CapturePipeline$Pipeline
+androidx.camera.camera2.internal.Camera2CapturePipeline$PipelineTask
+androidx.camera.camera2.internal.Camera2CapturePipeline$ResultListener$$InternalSyntheticLambda$16$e9ddbdb1a5a806eefb22bcf9233434b3e3f1bc7df28a48c5321e692572a5e2ee$0
+androidx.camera.camera2.internal.Camera2CapturePipeline$ResultListener$Checker
+androidx.camera.camera2.internal.Camera2CapturePipeline$ResultListener
+androidx.camera.camera2.internal.Camera2CapturePipeline$TorchTask$$InternalSyntheticLambda$16$a8046e63db84eaac8ce83e834ea41eac8688f63a32399d4ef702a8082bc85b75$0
+androidx.camera.camera2.internal.Camera2CapturePipeline$TorchTask$$InternalSyntheticLambda$16$a8046e63db84eaac8ce83e834ea41eac8688f63a32399d4ef702a8082bc85b75$1
+androidx.camera.camera2.internal.Camera2CapturePipeline$TorchTask$$InternalSyntheticLambda$16$a8046e63db84eaac8ce83e834ea41eac8688f63a32399d4ef702a8082bc85b75$2
+androidx.camera.camera2.internal.Camera2CapturePipeline$TorchTask$$InternalSyntheticLambda$17$adf5c3f4ca39d5e49c0f59ab5f668a90608e810a2129285e3034e1d6337e7fed$0
+androidx.camera.camera2.internal.Camera2CapturePipeline$TorchTask
 androidx.camera.camera2.internal.Camera2CapturePipeline:
+    public static final java.util.Set AE_CONVERGED_STATE_SET
+    public static final java.util.Set AE_TORCH_AS_FLASH_CONVERGED_STATE_SET
+    public static final java.util.Set AF_CONVERGED_STATE_SET
+    public static final java.util.Set AWB_CONVERGED_STATE_SET
+    public final androidx.camera.camera2.internal.Camera2CameraControlImpl mCameraControl
+    public final androidx.camera.core.impl.Quirks mCameraQuirk
+    public final androidx.camera.core.impl.utils.executor.SequentialExecutor mExecutor
+    public final boolean mHasFlashUnit
+    public final boolean mIsLegacyDevice
+    public int mTemplate
+    public final androidx.camera.camera2.internal.compat.workaround.UseTorchAsFlash mUseTorchAsFlash
+    public static boolean is3AConverged(android.hardware.camera2.TotalCaptureResult,boolean)
+    public static boolean isFlashRequired(int,android.hardware.camera2.TotalCaptureResult)
     public static boolean isTorchAsFlash()
     public static void setTemplate()
     public static com.google.common.util.concurrent.ListenableFuture submitStillCaptures()
@@ -66924,11 +66960,8 @@ androidx.camera.camera2.internal.ExposureStateImpl:
     public static int getExposureCompensationIndex()
     public static void setExposureCompensationIndex()
 androidx.camera.camera2.internal.FocusMeteringControl$$InternalSyntheticLambda$15$7667f5c8d6e788c3087b782099264d9972e763dad468c8978b524b1b331baa2c$0
-androidx.camera.camera2.internal.FocusMeteringControl$1:
-    public final synthetic androidx.camera.camera2.internal.FocusMeteringControl this$0
-    public final synthetic androidx.concurrent.futures.CallbackToFutureAdapter$Completer val$completer
-androidx.camera.camera2.internal.FocusMeteringControl$2:
-    public final synthetic androidx.camera.camera2.internal.FocusMeteringControl this$0
+androidx.camera.camera2.internal.FocusMeteringControl$1
+androidx.camera.camera2.internal.FocusMeteringControl$2
 androidx.camera.camera2.internal.FocusMeteringControl:
     public java.util.concurrent.ScheduledFuture mAutoCancelHandle
     public java.util.concurrent.ScheduledFuture mAutoFocusTimeoutHandle
@@ -67061,6 +67094,8 @@ androidx.camera.camera2.internal.TemplateTypeUtil$1
 androidx.camera.camera2.internal.TemplateTypeUtil
 androidx.camera.camera2.internal.TorchControl:
     public final java.util.concurrent.Executor mExecutor
+    public final boolean mHasFlashUnit
+    public final void enableTorchInternal(androidx.concurrent.futures.CallbackToFutureAdapter$Completer,boolean)
     public static androidx.lifecycle.LiveData getTorchState()
     public static synthetic boolean lambda$new$0()
     public static void setActive()
@@ -67075,6 +67110,7 @@ androidx.camera.camera2.internal.ZoomStateImpl:
     public static float getPercentageByRatio()
 androidx.camera.camera2.internal.ZslControl
 androidx.camera.camera2.internal.ZslControlImpl:
+    public boolean mIsZslDisabledByFlashMode
     public final void addZslConfig()
     public static void cleanup()
     public static java.util.Map createReprocessingInputSizeMap()
@@ -67224,6 +67260,7 @@ androidx.camera.camera2.internal.compat.quirk.AeFpsRangeLegacyQuirk:
 androidx.camera.camera2.internal.compat.quirk.AspectRatioLegacyApi21Quirk:
     public void <init>()
     public final int getCorrectedAspectRatio()
+androidx.camera.camera2.internal.compat.quirk.AutoFlashUnderExposedQuirk
 androidx.camera.camera2.internal.compat.quirk.CamcorderProfileResolutionQuirk:
     public final androidx.camera.camera2.internal.compat.StreamConfigurationMapCompat mStreamConfigurationMapCompat
     public java.util.List mSupportedResolutions
@@ -67298,10 +67335,7 @@ androidx.camera.camera2.internal.compat.workaround.OutputSizesCorrector:
     public final java.lang.String mCameraId
     public static void addExtraSupportedOutputSizesByFormat()
     public static void excludeProblematicOutputSizesByFormat()
-androidx.camera.camera2.internal.compat.workaround.OverrideAeModeForStillCapture:
-    public static void onAePrecaptureFinished()
-    public static void onAePrecaptureStarted()
-    public static boolean shouldSetAeModeAlwaysFlash()
+androidx.camera.camera2.internal.compat.workaround.OverrideAeModeForStillCapture
 androidx.camera.camera2.internal.compat.workaround.ResolutionCorrector:
     public static java.util.List insertOrPrioritize()
 androidx.camera.camera2.internal.compat.workaround.SupportedRepeatingSurfaceSize:
@@ -67309,6 +67343,7 @@ androidx.camera.camera2.internal.compat.workaround.SupportedRepeatingSurfaceSize
 androidx.camera.camera2.internal.compat.workaround.TargetAspectRatio:
     public static int get()
 androidx.camera.camera2.internal.compat.workaround.UseTorchAsFlash:
+    public final boolean mHasUseTorchAsFlashQuirk
     public static boolean shouldUseTorchAsFlash()
 androidx.camera.camera2.internal.compat.workaround.WaitForRepeatingRequestStart$OpenCaptureSession
 androidx.camera.camera2.internal.compat.workaround.WaitForRepeatingRequestStart$SingleRepeatingRequest
@@ -67361,6 +67396,7 @@ androidx.camera.core.AutoValue_CameraState_StateError:
     public static int getCode()
 androidx.camera.core.AutoValue_ImmutableImageInfo:
     public static android.graphics.Matrix getSensorToBufferTransformMatrix()
+    public final void populateExifData(androidx.camera.core.impl.utils.ExifData$Builder)
 androidx.camera.core.AutoValue_SurfaceOutput_Event:
     public final int eventCode
     public static int getEventCode()
@@ -67431,8 +67467,7 @@ androidx.camera.core.CameraXConfig:
     public final androidx.camera.camera2.Camera2Config$$InternalSyntheticLambda$1$d7e6a21aa425505a62ec9f0a19a2f24a6d6b1bfdb1b7da02688e172390ad41ff$1 getDeviceSurfaceManagerProvider()
     public static android.os.Handler getSchedulerHandler()
     public final androidx.camera.camera2.Camera2Config$$InternalSyntheticLambda$1$d7e6a21aa425505a62ec9f0a19a2f24a6d6b1bfdb1b7da02688e172390ad41ff$2 getUseCaseConfigFactoryProvider()
-androidx.camera.core.CaptureBundles$CaptureBundleImpl:
-    public static java.util.List getCaptureStages()
+androidx.camera.core.CaptureBundles$CaptureBundleImpl
 androidx.camera.core.CaptureBundles
 androidx.camera.core.DynamicRange:
     public static final androidx.camera.core.DynamicRange HDR_UNSPECIFIED_10_BIT
@@ -67494,11 +67529,15 @@ androidx.camera.core.ImageAnalysisNonBlockingAnalyzer$CacheAnalyzingImageProxy:
     public static synthetic void lambda$new$1()
 androidx.camera.core.ImageAnalysisNonBlockingAnalyzer:
     public static void analyzeCachedImage()
-androidx.camera.core.ImageCapture$$InternalSyntheticLambda$9$65ac959b9c440bf077255f0868dc0cf9ad1e7e80100d0d8237a9edc08e0b0649$0
+androidx.camera.core.ImageCapture$$InternalSyntheticLambda$10$65ac959b9c440bf077255f0868dc0cf9ad1e7e80100d0d8237a9edc08e0b0649$0
+androidx.camera.core.ImageCapture$$InternalSyntheticLambda$11$7de2dc76246f2cdcad8974aab5db5c831c5880afdca67c324ff388401cd73478$0
 androidx.camera.core.ImageCapture$1:
+    public final synthetic androidx.camera.core.ImageCapture this$0
     public static void lockFlashMode()
     public static com.google.common.util.concurrent.ListenableFuture submitStillCaptureRequests()
+    public final void unlockFlashMode()
 androidx.camera.core.ImageCapture$Builder:
+    public static androidx.camera.core.ImageCapture build()
     public final androidx.camera.core.impl.ImageCaptureConfig getUseCaseConfig()
     public static androidx.camera.core.ImageCapture$Builder setCaptureType()
     public static androidx.camera.core.ImageCapture$Builder setDynamicRange()
@@ -67511,58 +67550,39 @@ androidx.camera.core.ImageCapture$Defaults:
     public static final androidx.camera.core.DynamicRange DEFAULT_DYNAMIC_RANGE
     public static final androidx.camera.core.resolutionselector.ResolutionSelector DEFAULT_RESOLUTION_SELECTOR
     public static androidx.camera.core.impl.ImageCaptureConfig getConfig()
-androidx.camera.core.ImageCapture$Metadata:
-    public boolean mIsReversedHorizontal
-    public boolean mIsReversedHorizontalSet
-    public boolean mIsReversedVertical
-    public android.location.Location mLocation
-    public static android.location.Location getLocation()
-    public static boolean isReversedHorizontal()
-    public static boolean isReversedVertical()
-androidx.camera.core.ImageCapture$OnImageCapturedCallback
+androidx.camera.core.ImageCapture$Metadata
 androidx.camera.core.ImageCapture$OnImageSavedCallback
-androidx.camera.core.ImageCapture$OutputFileOptions$Builder
-androidx.camera.core.ImageCapture$OutputFileOptions:
-    public final android.content.ContentResolver mContentResolver
-    public final android.content.ContentValues mContentValues
-    public final java.io.OutputStream mOutputStream
-    public final android.net.Uri mSaveCollection
-    public static android.content.ContentResolver getContentResolver()
-    public static android.content.ContentValues getContentValues()
-    public static java.io.File getFile()
-    public static androidx.camera.core.ImageCapture$Metadata getMetadata()
-    public static java.io.OutputStream getOutputStream()
-    public static android.net.Uri getSaveCollection()
-androidx.camera.core.ImageCapture$OutputFileResults:
-    public final android.net.Uri mSavedUri
+androidx.camera.core.ImageCapture$OutputFileOptions
+androidx.camera.core.ImageCapture$OutputFileResults
 androidx.camera.core.ImageCapture:
     public static final androidx.camera.core.internal.compat.workaround.ExifRotationAvailability EXIF_ROTATION_AVAILABILITY
     public final androidx.camera.core.impl.ImageReaderProxy$OnImageAvailableListener mClosingListener
+    public android.util.Rational mCropAspectRatio
+    public final int mFlashType
     public static synthetic java.lang.Void $r8$lambda$-L1u75KfbbCyrbZFudyPcPO3-k4()
     public final void abortImageCaptureRequests()
     public static void clearPipeline$1()
     public static boolean enforceSoftwareJpegConstraints()
     public static int getCaptureMode()
-    public static int getJpegQualityInternal()
-    public static android.graphics.Rect getTakePictureCropRect()
     public static void lambda$createPipeline$3()
     public static synthetic java.lang.Void lambda$submitStillCaptureRequest$4()
-    public static synthetic void lambda$takePicture$2()
     public static void lockFlashMode()
-    public static void sendInvalidCameraError()
     public static void setCropAspectRatio()
     public static com.google.common.util.concurrent.ListenableFuture submitStillCaptureRequest()
-    public static void takePictureInternal()
     public static void unlockFlashMode()
 androidx.camera.core.ImageCaptureException:
     public final int mImageCaptureError
-androidx.camera.core.ImageProcessingUtil$$InternalSyntheticLambda$14$9a6c4997da4ea35b2feb8d467e7e3509322fa20013b30bd7bf8d5d30becb5e16$0:
+androidx.camera.core.ImageInfo:
+    public abstract void populateExifData(androidx.camera.core.impl.utils.ExifData$Builder)
+androidx.camera.core.ImageProcessingUtil$$InternalSyntheticLambda$15$9a6c4997da4ea35b2feb8d467e7e3509322fa20013b30bd7bf8d5d30becb5e16$0:
     public final synthetic androidx.camera.core.ImageProxy f$0
-androidx.camera.core.ImageProcessingUtil$$InternalSyntheticLambda$14$f0087e3ffa0e1955d76ec349510c7d592a28721c514fee20f7c11f6ee72b3346$0:
+androidx.camera.core.ImageProcessingUtil$$InternalSyntheticLambda$15$f0087e3ffa0e1955d76ec349510c7d592a28721c514fee20f7c11f6ee72b3346$0:
     public final synthetic androidx.camera.core.ImageProxy f$0
 androidx.camera.core.ImageProcessingUtil$Result$EnumUnboxingLocalUtility
 androidx.camera.core.ImageProcessingUtil$Result
 androidx.camera.core.ImageProcessingUtil:
+    public static androidx.camera.core.ImageProxy convertJpegBytesToImage(androidx.camera.core.SafeCloseImageReaderProxy,byte[])
+    public static void copyBitmapToByteBuffer(android.graphics.Bitmap,java.nio.ByteBuffer,int)
     public static boolean isSupportedRotationDegrees(int)
 androidx.camera.core.ImageProcessor$Request
 androidx.camera.core.ImageProcessor$Response
@@ -67584,8 +67604,8 @@ androidx.camera.core.MetadataImageReader:
     public static void resultIncoming()
 androidx.camera.core.MeteringPointFactory:
     public android.util.Rational mSurfaceAspectRatio
-androidx.camera.core.Preview$$InternalSyntheticLambda$9$6a5d2015aefd069e8427e1d46d7b5b3a3d7670f781d825e8fc07dd4ef9e51648$0
-androidx.camera.core.Preview$$InternalSyntheticLambda$9$6a5d2015aefd069e8427e1d46d7b5b3a3d7670f781d825e8fc07dd4ef9e51648$1
+androidx.camera.core.Preview$$InternalSyntheticLambda$10$6a5d2015aefd069e8427e1d46d7b5b3a3d7670f781d825e8fc07dd4ef9e51648$0
+androidx.camera.core.Preview$$InternalSyntheticLambda$10$6a5d2015aefd069e8427e1d46d7b5b3a3d7670f781d825e8fc07dd4ef9e51648$1
 androidx.camera.core.Preview$Builder:
     public final androidx.camera.core.Preview build()
     public final androidx.camera.core.impl.PreviewConfig getUseCaseConfig()
@@ -67620,6 +67640,7 @@ androidx.camera.core.SafeCloseImageReaderProxy:
     public final androidx.camera.core.SingleCloseImageProxy wrapImageProxy(androidx.camera.core.ImageProxy)
 androidx.camera.core.SettableImageProxy:
     public android.graphics.Rect mCropRect
+    public final void setCropRect(android.graphics.Rect)
 androidx.camera.core.SurfaceOutput$Event
 androidx.camera.core.SurfaceOutput
 androidx.camera.core.SurfaceProcessor
@@ -67695,6 +67716,7 @@ androidx.camera.core.concurrent.CameraCoordinator
 androidx.camera.core.imagecapture.AutoValue_Bitmap2JpegBytes_In
 androidx.camera.core.imagecapture.AutoValue_CaptureNode_In:
     public final androidx.camera.core.ImageReaderProxyProvider imageReaderProxyProvider
+    public androidx.camera.core.impl.CameraCaptureCallback mCameraCaptureCallback
     public static androidx.camera.core.impl.CameraCaptureCallback getCameraCaptureCallback()
     public static androidx.camera.core.processing.Edge getErrorEdge()
     public static void getImageReaderProxyProvider()
@@ -67706,80 +67728,59 @@ androidx.camera.core.imagecapture.AutoValue_CaptureNode_In:
     public static boolean isVirtualCamera()
     public static void setCameraCaptureCallback()
     public static void setSurface()
-androidx.camera.core.imagecapture.AutoValue_CaptureNode_Out:
-    public static androidx.camera.core.processing.Edge getImageEdge()
-    public static int getInputFormat()
-    public static int getOutputFormat()
-    public static androidx.camera.core.processing.Edge getRequestEdge()
-androidx.camera.core.imagecapture.AutoValue_Image2JpegBytes_In:
-    public static int getJpegQuality()
-    public static androidx.camera.core.processing.AutoValue_Packet getPacket()
+androidx.camera.core.imagecapture.AutoValue_CaptureNode_Out
+androidx.camera.core.imagecapture.AutoValue_Image2JpegBytes_In
 androidx.camera.core.imagecapture.AutoValue_JpegBytes2Disk_In
-androidx.camera.core.imagecapture.AutoValue_ProcessingNode_In:
-    public static androidx.camera.core.processing.Edge getEdge()
-    public static int getInputFormat()
-    public static int getOutputFormat()
-androidx.camera.core.imagecapture.AutoValue_ProcessingNode_InputPacket:
-    public static androidx.camera.core.ImageProxy getImageProxy()
-    public static androidx.camera.core.imagecapture.ProcessingRequest getProcessingRequest()
-androidx.camera.core.imagecapture.AutoValue_TakePictureRequest:
-    public final androidx.camera.core.ImageCapture$OnImageCapturedCallback inMemoryCallback
-    public static boolean decrementRetryCounter()
-    public static java.util.concurrent.Executor getAppExecutor()
-    public static int getCaptureMode()
-    public static android.graphics.Rect getCropRect()
-    public static void getInMemoryCallback()
-    public static int getJpegQuality()
-    public static com.healthyscan.app.ui.screens.scan.LabelScanScreenKt$LabelCaptureView$2$3$1$1$1 getOnDiskCallback()
-    public static androidx.camera.core.ImageCapture$OutputFileOptions getOutputFileOptions()
-    public static int getRotationDegrees()
-    public static android.graphics.Matrix getSensorToBufferTransform()
-    public static java.util.List getSessionConfigCameraCaptureCallbacks()
-    public static void lambda$onError$0()
-    public static void lambda$onResult$1()
-    public static synthetic void lambda$onResult$2()
-    public final void onError(androidx.camera.core.ImageCaptureException)
-    public static void onResult()
-    public static void onResult$1()
+androidx.camera.core.imagecapture.AutoValue_ProcessingNode_In
+androidx.camera.core.imagecapture.AutoValue_ProcessingNode_InputPacket
 androidx.camera.core.imagecapture.Bitmap2JpegBytes$In
 androidx.camera.core.imagecapture.Bitmap2JpegBytes:
     public static androidx.camera.core.processing.AutoValue_Packet apply()
     public final java.lang.Object apply(java.lang.Object)
 androidx.camera.core.imagecapture.BitmapEffect
-androidx.camera.core.imagecapture.CameraRequest:
-    public final java.util.ArrayList mCaptureConfigs
-    public static java.util.List getCaptureConfigs()
-    public static boolean isAborted()
-androidx.camera.core.imagecapture.CaptureNode$1:
-    public final void onSuccess()
-androidx.camera.core.imagecapture.CaptureNode$In$1:
-    public final synthetic androidx.camera.core.imagecapture.AutoValue_CaptureNode_In this$0
+androidx.camera.core.imagecapture.CameraRequest
+androidx.camera.core.imagecapture.CaptureNode$$InternalSyntheticLambda$11$342a29fec6c04978dbfa00a278e23c7d7448c6861db885071862a069279c80a4$1:
+    public final synthetic androidx.camera.core.imagecapture.NoMetadataImageReader f$1
+androidx.camera.core.imagecapture.CaptureNode$$InternalSyntheticThrowCCEIfNotNull$185$eeb0b6a3769733f521fa5712fb3d69e1b78339fd16f4149475aac83af4f4766a$0
+androidx.camera.core.imagecapture.CaptureNode$$InternalSyntheticThrowCCEIfNotNull$29$6dbe0afc12ad7a40467a28a431387bea455da7e4bf63499ff52ba99d2e1347e0$0
+androidx.camera.core.imagecapture.CaptureNode$1
+androidx.camera.core.imagecapture.CaptureNode$In$1
 androidx.camera.core.imagecapture.CaptureNode$In
 androidx.camera.core.imagecapture.CaptureNode$Out
 androidx.camera.core.imagecapture.CaptureNode:
+    public androidx.camera.core.imagecapture.ProcessingRequest mCurrentRequest
+    public androidx.camera.core.imagecapture.AutoValue_CaptureNode_Out mOutputEdge
+    public final java.util.HashSet mPendingStageIds
     public static void lambda$transform$0()
     public static void lambda$transform$1()
     public static void matchAndPropagateImage()
+    public static void onImageProxyAvailable()
     public static void release()
     public static void releaseInputResources()
+    public static void sendCaptureError()
     public static void setOnImageCloseListener()
     public static androidx.camera.core.imagecapture.AutoValue_CaptureNode_Out transform()
 androidx.camera.core.imagecapture.Image2JpegBytes$In
 androidx.camera.core.imagecapture.Image2JpegBytes:
+    public final androidx.camera.core.internal.compat.workaround.JpegMetadataCorrector mJpegMetadataCorrector
+    public final java.lang.Object apply(java.lang.Object)
     public static androidx.camera.core.processing.AutoValue_Packet apply$2()
+    public static androidx.camera.core.processing.AutoValue_Packet processJpegImage()
+    public static androidx.camera.core.processing.AutoValue_Packet processYuvImage()
 androidx.camera.core.imagecapture.ImageCaptureControl
 androidx.camera.core.imagecapture.ImagePipeline:
     public static final androidx.camera.core.internal.compat.workaround.ExifRotationAvailability EXIF_ROTATION_AVAILABILITY
+    public final androidx.camera.core.impl.CaptureConfig mCaptureConfig
     static void <clinit>()
     public static androidx.camera.core.imagecapture.CameraRequest createCameraRequest()
     public static androidx.camera.core.CaptureBundles$CaptureBundleImpl createCaptureBundle()
-    public static androidx.camera.core.imagecapture.ProcessingRequest createProcessingRequest()
+    public static void createProcessingRequest()
     public static androidx.core.util.Pair createRequests()
     public static androidx.camera.core.impl.SessionConfig$Builder createSessionConfigBuilder()
     public static int getCameraRequestJpegQuality()
     public static int getCapacity()
     public static int getOutputFormat()
-    public final void notifyCaptureError(androidx.camera.core.ImageCaptureException)
+    public static void notifyCaptureError()
     public static void setOnImageCloseListener()
     public static void submitProcessingRequest()
 androidx.camera.core.imagecapture.JpegBytes2CroppedBitmap:
@@ -67788,9 +67789,8 @@ androidx.camera.core.imagecapture.JpegBytes2CroppedBitmap:
     public static android.graphics.Bitmap createCroppedBitmap()
 androidx.camera.core.imagecapture.JpegBytes2Disk$In
 androidx.camera.core.imagecapture.JpegBytes2Disk:
-    public static androidx.camera.core.ImageCapture$OutputFileResults apply()
     public final java.lang.Object apply(java.lang.Object)
-    public static boolean isSaveToOutputStream()
+    public static void apply()
 androidx.camera.core.imagecapture.JpegBytes2Image:
     public final java.lang.Object apply(java.lang.Object)
     public final androidx.camera.core.processing.AutoValue_Packet apply$1()
@@ -67798,80 +67798,77 @@ androidx.camera.core.imagecapture.JpegImage2Result:
     public static androidx.camera.core.ImageProxy apply()
     public final java.lang.Object apply(java.lang.Object)
 androidx.camera.core.imagecapture.NoMetadataImageReader:
+    public androidx.camera.core.imagecapture.ProcessingRequest mPendingRequest
     public static void acceptProcessingRequest()
+    public static void createImageProxyWithEmptyMetadata(androidx.camera.core.ImageProxy)
     public static synthetic void lambda$setOnImageAvailableListener$0$1()
 androidx.camera.core.imagecapture.ProcessingInput2Packet:
+    public final java.lang.Object apply(java.lang.Object)
     public static androidx.camera.core.processing.AutoValue_Packet apply$3()
+androidx.camera.core.imagecapture.ProcessingNode$$InternalSyntheticLambda$11$23e4d21a9e01e6a1f848770e727f39ad1aafba37439b5d077bae9996d8392dd5$0
+androidx.camera.core.imagecapture.ProcessingNode$$InternalSyntheticLambda$12$f23b9631c17f02ec3fe3575886702f01e4e79588bf04b6ad6fe05ecfe8d87b37$0
+androidx.camera.core.imagecapture.ProcessingNode$$InternalSyntheticLambda$13$997b63f733fbe0a9d81faed658757bb44228cf7217fa6f53515d33f1a4743917$0
+androidx.camera.core.imagecapture.ProcessingNode$$InternalSyntheticLambda$13$997b63f733fbe0a9d81faed658757bb44228cf7217fa6f53515d33f1a4743917$1
+androidx.camera.core.imagecapture.ProcessingNode$$InternalSyntheticLambda$14$3b8ab3f121e4da710feaa6f42e9cca09a7c772563d066dd6f3e681d6598e0fcc$0
 androidx.camera.core.imagecapture.ProcessingNode$In
 androidx.camera.core.imagecapture.ProcessingNode$InputPacket
 androidx.camera.core.imagecapture.ProcessingNode:
+    public androidx.camera.core.imagecapture.Bitmap2JpegBytes mBitmap2JpegBytes
     public androidx.camera.core.imagecapture.BitmapEffect mBitmapEffect
+    public final java.util.concurrent.Executor mBlockingExecutor
+    public androidx.camera.core.imagecapture.Image2JpegBytes mImage2JpegBytes
     public final androidx.camera.core.processing.InternalImageProcessor mImageProcessor
+    public androidx.camera.core.imagecapture.ProcessingInput2Packet mInput2Packet
+    public androidx.camera.core.imagecapture.AutoValue_ProcessingNode_In mInputEdge
+    public androidx.camera.core.imagecapture.JpegBytes2CroppedBitmap mJpegBytes2CroppedBitmap
+    public androidx.camera.core.imagecapture.JpegBytes2Disk mJpegBytes2Disk
+    public androidx.camera.core.imagecapture.JpegBytes2Image mJpegBytes2Image
+    public androidx.camera.core.imagecapture.JpegImage2Result mJpegImage2Result
+    public static androidx.camera.core.processing.AutoValue_Packet cropAndMaybeApplyEffect()
     public static void lambda$transform$0()
-    public static void lambda$transform$1()
+    public static synthetic void lambda$transform$1()
+    public static androidx.camera.core.ImageProxy processInMemoryCapture()
     public static void processInputPacket()
+    public static void processOnDiskCapture()
     public static void release()
-    public static void sendError(androidx.camera.core.imagecapture.ProcessingRequest,androidx.camera.core.ImageCaptureException)
+    public static void sendError(androidx.camera.core.ImageCaptureException)
     public static java.lang.Void transform()
-androidx.camera.core.imagecapture.ProcessingRequest:
-    public static com.google.common.util.concurrent.ListenableFuture getCaptureFuture()
-    public static android.graphics.Rect getCropRect()
-    public static int getJpegQuality()
-    public static androidx.camera.core.ImageCapture$OutputFileOptions getOutputFileOptions()
-    public static int getRotationDegrees()
-    public static android.graphics.Matrix getSensorToBufferTransform()
-    public static java.util.List getStageIds()
-    public static java.lang.String getTagBundleKey()
-    public static boolean isAborted()
-    public static boolean isInMemoryCapture()
-    public static void onCaptureFailure()
-    public static void onFinalResult()
-    public static void onFinalResult$1()
-    public static void onImageCaptured()
-    public static void onProcessFailure()
-androidx.camera.core.imagecapture.RequestWithCallback:
-    public final void abort(androidx.camera.core.ImageCaptureException)
-    public static void abortAndSendErrorToApp()
-    public static void abortSilentlyAndRetry()
-    public final void checkOnImageCaptured()
-    public static com.google.common.util.concurrent.ListenableFuture getCaptureFuture()
-    public static com.google.common.util.concurrent.ListenableFuture getCompleteFuture()
-    public static boolean isAborted()
-    public static synthetic java.lang.Object lambda$new$0()
-    public static synthetic java.lang.Object lambda$new$1()
-    public static void onCaptureFailure()
-    public final void onFailure(androidx.camera.core.ImageCaptureException)
-    public static void onFinalResult()
-    public static void onFinalResult$1()
-    public static void onImageCaptured()
-    public static void onProcessFailure()
-    public static void setCaptureRequestFuture()
+androidx.camera.core.imagecapture.ProcessingRequest
+androidx.camera.core.imagecapture.RequestWithCallback$$InternalSyntheticLambda$11$0f28d10f9245e7f96be2fc5a7337e6bc69784fc97a80a7cabb7dadae9f35e978$0
+androidx.camera.core.imagecapture.RequestWithCallback$$InternalSyntheticLambda$11$0f28d10f9245e7f96be2fc5a7337e6bc69784fc97a80a7cabb7dadae9f35e978$1
+androidx.camera.core.imagecapture.RequestWithCallback
 androidx.camera.core.imagecapture.RgbaImageProxy$1
 androidx.camera.core.imagecapture.RgbaImageProxy$2
 androidx.camera.core.imagecapture.RgbaImageProxy
-androidx.camera.core.imagecapture.SingleBundlingNode$1:
-    public final void onSuccess()
+androidx.camera.core.imagecapture.SingleBundlingNode$$InternalSyntheticLambda$11$3a2035396c56b590fa03ac5b9fb63c156315ff9c41ac5609ca9e91da7c99453b$0
+androidx.camera.core.imagecapture.SingleBundlingNode$$InternalSyntheticLambda$11$3a2035396c56b590fa03ac5b9fb63c156315ff9c41ac5609ca9e91da7c99453b$1
+androidx.camera.core.imagecapture.SingleBundlingNode$$InternalSyntheticThrowCCEIfNotNull$45$98795d99fa7761cd3b4bbb0b6dd36c3872fc136fc34b30f41c29a4aaa0005640$0
+androidx.camera.core.imagecapture.SingleBundlingNode$1
 androidx.camera.core.imagecapture.SingleBundlingNode:
+    public androidx.camera.core.imagecapture.AutoValue_ProcessingNode_In mOutputEdge
+    public androidx.camera.core.imagecapture.ProcessingRequest mPendingRequest
     public static void matchImageWithRequest()
     public static void release()
     public static void trackIncomingRequest()
     public static androidx.camera.core.imagecapture.AutoValue_ProcessingNode_In transform()
 androidx.camera.core.imagecapture.TakePictureCallback
-androidx.camera.core.imagecapture.TakePictureManager$1:
-    public final void onSuccess()
+androidx.camera.core.imagecapture.TakePictureManager$$InternalSyntheticLambda$11$2a0192bd939b2a1d19f8daa24db53798b96358c4c2577175aba9b62a8ef8ee8c$0
+androidx.camera.core.imagecapture.TakePictureManager$$InternalSyntheticLambda$11$2a0192bd939b2a1d19f8daa24db53798b96358c4c2577175aba9b62a8ef8ee8c$1
+androidx.camera.core.imagecapture.TakePictureManager$$InternalSyntheticThrowCCEIfNotNull$84$f76867f1c44c11f6d6ac1aabb6141fa243688f257deece63bf874ae8b622fb66$0
+androidx.camera.core.imagecapture.TakePictureManager$$InternalSyntheticThrowCCEIfNotNull$97$09d0ba7fee2b0134983a726ae07b938fdae32511cd94966e412003da0544c1b7$0
+androidx.camera.core.imagecapture.TakePictureManager$1
 androidx.camera.core.imagecapture.TakePictureManager:
+    public androidx.camera.core.imagecapture.RequestWithCallback mCapturingRequest
+    public final androidx.camera.core.ImageCapture$1 mImageCaptureControl
     public final boolean hasCapturingRequest()
     public static synthetic void lambda$trackCurrentRequests$0()
     public static synthetic void lambda$trackCurrentRequests$1()
-    public static void offerRequest()
     public static void pause()
     public static void resume()
-    public final void retryRequest(androidx.camera.core.imagecapture.AutoValue_TakePictureRequest)
+    public static void retryRequest()
     public static void setImagePipeline()
     public static com.google.common.util.concurrent.ListenableFuture submitCameraRequest()
     public static void trackCurrentRequests()
-androidx.camera.core.imagecapture.TakePictureRequest$$InternalSyntheticLambda$13$00beeb8523a6389f7acd7ad389d78f8876c6d61ca679a2363518310c116915c9$0:
-    public final synthetic androidx.camera.core.ImageProxy f$1
 androidx.camera.core.imagecapture.TakePictureRequest$RetryControl
 androidx.camera.core.imagecapture.TakePictureRequest
 androidx.camera.core.impl.AttachedSurfaceInfo
@@ -67947,13 +67944,13 @@ androidx.camera.core.impl.CameraCaptureFailure:
     public static int getReason()
 androidx.camera.core.impl.CameraCaptureMetaData$AfMode$EnumUnboxingLocalUtility
 androidx.camera.core.impl.CameraCaptureMetaData$AfMode
-androidx.camera.core.impl.CameraCaptureMetaData$FlashState$EnumUnboxingLocalUtility:
-    static void <clinit>()
-    public static int _valueOf(java.lang.String)
-    public static int[] _values()
-    public static synthetic java.lang.String name(int)
-    public static synthetic int valueOf(java.lang.String)
+androidx.camera.core.impl.CameraCaptureMetaData$FlashState$EnumUnboxingLocalUtility
 androidx.camera.core.impl.CameraCaptureMetaData$FlashState
+androidx.camera.core.impl.CameraCaptureResult$EmptyCameraCaptureResult:
+    public final int getFlashState()
+androidx.camera.core.impl.CameraCaptureResult:
+    public abstract int getFlashState()
+    public void populateExifData(androidx.camera.core.impl.utils.ExifData$Builder)
 androidx.camera.core.impl.CameraCaptureResults
 androidx.camera.core.impl.CameraConfig$$InternalSyntheticThrowCCEIfNotNull$37$9d86feba0a1b93ec656fea9a38d63fde23b1c27e459494a363843c13a5019a6c$0
 androidx.camera.core.impl.CameraConfig:
@@ -67963,13 +67960,16 @@ androidx.camera.core.impl.CameraConfig:
     public void getSessionProcessor()
     public abstract int getUseCaseCombinationRequiredRule()
     public abstract androidx.camera.core.impl.UseCaseConfigFactory getUseCaseConfigFactory()
-androidx.camera.core.impl.CameraConfigProvider$$InternalSyntheticLambda$9$20c05a79c1aa3cbf3df668802ea06ce10e6f01685247d0b4895f2c854fcb1e4d$0
+androidx.camera.core.impl.CameraConfigProvider$$InternalSyntheticLambda$10$20c05a79c1aa3cbf3df668802ea06ce10e6f01685247d0b4895f2c854fcb1e4d$0
 androidx.camera.core.impl.CameraConfigProvider
 androidx.camera.core.impl.CameraConfigs$EmptyCameraConfig:
     public final androidx.camera.core.impl.AutoValue_Identifier getCompatibilityId()
-androidx.camera.core.impl.CameraControlInternal$CameraControlException:
-    public androidx.camera.core.impl.CameraCaptureFailure mCameraCaptureFailure
+androidx.camera.core.impl.CameraControlInternal$1:
+    public final com.google.common.util.concurrent.ListenableFuture submitStillCaptureRequests()
+androidx.camera.core.impl.CameraControlInternal$CameraControlException
 androidx.camera.core.impl.CameraControlInternal$ControlUpdateCallback
+androidx.camera.core.impl.CameraControlInternal:
+    public abstract com.google.common.util.concurrent.ListenableFuture submitStillCaptureRequests()
 androidx.camera.core.impl.CameraDeviceSurfaceManager$Provider
 androidx.camera.core.impl.CameraDeviceSurfaceManager
 androidx.camera.core.impl.CameraFactory$Provider
@@ -68002,7 +68002,7 @@ androidx.camera.core.impl.CameraThreadConfig
 androidx.camera.core.impl.CaptureBundle
 androidx.camera.core.impl.CaptureConfig$Builder:
     public static void addAllTags()
-    public final void addImplementationOption(androidx.camera.core.impl.AutoValue_Config_Option,java.lang.Object)
+    public final void addImplementationOption(androidx.camera.core.impl.AutoValue_Config_Option,android.util.Range)
     public final void addSurface(androidx.camera.core.impl.DeferrableSurface)
     public final void addTag(java.lang.String,java.lang.Object)
     public static void clearSurfaces()
@@ -68023,9 +68023,7 @@ androidx.camera.core.impl.CaptureConfig:
     public static androidx.camera.core.impl.TagBundle getTagBundle()
     public static int getTemplateType()
     public static boolean isUseRepeatingSurface()
-androidx.camera.core.impl.CaptureStage$DefaultCaptureStage:
-    public static androidx.camera.core.impl.CaptureConfig getCaptureConfig()
-    public static int getId()
+androidx.camera.core.impl.CaptureStage$DefaultCaptureStage
 androidx.camera.core.impl.CaptureStage
 androidx.camera.core.impl.Config$Option
 androidx.camera.core.impl.Config$OptionMatcher
@@ -68055,6 +68053,8 @@ androidx.camera.core.impl.DeferrableSurfaces$1:
 androidx.camera.core.impl.DeferrableSurfaces
 androidx.camera.core.impl.EncoderProfilesProvider
 androidx.camera.core.impl.ExtendedCameraConfigProviderStore
+androidx.camera.core.impl.ForwardingCameraControl:
+    public abstract com.google.common.util.concurrent.ListenableFuture submitStillCaptureRequests()
 androidx.camera.core.impl.ForwardingCameraInfo
 androidx.camera.core.impl.Identifier
 androidx.camera.core.impl.ImageAnalysisConfig$$InternalSyntheticThrowCCEIfNotNull$37$d2ffe8fbd6aeb2d0bea54c50fdfe956083456fdd0663caa7c6e7dfad73c6a99b$0
@@ -68067,6 +68067,8 @@ androidx.camera.core.impl.ImageAnalysisConfig:
     public static java.lang.Boolean isOutputImageRotationEnabled()
 androidx.camera.core.impl.ImageCaptureConfig$$InternalSyntheticThrowCCEIfNotNull$37$a0cd9d4dae9c12c857c6644f778c1a9cb0cb75f55e6cf3e0e579eb35851c59e8$0
 androidx.camera.core.impl.ImageCaptureConfig:
+    public static final androidx.camera.core.impl.AutoValue_Config_Option OPTION_CAPTURE_BUNDLE
+    public static final androidx.camera.core.impl.AutoValue_Config_Option OPTION_JPEG_COMPRESSION_QUALITY
     public static final androidx.camera.core.impl.AutoValue_Config_Option OPTION_MAX_CAPTURE_STAGES
     public static androidx.camera.core.CaptureBundles$CaptureBundleImpl getCaptureBundle()
     public final int getCaptureMode()
@@ -68074,7 +68076,6 @@ androidx.camera.core.impl.ImageCaptureConfig:
     public static int getFlashType()
     public final void getImageReaderProxyProvider()
     public static java.util.concurrent.Executor getIoExecutor()
-    public static int getJpegQuality()
     public static boolean hasCaptureMode()
 androidx.camera.core.impl.ImageInputConfig:
     public androidx.camera.core.DynamicRange getDynamicRange()
@@ -68145,7 +68146,6 @@ androidx.camera.core.impl.SessionConfig$Builder:
     public final void addSessionStateCallback(android.hardware.camera2.CameraCaptureSession$StateCallback)
     public final void addSurface(androidx.camera.core.impl.DeferrableSurface)
     public final void addTag(java.lang.String,java.lang.Object)
-    public static java.util.List getSingleCameraCaptureCallbacks()
     public final void setExpectedFrameRateRange(android.util.Range)
     public final void setImplementationOptions(androidx.camera.core.impl.Config)
     public static androidx.camera.core.impl.SessionConfig$Builder setInputConfiguration()
@@ -68243,80 +68243,28 @@ androidx.camera.core.impl.utils.AspectRatioUtil$CompareAspectRatiosByMappingArea
     public static int compare()
     public static float getMappingAreaSize()
     public static boolean isMappingAreaCovered(android.graphics.RectF,android.graphics.RectF)
-androidx.camera.core.impl.utils.ByteOrderedDataOutputStream:
-    public static void setByteOrder()
-    public static void writeByte()
-    public static void writeUnsignedInt()
-    public static void writeUnsignedShort()
+androidx.camera.core.impl.utils.ByteOrderedDataOutputStream
 androidx.camera.core.impl.utils.CompareSizesByArea:
     public static int compare()
-androidx.camera.core.impl.utils.Exif$1:
-    public static java.text.SimpleDateFormat initialValue()
-androidx.camera.core.impl.utils.Exif$2:
-    public static java.text.SimpleDateFormat initialValue()
-androidx.camera.core.impl.utils.Exif$3:
-    public static java.text.SimpleDateFormat initialValue()
+androidx.camera.core.impl.utils.Exif$1
+androidx.camera.core.impl.utils.Exif$2
+androidx.camera.core.impl.utils.Exif$3
 androidx.camera.core.impl.utils.Exif$Speed$Converter
 androidx.camera.core.impl.utils.Exif$Speed
-androidx.camera.core.impl.utils.Exif:
-    public static final java.lang.String TAG
-    public boolean mRemoveTimestamp
-    public static void attachLastModifiedTimestamp()
-    public static void attachLocation()
-    public static java.util.Date convertFromExifDateTime(java.lang.String)
-    public static androidx.camera.core.impl.utils.Exif createFromInputStream(java.io.ByteArrayInputStream)
-    public static void flipHorizontally()
-    public static void flipVertically()
-    public static java.lang.String getDescription()
-    public static int getHeight()
-    public static android.location.Location getLocation()
-    public final int getOrientation()
-    public static long getTimestamp()
-    public static int getWidth()
-    public static boolean isFlippedHorizontally()
-    public static boolean isFlippedVertically()
-    public static long parseTimestamp()
-    public static long parseTimestamp(java.lang.String)
-androidx.camera.core.impl.utils.ExifAttribute:
-    public static final byte[] EXIF_ASCII_PREFIX
-    public final long bytesOffset
-    public final int size()
+androidx.camera.core.impl.utils.Exif
+androidx.camera.core.impl.utils.ExifAttribute
 androidx.camera.core.impl.utils.ExifData$1
-androidx.camera.core.impl.utils.ExifData$Builder$1:
-    public static java.util.HashMap nextElement()
-androidx.camera.core.impl.utils.ExifData$Builder$2:
-    public final synthetic androidx.camera.core.impl.utils.ExifData$Builder this$0
-    public static java.util.Map nextElement()
-androidx.camera.core.impl.utils.ExifData$Builder$3:
-    public final synthetic androidx.camera.core.impl.utils.ExifData$Builder this$0
-    public static java.util.Map nextElement()
-androidx.camera.core.impl.utils.ExifData$Builder:
-    public static androidx.camera.core.impl.utils.ExifData build()
-    public final void setAttribute(java.lang.String)
-    public static androidx.camera.core.impl.utils.ExifData$Builder setExposureTimeNanos()
-    public static androidx.camera.core.impl.utils.ExifData$Builder setFlashState()
-    public static androidx.camera.core.impl.utils.ExifData$Builder setFocalLength()
-    public final void setImageHeight(int)
-    public final void setImageWidth(int)
-    public static androidx.camera.core.impl.utils.ExifData$Builder setIso()
-    public static androidx.camera.core.impl.utils.ExifData$Builder setLensFNumber()
-    public static androidx.camera.core.impl.utils.ExifData$Builder setWhiteBalanceMode()
+androidx.camera.core.impl.utils.ExifData$Builder$1
+androidx.camera.core.impl.utils.ExifData$Builder$2
+androidx.camera.core.impl.utils.ExifData$Builder$3
+androidx.camera.core.impl.utils.ExifData$Builder
 androidx.camera.core.impl.utils.ExifData$WhiteBalanceMode$EnumUnboxingLocalUtility
 androidx.camera.core.impl.utils.ExifData$WhiteBalanceMode
-androidx.camera.core.impl.utils.ExifData:
-    public static final androidx.camera.core.impl.utils.ExifTag[] IFD_EXIF_TAGS
-    public static final java.lang.String[] IFD_FORMAT_NAMES
-    public static final androidx.camera.core.impl.utils.ExifTag[] IFD_GPS_TAGS
-    public static final androidx.camera.core.impl.utils.ExifTag[] IFD_INTEROPERABILITY_TAGS
-    public static final androidx.camera.core.impl.utils.ExifTag[] IFD_TIFF_TAGS
-    public static java.nio.ByteOrder getByteOrder()
+androidx.camera.core.impl.utils.ExifData
 androidx.camera.core.impl.utils.ExifOutputStream$JpegHeader
-androidx.camera.core.impl.utils.ExifOutputStream:
-    public final int requestByteToBuffer(int,byte[],int,int)
-    public static void writeExifSegment()
-androidx.camera.core.impl.utils.LongRational:
-    public static long getDenominator()
-    public static long getNumerator()
+androidx.camera.core.impl.utils.ExifOutputStream
+androidx.camera.core.impl.utils.ExifTag
+androidx.camera.core.impl.utils.LongRational
 androidx.camera.core.impl.utils.MatrixExt:
     public static final float[] sTemp
     static void <clinit>()
@@ -68361,7 +68309,6 @@ androidx.camera.core.impl.utils.futures.Futures$3:
 androidx.camera.core.impl.utils.futures.Futures:
     public static final androidx.camera.core.impl.utils.futures.Futures$2 IDENTITY_FUNCTION
     public static void addCallback(com.google.common.util.concurrent.ListenableFuture,androidx.camera.core.impl.utils.futures.FutureCallback,java.util.concurrent.Executor)
-    public static androidx.camera.core.impl.utils.futures.ListFuture allAsList(java.util.List)
     public static void propagate(com.google.common.util.concurrent.ListenableFuture,androidx.concurrent.futures.CallbackToFutureAdapter$Completer)
     public static androidx.camera.core.impl.utils.futures.ListFuture successfulAsList(java.util.List)
     public static androidx.camera.core.impl.utils.futures.ChainingListenableFuture transform(com.google.common.util.concurrent.ListenableFuture,androidx.arch.core.util.Function,androidx.camera.core.impl.utils.executor.DirectExecutor)
@@ -68383,15 +68330,15 @@ androidx.camera.core.internal.AutoValue_ImmutableZoomState:
     public final float getZoomRatio()
 androidx.camera.core.internal.CameraCaptureResultImageInfo:
     public static androidx.camera.core.impl.CameraCaptureResult getCameraCaptureResult()
+    public final void populateExifData(androidx.camera.core.impl.utils.ExifData$Builder)
 androidx.camera.core.internal.CameraUseCaseAdapter$$InternalSyntheticThrowCCEIfNotNull$29$e6fc34e0b888c7bae25d6850c65766f83719ac2c9d36df2c7ec126adca5529e7$0
-androidx.camera.core.internal.CameraUseCaseAdapter$$InternalSyntheticThrowCCEIfNotNull$92$f2d1f1b9ad0d20bfe45cf8f0518683004c446f8ea1f11e357c0d250483310606$0
+androidx.camera.core.internal.CameraUseCaseAdapter$$InternalSyntheticThrowCCEIfNotNull$93$f2d1f1b9ad0d20bfe45cf8f0518683004c446f8ea1f11e357c0d250483310606$0
 androidx.camera.core.internal.CameraUseCaseAdapter:
     public final java.util.LinkedHashSet mCameraInternals
     public androidx.camera.core.ViewPort mViewPort
     public static void addUseCases()
     public static void cacheInteropConfig()
     public static android.graphics.Matrix calculateSensorToBufferTransformMatrix(android.graphics.Rect,android.util.Size)
-    public static androidx.camera.core.ImageCapture createExtraImageCapture()
     public static androidx.camera.core.Preview createExtraPreview()
     public static androidx.camera.core.internal.CameraUseCaseAdapter$CameraId getCameraId()
     public static java.util.Map getConfigs()
@@ -68434,8 +68381,6 @@ androidx.camera.core.internal.UseCaseEventConfig:
 androidx.camera.core.internal.ViewPorts
 androidx.camera.core.internal.compat.ImageWriterCompat
 androidx.camera.core.internal.compat.ImageWriterCompatApi23Impl
-androidx.camera.core.internal.compat.quirk.CaptureFailedRetryQuirk:
-    public static int getRetryCount()
 androidx.camera.core.internal.compat.quirk.DeviceQuirksLoader
 androidx.camera.core.internal.compat.quirk.ImageCaptureRotationOptionQuirk:
     public static boolean isSupported()
@@ -68445,11 +68390,9 @@ androidx.camera.core.internal.compat.quirk.IncorrectJpegMetadataQuirk:
     public static byte[] jpegImageToJpegByteArray()
 androidx.camera.core.internal.compat.quirk.SurfaceOrderQuirk:
     public static boolean load()
-androidx.camera.core.internal.compat.workaround.CaptureFailedRetryEnabler
 androidx.camera.core.internal.compat.workaround.ExifRotationAvailability
 androidx.camera.core.internal.compat.workaround.InvalidJpegDataParser
-androidx.camera.core.internal.compat.workaround.JpegMetadataCorrector:
-    public static byte[] jpegImageToJpegByteArray()
+androidx.camera.core.internal.compat.workaround.JpegMetadataCorrector
 androidx.camera.core.internal.compat.workaround.SurfaceSorter:
     public static int getSurfacePriority(androidx.camera.core.impl.DeferrableSurface)
     public static int lambda$sort$0()
@@ -68457,10 +68400,8 @@ androidx.camera.core.internal.compat.workaround.SurfaceSorter:
 androidx.camera.core.internal.utils.ArrayRingBuffer
 androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType$EnumUnboxingLocalUtility
 androidx.camera.core.internal.utils.ImageUtil$CodecFailedException$FailureType
-androidx.camera.core.internal.utils.ImageUtil$CodecFailedException:
-    public final int mFailureType
-androidx.camera.core.internal.utils.ImageUtil:
-    public static boolean isAspectRatioValid(android.util.Rational)
+androidx.camera.core.internal.utils.ImageUtil$CodecFailedException
+androidx.camera.core.internal.utils.ImageUtil
 androidx.camera.core.internal.utils.RingBuffer$OnRemoveCallback
 androidx.camera.core.internal.utils.SizeUtil:
     public static final android.util.Size RESOLUTION_QVGA
@@ -68471,25 +68412,21 @@ androidx.camera.core.internal.utils.ZslRingBuffer:
     public static boolean isEmpty()
     public static boolean isValidZslFrame()
 androidx.camera.core.processing.AutoValue_DefaultSurfaceProcessor_PendingSnapshot:
+    public final androidx.concurrent.futures.CallbackToFutureAdapter$Completer completer
+    public final int jpegQuality
+    public final int rotationDegrees
+    public void <init>(int,int,androidx.concurrent.futures.CallbackToFutureAdapter$Completer)
+    public final boolean equals(java.lang.Object)
     public static androidx.concurrent.futures.CallbackToFutureAdapter$Completer getCompleter()
     public static int getJpegQuality()
     public static int getRotationDegrees()
+    public final int hashCode()
+    public final java.lang.String toString()
 androidx.camera.core.processing.AutoValue_OpenGlRenderer_OutputSurface:
     public static android.opengl.EGLSurface getEglSurface()
     public static int getHeight()
     public static int getWidth()
-androidx.camera.core.processing.AutoValue_Packet:
-    public static androidx.camera.core.impl.CameraCaptureResult getCameraCaptureResult()
-    public static android.graphics.Rect getCropRect()
-    public static java.lang.Object getData()
-    public static androidx.camera.core.impl.utils.Exif getExif()
-    public static int getFormat()
-    public static int getRotationDegrees()
-    public static android.graphics.Matrix getSensorToBufferTransform()
-    public static android.util.Size getSize()
-    public static boolean hasCropping()
-    public static androidx.camera.core.processing.AutoValue_Packet of(androidx.camera.core.ImageProxy,androidx.camera.core.impl.utils.Exif,android.graphics.Rect,int,android.graphics.Matrix,androidx.camera.core.impl.CameraCaptureResult)
-    public static androidx.camera.core.processing.AutoValue_Packet of(androidx.camera.core.ImageProxy,androidx.camera.core.impl.utils.Exif,android.util.Size,android.graphics.Rect,int,android.graphics.Matrix,androidx.camera.core.impl.CameraCaptureResult)
+androidx.camera.core.processing.AutoValue_Packet
 androidx.camera.core.processing.AutoValue_SurfaceProcessorNode_In
 androidx.camera.core.processing.AutoValue_SurfaceProcessorNode_OutConfig:
     public static android.graphics.Rect getCropRect()
@@ -68499,11 +68436,14 @@ androidx.camera.core.processing.AutoValue_SurfaceProcessorNode_OutConfig:
     public static android.util.Size getSize()
     public static int getTargets()
     public static java.util.UUID getUuid()
-androidx.camera.core.processing.DefaultSurfaceProcessor$$InternalSyntheticLambda$10$ba6235dfd58cb97b216b749678f53c3f220f19def66737a9748b01d5bcf553e0$0:
+androidx.camera.core.processing.DefaultSurfaceProcessor$$InternalSyntheticLambda$11$ba6235dfd58cb97b216b749678f53c3f220f19def66737a9748b01d5bcf553e0$0:
     public final synthetic androidx.camera.core.processing.ShaderProvider$1 f$2
-androidx.camera.core.processing.DefaultSurfaceProcessor$$InternalSyntheticLambda$11$908e2964ea51d60c195e9ea48b6a8cc4a236cd6ed1b4f2cf47ef0c50e72500e6$0:
+androidx.camera.core.processing.DefaultSurfaceProcessor$$InternalSyntheticLambda$12$908e2964ea51d60c195e9ea48b6a8cc4a236cd6ed1b4f2cf47ef0c50e72500e6$0:
     public final synthetic androidx.camera.core.processing.ShaderProvider$1 f$2
-androidx.camera.core.processing.DefaultSurfaceProcessor$Factory$$InternalSyntheticLambda$9$59d7bec7bbb6788df5b9cf499f7acac445c5a61f1064b5f3cf95fe30d5631789$0
+androidx.camera.core.processing.DefaultSurfaceProcessor$$InternalSyntheticLambda$12$d3f282a27cf2fd18b09ad29c14cb054f09411d41e7f90b7b1abaf690c20a6a5b$0
+androidx.camera.core.processing.DefaultSurfaceProcessor$$InternalSyntheticLambda$13$cc9020ba26207b9bb5ca997c0eaf6a6f0e07467f3d32e9e92515030cbd7131fc$0
+androidx.camera.core.processing.DefaultSurfaceProcessor$$InternalSyntheticLambda$13$cc9020ba26207b9bb5ca997c0eaf6a6f0e07467f3d32e9e92515030cbd7131fc$1
+androidx.camera.core.processing.DefaultSurfaceProcessor$Factory$$InternalSyntheticLambda$10$59d7bec7bbb6788df5b9cf499f7acac445c5a61f1064b5f3cf95fe30d5631789$0
 androidx.camera.core.processing.DefaultSurfaceProcessor$Factory
 androidx.camera.core.processing.DefaultSurfaceProcessor$PendingSnapshot
 androidx.camera.core.processing.DefaultSurfaceProcessor:
@@ -68526,8 +68466,8 @@ androidx.camera.core.processing.DefaultSurfaceProcessor:
 androidx.camera.core.processing.Edge:
     public static void setListener()
 androidx.camera.core.processing.ImageProcessorRequest
-androidx.camera.core.processing.InternalImageProcessor$$InternalSyntheticLambda$13$e9bbf425d04fd31904b2e45955c66ed4da0658015064b3bd1e391cac4c421e92$0
-androidx.camera.core.processing.InternalImageProcessor$$InternalSyntheticLambda$14$ae7789326109f73984d8dc85b358fe90ca8e70d54c895ffec8bba93b1d71c7e7$0
+androidx.camera.core.processing.InternalImageProcessor$$InternalSyntheticLambda$14$e9bbf425d04fd31904b2e45955c66ed4da0658015064b3bd1e391cac4c421e92$0
+androidx.camera.core.processing.InternalImageProcessor$$InternalSyntheticLambda$15$ae7789326109f73984d8dc85b358fe90ca8e70d54c895ffec8bba93b1d71c7e7$0
 androidx.camera.core.processing.InternalImageProcessor$$InternalSyntheticThrowCCEIfNotNull$79$5d306dc0636000364af4c1d81abe3c117b302e77b1bb0dfa846313680a0e36f7$0
 androidx.camera.core.processing.InternalImageProcessor
 androidx.camera.core.processing.OpenGlRenderer$OutputSurface
@@ -68626,7 +68566,8 @@ androidx.camera.core.resolutionselector.ResolutionStrategy:
     public static android.util.Size getBoundSize()
     public static int getFallbackRule()
 androidx.camera.core.streamsharing.ResolutionUtils
-androidx.camera.core.streamsharing.StreamSharing$$InternalSyntheticLambda$9$667f9c2d5b7538e325feff5b1b205c1a2febad6ab6ff393842d4784026983b8a$0:
+androidx.camera.core.streamsharing.StreamSharing$$InternalSyntheticLambda$10$667f9c2d5b7538e325feff5b1b205c1a2febad6ab6ff393842d4784026983b8a$0:
+    public final synthetic androidx.camera.core.streamsharing.StreamSharing f$0
     public static com.google.common.util.concurrent.ListenableFuture jpegSnapshot()
 androidx.camera.core.streamsharing.StreamSharing$Control
 androidx.camera.core.streamsharing.StreamSharing:
@@ -68658,9 +68599,14 @@ androidx.camera.core.streamsharing.VirtualCamera:
     public static void resetChildren()
     public static void setChildrenEdges()
     public static void unbindChildren()
+androidx.camera.core.streamsharing.VirtualCameraCaptureResult:
+    public final long mTimestamp
+    public final int getFlashState()
 androidx.camera.core.streamsharing.VirtualCameraControl:
+    public final androidx.camera.core.streamsharing.StreamSharing$$InternalSyntheticLambda$10$667f9c2d5b7538e325feff5b1b205c1a2febad6ab6ff393842d4784026983b8a$0 mStreamSharingControl
     public static int getJpegQuality()
     public static int getRotationDegrees()
+    public final com.google.common.util.concurrent.ListenableFuture submitStillCaptureRequests()
 androidx.camera.lifecycle.AutoValue_LifecycleCameraRepository_Key:
     public static androidx.camera.core.internal.CameraUseCaseAdapter$CameraId getCameraId()
     public static androidx.lifecycle.LifecycleOwner getLifecycleOwner()
@@ -68729,7 +68675,7 @@ androidx.camera.view.PreviewTransformation:
     public static void setScaleType()
     public static void setTransformationInfo()
     public static void transformView()
-androidx.camera.view.PreviewView$1$$InternalSyntheticBackportWithForwarding$13$ffae8bcc7481d83aaff970f5be4b755bed21d825c059bd33ed7ebeb2b88a5a98$0
+androidx.camera.view.PreviewView$1$$InternalSyntheticBackportWithForwarding$14$ffae8bcc7481d83aaff970f5be4b755bed21d825c059bd33ed7ebeb2b88a5a98$0
 androidx.camera.view.PreviewView$1:
     public static synthetic void lambda$onSurfaceRequested$0()
     public static void lambda$onSurfaceRequested$1()
@@ -68777,7 +68723,7 @@ androidx.camera.view.SurfaceViewImplementation:
     public final void initializePreview()
     public static void lambda$onSurfaceRequested$0()
     public final void setFrameUpdateListener()
-androidx.camera.view.TextureViewImplementation$1$$InternalSyntheticLambda$13$1f642f0318e5ff9e5b4bdf4842d5869303575615f8722648ddb429c236f84ce1$0
+androidx.camera.view.TextureViewImplementation$1$$InternalSyntheticLambda$14$1f642f0318e5ff9e5b4bdf4842d5869303575615f8722648ddb429c236f84ce1$0
 androidx.camera.view.TextureViewImplementation$1$1:
     public static void onSuccess$4()
 androidx.camera.view.TextureViewImplementation:
@@ -68854,7 +68800,7 @@ androidx.collection.LruCache:
     public static void safeSizeOf(java.lang.Object,java.lang.Object)
     public static int sizeOf()
     public final void trimToSize(int)
-androidx.collection.MutableFloatSet$$InternalSyntheticThrowCCEIfNotNull$330$43182fb1594507a514bf18492a0543eba5365d3c2285497da49e3ee6a9723e21$0
+androidx.collection.MutableFloatSet$$InternalSyntheticThrowCCEIfNotNull$333$43182fb1594507a514bf18492a0543eba5365d3c2285497da49e3ee6a9723e21$0
 androidx.collection.MutableFloatSet
 androidx.collection.MutableIntIntMap:
     public static void adjustStorage()
@@ -69482,7 +69428,7 @@ androidx.compose.animation.core.FloatSpringSpec:
 androidx.compose.animation.core.FloatTweenSpec:
     static void <clinit>()
     public final long clampPlayTimeNanos(long)
-androidx.compose.animation.core.InfiniteAnimationPolicyKt$$InternalSyntheticThrowCCEIfNotNull$171$cb71bdb322ca74d97dadee7c99cd8af016a33bd42ee774d86b0748d22d53f2c4$0
+androidx.compose.animation.core.InfiniteAnimationPolicyKt$$InternalSyntheticThrowCCEIfNotNull$173$cb71bdb322ca74d97dadee7c99cd8af016a33bd42ee774d86b0748d22d53f2c4$0
 androidx.compose.animation.core.InfiniteAnimationPolicyKt$withInfiniteAnimationFrameNanos$2
 androidx.compose.animation.core.InfiniteAnimationPolicyKt
 androidx.compose.animation.core.InfiniteRepeatableSpec:
@@ -69950,7 +69896,6 @@ androidx.compose.foundation.BorderKt$drawContentWithoutBorder$1:
 androidx.compose.foundation.BorderKt$drawRectBorder$1:
     public final void invoke$11()
 androidx.compose.foundation.BorderKt:
-    public static final androidx.compose.ui.Modifier border-xT4_qwU(androidx.compose.ui.Modifier,float,long,androidx.compose.foundation.shape.RoundedCornerShape)
     public static final androidx.compose.ui.Modifier border-ziNgDLE(androidx.compose.ui.Modifier,float,androidx.compose.ui.graphics.SolidColor,androidx.compose.ui.graphics.Shape)
 androidx.compose.foundation.BorderModifierNode$drawGenericBorder$1:
     public final void invoke$11()
@@ -71662,7 +71607,7 @@ androidx.compose.foundation.text.BasicTextFieldKt$DefaultTextFieldDecorator$1
 androidx.compose.foundation.text.BasicTextFieldKt:
     public static final androidx.compose.foundation.text.BasicTextFieldKt$DefaultTextFieldDecorator$1 DefaultTextFieldDecorator
     public static final long MinTouchTargetSizeForHandles
-androidx.compose.foundation.text.BasicTextKt$$InternalSyntheticThrowCCEIfNotNull$176$acc2cacd4ea2a218657d54aa42c2574787ccfa6ccac7a54bf5ec0516e0c9b354$0
+androidx.compose.foundation.text.BasicTextKt$$InternalSyntheticThrowCCEIfNotNull$178$acc2cacd4ea2a218657d54aa42c2574787ccfa6ccac7a54bf5ec0516e0c9b354$0
 androidx.compose.foundation.text.BasicTextKt$BasicText$1:
     public final void invoke$2()
 androidx.compose.foundation.text.BasicTextKt$BasicText$selectionController$selectableId$1$1
@@ -72760,8 +72705,6 @@ androidx.compose.material.icons.filled.DarkModeKt:
     static void <clinit>()
 androidx.compose.material.icons.filled.DeleteKt:
     static void <clinit>()
-androidx.compose.material.icons.filled.DocumentScannerKt:
-    static void <clinit>()
 androidx.compose.material.icons.filled.FavoriteBorderKt:
     static void <clinit>()
 androidx.compose.material.icons.filled.FavoriteKt:
@@ -72899,7 +72842,7 @@ androidx.compose.material.ripple.UnprojectedRipple:
     public static long calculateRippleColor-5vOe2sY()
     public static void setColor-DxMtmZc()
     public static void trySetRadius()
-androidx.compose.material3.AppBarKt$$InternalSyntheticThrowCCEIfNotNull$178$9f8dc6d5f46cbecfa6782cc11ca282c054ab1dd3e6fb361b1629c3913e6e4cb7$0
+androidx.compose.material3.AppBarKt$$InternalSyntheticThrowCCEIfNotNull$180$9f8dc6d5f46cbecfa6782cc11ca282c054ab1dd3e6fb361b1629c3913e6e4cb7$0
 androidx.compose.material3.AppBarKt$SingleRowTopAppBar$2$1:
     public final synthetic float $expandedHeightPx
     public final synthetic androidx.compose.material3.TopAppBarScrollBehavior $scrollBehavior
@@ -74253,7 +74196,7 @@ androidx.compose.runtime.Composer:
     public abstract void startReusableNode()
     public abstract void updateRememberedValue(java.lang.Object)
     public abstract void useNode()
-androidx.compose.runtime.ComposerImpl$$InternalSyntheticThrowCCEIfNotNull$164$063a0a8cadbfa8d63e10930c0b04c2427b8214f8ac50581fc7ccbadab9fc87ea$0
+androidx.compose.runtime.ComposerImpl$$InternalSyntheticThrowCCEIfNotNull$166$063a0a8cadbfa8d63e10930c0b04c2427b8214f8ac50581fc7ccbadab9fc87ea$0
 androidx.compose.runtime.ComposerImpl$CompositionContextHolder:
     public static androidx.compose.runtime.ComposerImpl$CompositionContextImpl getRef()
 androidx.compose.runtime.ComposerImpl$CompositionContextImpl:
@@ -77182,7 +77125,9 @@ androidx.compose.ui.graphics.vector.ImageVectorKt
 androidx.compose.ui.graphics.vector.PathBuilder:
     public static androidx.compose.ui.graphics.vector.PathBuilder arcToRelative()
     public static java.util.List getNodes()
+    public final void horizontalLineTo(float)
     public static androidx.compose.ui.graphics.vector.PathBuilder moveToRelative()
+    public final void verticalLineTo(float)
 androidx.compose.ui.graphics.vector.PathComponent$pathMeasure$2:
     public static androidx.compose.ui.graphics.AndroidPathMeasure invoke()
 androidx.compose.ui.graphics.vector.PathComponent:
@@ -78433,8 +78378,8 @@ androidx.compose.ui.node.AlignmentLines:
     public abstract void setUsedDuringParentMeasurement$ui_release()
 androidx.compose.ui.node.AlignmentLinesOwner:
     public abstract java.util.HashMap calculateAlignmentLines()
-androidx.compose.ui.node.BackwardsCompatNode$$InternalSyntheticThrowCCEIfNotNull$112$6e0e3aa2ed280a3d49d3bbcc500b2b3ddb88cc774afd0ad6d0d6e0f23aef2b2b$0
-androidx.compose.ui.node.BackwardsCompatNode$$InternalSyntheticThrowCCEIfNotNull$118$f333280ab3c2d798595492ec47c101aaac12127903b2bafb42c3b40243004989$0
+androidx.compose.ui.node.BackwardsCompatNode$$InternalSyntheticThrowCCEIfNotNull$114$6e0e3aa2ed280a3d49d3bbcc500b2b3ddb88cc774afd0ad6d0d6e0f23aef2b2b$0
+androidx.compose.ui.node.BackwardsCompatNode$$InternalSyntheticThrowCCEIfNotNull$120$f333280ab3c2d798595492ec47c101aaac12127903b2bafb42c3b40243004989$0
 androidx.compose.ui.node.BackwardsCompatNode$$InternalSyntheticThrowCCEIfNotNull$21$de7aebde9bd877a98ab4165c3867a69922610a85b79fae3b6c4b1fcd9a5bb241$0
 androidx.compose.ui.node.BackwardsCompatNode$$InternalSyntheticThrowCCEIfNotNull$21$e32183bba448871fc58a1bc1fa949ef05f96cf21d57e4acded7ba05d151c58ca$0
 androidx.compose.ui.node.BackwardsCompatNode$$InternalSyntheticThrowCCEIfNotNull$23$3e260ccdb2c62e0fa7052269f322ebc39114f92dab6192c0103e9ce37415b129$0
@@ -78837,8 +78782,8 @@ androidx.compose.ui.node.LayoutNodeLayoutDelegate:
 androidx.compose.ui.node.LayoutTreeConsistencyChecker
 androidx.compose.ui.node.LookaheadAlignmentLines:
     static void <clinit>()
-androidx.compose.ui.node.LookaheadCapablePlaceable$$InternalSyntheticThrowCCEIfNotNull$90$6a3235e19958f3c800cf563be8a94368cab35ebf77150b804cfafd341b0cc97d$0
-androidx.compose.ui.node.LookaheadCapablePlaceable$$InternalSyntheticThrowCCEIfNotNull$90$6a3235e19958f3c800cf563be8a94368cab35ebf77150b804cfafd341b0cc97d$1
+androidx.compose.ui.node.LookaheadCapablePlaceable$$InternalSyntheticThrowCCEIfNotNull$91$6a3235e19958f3c800cf563be8a94368cab35ebf77150b804cfafd341b0cc97d$0
+androidx.compose.ui.node.LookaheadCapablePlaceable$$InternalSyntheticThrowCCEIfNotNull$91$6a3235e19958f3c800cf563be8a94368cab35ebf77150b804cfafd341b0cc97d$1
 androidx.compose.ui.node.LookaheadCapablePlaceable$Companion$onCommitAffectingRuler$1:
     public static void invoke$61()
 androidx.compose.ui.node.LookaheadCapablePlaceable$Companion
@@ -79298,10 +79243,10 @@ androidx.compose.ui.platform.AndroidComposeView:
     public static boolean startDrag-12SF9DM()
 androidx.compose.ui.platform.AndroidComposeViewAccessibilityDelegateCompat$$InternalSyntheticLambda$3$c2bede89dd047365e56b025d4954e8b2c5f680c5fc614d2ac7466fdcab6c6930$0:
     public final synthetic androidx.compose.ui.platform.AndroidComposeViewAccessibilityDelegateCompat$sortByGeometryGroupings$2 f$0
-androidx.compose.ui.platform.AndroidComposeViewAccessibilityDelegateCompat$$InternalSyntheticThrowCCEIfNotNull$213$429b99719615f26f70d2226afaa7db04a7ad05455862d34ba7d22b40d257d829$0
-androidx.compose.ui.platform.AndroidComposeViewAccessibilityDelegateCompat$$InternalSyntheticThrowCCEIfNotNull$216$5b888b6b8a06c044ebff764588480198db071ec6f17d78b86d37ef1d3b96bbab$0
-androidx.compose.ui.platform.AndroidComposeViewAccessibilityDelegateCompat$$InternalSyntheticThrowCCEIfNotNull$216$5b888b6b8a06c044ebff764588480198db071ec6f17d78b86d37ef1d3b96bbab$1
-androidx.compose.ui.platform.AndroidComposeViewAccessibilityDelegateCompat$$InternalSyntheticThrowCCEIfNotNull$218$a4d911081e3242b8e95ee28be239d6f311aa2e66f7281e89afd4af97344dfc3d$0
+androidx.compose.ui.platform.AndroidComposeViewAccessibilityDelegateCompat$$InternalSyntheticThrowCCEIfNotNull$216$429b99719615f26f70d2226afaa7db04a7ad05455862d34ba7d22b40d257d829$0
+androidx.compose.ui.platform.AndroidComposeViewAccessibilityDelegateCompat$$InternalSyntheticThrowCCEIfNotNull$219$5b888b6b8a06c044ebff764588480198db071ec6f17d78b86d37ef1d3b96bbab$0
+androidx.compose.ui.platform.AndroidComposeViewAccessibilityDelegateCompat$$InternalSyntheticThrowCCEIfNotNull$219$5b888b6b8a06c044ebff764588480198db071ec6f17d78b86d37ef1d3b96bbab$1
+androidx.compose.ui.platform.AndroidComposeViewAccessibilityDelegateCompat$$InternalSyntheticThrowCCEIfNotNull$221$a4d911081e3242b8e95ee28be239d6f311aa2e66f7281e89afd4af97344dfc3d$0
 androidx.compose.ui.platform.AndroidComposeViewAccessibilityDelegateCompat$Api24Impl:
     public static final androidx.compose.ui.platform.AndroidComposeViewAccessibilityDelegateCompat$Api24Impl INSTANCE
     static void <clinit>()
@@ -79602,7 +79547,7 @@ androidx.compose.ui.platform.GraphicsLayerOwnerLayer:
     public static void updateMatrix()
     public static void updateOutline()
 androidx.compose.ui.platform.InfiniteAnimationPolicy
-androidx.compose.ui.platform.InfiniteAnimationPolicyKt$$InternalSyntheticThrowCCEIfNotNull$171$48ede4bc91adf7d64a723a9e1d0497c8f56376f430fc2ca7da2d19822e3f5621$0
+androidx.compose.ui.platform.InfiniteAnimationPolicyKt$$InternalSyntheticThrowCCEIfNotNull$173$48ede4bc91adf7d64a723a9e1d0497c8f56376f430fc2ca7da2d19822e3f5621$0
 androidx.compose.ui.platform.InfiniteAnimationPolicyKt$withInfiniteAnimationFrameNanos$2
 androidx.compose.ui.platform.InfiniteAnimationPolicyKt
 androidx.compose.ui.platform.InputMethodSession$createInputConnection$1$1:
@@ -79642,7 +79587,7 @@ androidx.compose.ui.platform.OutlineResolver:
     public static void updateCacheWithRect()
     public static void updateCacheWithRoundRect()
 androidx.compose.ui.platform.PlatformTextInputMethodRequest
-androidx.compose.ui.platform.PlatformTextInputModifierNodeKt$$InternalSyntheticThrowCCEIfNotNull$200$2ed3c0b113b81a457a962d97ce7e17b96d3c42f6f70edfec8b9b2fe9251b3070$0
+androidx.compose.ui.platform.PlatformTextInputModifierNodeKt$$InternalSyntheticThrowCCEIfNotNull$203$2ed3c0b113b81a457a962d97ce7e17b96d3c42f6f70edfec8b9b2fe9251b3070$0
 androidx.compose.ui.platform.PlatformTextInputModifierNodeKt$LocalChainedPlatformTextInputInterceptor$1:
     public static void invoke$69()
 androidx.compose.ui.platform.PlatformTextInputSession:
@@ -79802,7 +79747,7 @@ androidx.compose.ui.platform.WrappedComposition$setContent$1:
 androidx.compose.ui.platform.WrappedComposition:
     public static androidx.compose.runtime.Composition getOriginal()
     public static androidx.compose.ui.platform.AndroidComposeView getOwner()
-androidx.compose.ui.platform.accessibility.CollectionInfo_androidKt$$InternalSyntheticThrowCCEIfNotNull$176$809cdc83f90f06cc34f6bad5a71919e6a03615eb4494bdcaff4c759928be81d6$0
+androidx.compose.ui.platform.accessibility.CollectionInfo_androidKt$$InternalSyntheticThrowCCEIfNotNull$178$809cdc83f90f06cc34f6bad5a71919e6a03615eb4494bdcaff4c759928be81d6$0
 androidx.compose.ui.platform.accessibility.CollectionInfo_androidKt$setCollectionItemInfo$itemInfo$1
 androidx.compose.ui.platform.accessibility.CollectionInfo_androidKt$toAccessibilityCollectionItemInfo$1
 androidx.compose.ui.platform.accessibility.CollectionInfo_androidKt:
@@ -80813,10 +80758,10 @@ androidx.compose.ui.text.caches.SimpleArrayMap:
     public final java.lang.Object valueAt(int)
 androidx.compose.ui.text.font.AndroidFont$TypefaceLoader
 androidx.compose.ui.text.font.AndroidFont
-androidx.compose.ui.text.font.AndroidFontLoader$$InternalSyntheticThrowCCEIfNotNull$158$b663a48dbef432d01d36ffc53a124fef7a5f1d78703ba8b6e80c67c77751099b$0
-androidx.compose.ui.text.font.AndroidFontLoader$$InternalSyntheticThrowCCEIfNotNull$158$b663a48dbef432d01d36ffc53a124fef7a5f1d78703ba8b6e80c67c77751099b$1
-androidx.compose.ui.text.font.AndroidFontLoader$$InternalSyntheticThrowCCEIfNotNull$158$b663a48dbef432d01d36ffc53a124fef7a5f1d78703ba8b6e80c67c77751099b$2
-androidx.compose.ui.text.font.AndroidFontLoader$$InternalSyntheticThrowCCEIfNotNull$158$b663a48dbef432d01d36ffc53a124fef7a5f1d78703ba8b6e80c67c77751099b$3
+androidx.compose.ui.text.font.AndroidFontLoader$$InternalSyntheticThrowCCEIfNotNull$160$b663a48dbef432d01d36ffc53a124fef7a5f1d78703ba8b6e80c67c77751099b$0
+androidx.compose.ui.text.font.AndroidFontLoader$$InternalSyntheticThrowCCEIfNotNull$160$b663a48dbef432d01d36ffc53a124fef7a5f1d78703ba8b6e80c67c77751099b$1
+androidx.compose.ui.text.font.AndroidFontLoader$$InternalSyntheticThrowCCEIfNotNull$160$b663a48dbef432d01d36ffc53a124fef7a5f1d78703ba8b6e80c67c77751099b$2
+androidx.compose.ui.text.font.AndroidFontLoader$$InternalSyntheticThrowCCEIfNotNull$160$b663a48dbef432d01d36ffc53a124fef7a5f1d78703ba8b6e80c67c77751099b$3
 androidx.compose.ui.text.font.AndroidFontLoader$$InternalSyntheticThrowCCEIfNotNull$61$5fb84b31842a528f59822ccc7c97b00af4f45ea8b1cf80e2d8f01a7ee8812bca$0
 androidx.compose.ui.text.font.AndroidFontLoader$$InternalSyntheticThrowCCEIfNotNull$61$5fb84b31842a528f59822ccc7c97b00af4f45ea8b1cf80e2d8f01a7ee8812bca$1
 androidx.compose.ui.text.font.AndroidFontLoader$$InternalSyntheticThrowCCEIfNotNull$61$5fb84b31842a528f59822ccc7c97b00af4f45ea8b1cf80e2d8f01a7ee8812bca$2
@@ -80839,9 +80784,9 @@ androidx.compose.ui.text.font.AndroidFontResolveInterceptor:
 androidx.compose.ui.text.font.AndroidFontResolveInterceptor_androidKt
 androidx.compose.ui.text.font.AndroidFontUtils_androidKt:
     public static final int getAndroidTypefaceStyle(boolean,boolean)
-androidx.compose.ui.text.font.AsyncFontListLoader$$InternalSyntheticThrowCCEIfNotNull$138$f316b05f9996028cd39f9c39e9b721b97eee2a3d1d9afc12471b3d865057f225$0
-androidx.compose.ui.text.font.AsyncFontListLoader$$InternalSyntheticThrowCCEIfNotNull$138$f316b05f9996028cd39f9c39e9b721b97eee2a3d1d9afc12471b3d865057f225$1
-androidx.compose.ui.text.font.AsyncFontListLoader$$InternalSyntheticThrowCCEIfNotNull$162$cc4e108c24fe962fab6864452822ad9b53eb9e043d858356aa3a8cb47ed836b7$0
+androidx.compose.ui.text.font.AsyncFontListLoader$$InternalSyntheticThrowCCEIfNotNull$140$f316b05f9996028cd39f9c39e9b721b97eee2a3d1d9afc12471b3d865057f225$0
+androidx.compose.ui.text.font.AsyncFontListLoader$$InternalSyntheticThrowCCEIfNotNull$140$f316b05f9996028cd39f9c39e9b721b97eee2a3d1d9afc12471b3d865057f225$1
+androidx.compose.ui.text.font.AsyncFontListLoader$$InternalSyntheticThrowCCEIfNotNull$164$cc4e108c24fe962fab6864452822ad9b53eb9e043d858356aa3a8cb47ed836b7$0
 androidx.compose.ui.text.font.AsyncFontListLoader$load$1
 androidx.compose.ui.text.font.AsyncFontListLoader$load$2$typeface$1
 androidx.compose.ui.text.font.AsyncFontListLoader$loadWithTimeoutOrNull$1
@@ -80886,7 +80831,7 @@ androidx.compose.ui.text.font.FontFamilyResolverImpl:
 androidx.compose.ui.text.font.FontFamilyResolverKt:
     public static final androidx.compose.ui.text.font.AsyncTypefaceCache GlobalAsyncTypefaceCache
 androidx.compose.ui.text.font.FontListFontFamily
-androidx.compose.ui.text.font.FontListFontFamilyTypefaceAdapter$$InternalSyntheticThrowCCEIfNotNull$167$19f4cf09b7e8ecab7079dcbaa8d9a5c48b256e5ab829da46a910906b05b06fc0$0
+androidx.compose.ui.text.font.FontListFontFamilyTypefaceAdapter$$InternalSyntheticThrowCCEIfNotNull$169$19f4cf09b7e8ecab7079dcbaa8d9a5c48b256e5ab829da46a910906b05b06fc0$0
 androidx.compose.ui.text.font.FontListFontFamilyTypefaceAdapter$Companion
 androidx.compose.ui.text.font.FontListFontFamilyTypefaceAdapter$resolve$1
 androidx.compose.ui.text.font.FontListFontFamilyTypefaceAdapter:
@@ -83168,7 +83113,7 @@ androidx.core.os.LocaleListCompat:
     public final java.lang.String toLanguageTags()
     public static java.lang.Object unwrap()
     public static androidx.core.os.LocaleListCompat wrap(android.os.LocaleList)
-androidx.core.os.LocaleListCompatWrapper$$InternalSyntheticThrowCCEIfNotNull$330$eabde584e09f5dbef5e5c77b987ffae1119ec566c4556bde1e78e256d6ae9d7b$0
+androidx.core.os.LocaleListCompatWrapper$$InternalSyntheticThrowCCEIfNotNull$333$eabde584e09f5dbef5e5c77b987ffae1119ec566c4556bde1e78e256d6ae9d7b$0
 androidx.core.os.LocaleListCompatWrapper
 androidx.core.os.LocaleListInterface:
     public abstract java.util.Locale get()
@@ -84398,9 +84343,9 @@ androidx.datastore.preferences.protobuf.ExtensionRegistryLite:
     public final java.util.Map extensionsByNumber
     public static void findLiteExtensionByNumber()
 androidx.datastore.preferences.protobuf.ExtensionSchema
-androidx.datastore.preferences.protobuf.ExtensionSchemaLite$$InternalSyntheticThrowCCEIfNotNull$103$41d7c8792b18fba4d931d6e1cdc30f17f9f2b131ad2f06c10c840ac1c9730562$0
-androidx.datastore.preferences.protobuf.ExtensionSchemaLite$$InternalSyntheticThrowCCEIfNotNull$109$520b94fdec3d3f07cec41d320e347e8a8d58aa93dfce44cf31afc009f56675ae$0
-androidx.datastore.preferences.protobuf.ExtensionSchemaLite$$InternalSyntheticThrowCCEIfNotNull$114$30b2d5c35521e6544704c637079c55a0910a4c12d4d2207553564023210d211f$0
+androidx.datastore.preferences.protobuf.ExtensionSchemaLite$$InternalSyntheticThrowCCEIfNotNull$105$41d7c8792b18fba4d931d6e1cdc30f17f9f2b131ad2f06c10c840ac1c9730562$0
+androidx.datastore.preferences.protobuf.ExtensionSchemaLite$$InternalSyntheticThrowCCEIfNotNull$111$520b94fdec3d3f07cec41d320e347e8a8d58aa93dfce44cf31afc009f56675ae$0
+androidx.datastore.preferences.protobuf.ExtensionSchemaLite$$InternalSyntheticThrowCCEIfNotNull$116$30b2d5c35521e6544704c637079c55a0910a4c12d4d2207553564023210d211f$0
 androidx.datastore.preferences.protobuf.ExtensionSchemaLite$$InternalSyntheticThrowCCEIfNotNull$21$6d276455942cfae5e599eaccba4decd95f9d3ba1ab192bba846e65c55222f6dd$0
 androidx.datastore.preferences.protobuf.ExtensionSchemaLite$$InternalSyntheticThrowCCEIfNotNull$21$e25c184836d93970789fa5f6a4f1a231cfa9a3bf94c8a284869e72f64ed3315b$0
 androidx.datastore.preferences.protobuf.ExtensionSchemaLite$$InternalSyntheticThrowCCEIfNotNull$82$3e34cb2f140969c0619dca7f35f13bbe35268ec1c08002245940249bce97f47e$0
@@ -84432,9 +84377,9 @@ androidx.datastore.preferences.protobuf.FieldSet$$InternalSyntheticThrowCCEIfNot
 androidx.datastore.preferences.protobuf.FieldSet$$InternalSyntheticThrowCCEIfNotNull$82$b56f1e7843a97fadff060602d217a55c8be861562d551059c4d5f209b4f0a481$3
 androidx.datastore.preferences.protobuf.FieldSet$$InternalSyntheticThrowCCEIfNotNull$82$d6e17a2624f3202cdfab97a88a48132cd813ac78792bb98efc3026a66a56b3b9$0
 androidx.datastore.preferences.protobuf.FieldSet$$InternalSyntheticThrowCCEIfNotNull$82$d6e17a2624f3202cdfab97a88a48132cd813ac78792bb98efc3026a66a56b3b9$1
-androidx.datastore.preferences.protobuf.FieldSet$$InternalSyntheticThrowCCEIfNotNull$94$da7e74b8c47d707c13ba91483b2aaf98bf00fd75eaeef40a3cc92253c93f211c$0
-androidx.datastore.preferences.protobuf.FieldSet$$InternalSyntheticThrowCCEIfNotNull$94$da7e74b8c47d707c13ba91483b2aaf98bf00fd75eaeef40a3cc92253c93f211c$1
-androidx.datastore.preferences.protobuf.FieldSet$$InternalSyntheticThrowCCEIfNotNull$97$7ac61fd66721836dfa6ff5d2712b24289d572eb1425f0a27386a1552db803d03$0
+androidx.datastore.preferences.protobuf.FieldSet$$InternalSyntheticThrowCCEIfNotNull$95$da7e74b8c47d707c13ba91483b2aaf98bf00fd75eaeef40a3cc92253c93f211c$0
+androidx.datastore.preferences.protobuf.FieldSet$$InternalSyntheticThrowCCEIfNotNull$95$da7e74b8c47d707c13ba91483b2aaf98bf00fd75eaeef40a3cc92253c93f211c$1
+androidx.datastore.preferences.protobuf.FieldSet$$InternalSyntheticThrowCCEIfNotNull$99$7ac61fd66721836dfa6ff5d2712b24289d572eb1425f0a27386a1552db803d03$0
 androidx.datastore.preferences.protobuf.FieldSet$1
 androidx.datastore.preferences.protobuf.FieldSet$FieldDescriptorLite
 androidx.datastore.preferences.protobuf.FieldSet:
@@ -85077,8 +85022,7 @@ androidx.exifinterface.media.ExifInterface$ByteOrderedDataInputStream:
     public static int position()
     public final long readUnsignedInt()
     public static void setByteOrder()
-androidx.exifinterface.media.ExifInterface$ByteOrderedDataOutputStream:
-    public static void setByteOrder()
+androidx.exifinterface.media.ExifInterface$ByteOrderedDataOutputStream
 androidx.exifinterface.media.ExifInterface$ExifAttribute:
     public static androidx.exifinterface.media.ExifInterface$ExifAttribute createURational(androidx.exifinterface.media.ExifInterface$Rational,java.nio.ByteOrder)
     public final int size()
@@ -85088,7 +85032,10 @@ androidx.exifinterface.media.ExifInterface$Rational:
     public static double calculate()
 androidx.exifinterface.media.ExifInterface:
     public static final int[] BITS_PER_SAMPLE_GREYSCALE_1
+    public static final java.util.regex.Pattern DATETIME_PRIMARY_FORMAT_PATTERN
+    public static final java.util.regex.Pattern DATETIME_SECONDARY_FORMAT_PATTERN
     public static final java.util.List FLIPPED_ROTATION_ORDER
+    public static final java.util.regex.Pattern GPS_TIMESTAMP_PATTERN
     public static final androidx.exifinterface.media.ExifInterface$ExifTag[] IFD_EXIF_TAGS
     public static final androidx.exifinterface.media.ExifInterface$ExifTag[] IFD_GPS_TAGS
     public static final androidx.exifinterface.media.ExifInterface$ExifTag[] IFD_INTEROPERABILITY_TAGS
@@ -85100,11 +85047,26 @@ androidx.exifinterface.media.ExifInterface:
     public static final androidx.exifinterface.media.ExifInterface$ExifTag[] ORF_MAKER_NOTE_TAGS
     public static final androidx.exifinterface.media.ExifInterface$ExifTag[] PEF_TAGS
     public static final java.util.List ROTATION_ORDER
+    public static final byte[] WEBP_CHUNK_TYPE_ANIM
+    public static final byte[] WEBP_CHUNK_TYPE_ANMF
+    public static final byte[] WEBP_CHUNK_TYPE_VP8
+    public static final byte[] WEBP_CHUNK_TYPE_VP8L
+    public static final byte[] WEBP_CHUNK_TYPE_VP8X
+    public static final byte[] WEBP_VP8_SIGNATURE
+    public boolean mHasThumbnail
+    public boolean mHasThumbnailStrips
     public boolean mIsExifDataOnly
     public boolean mModified
+    public byte[] mThumbnailBytes
+    public int mThumbnailCompression
+    public int mThumbnailLength
+    public int mThumbnailOffset
+    public boolean mXmpIsFromSeparateMarker
     public static java.text.SimpleDateFormat sFormatterPrimary
     public static java.text.SimpleDateFormat sFormatterSecondary
+    public void <init>(java.lang.String)
     public static java.lang.String convertDecimalDegree(double)
+    public static double convertRationalLatLonToDouble(java.lang.String,java.lang.String)
     public static void copyChunksUpToGivenChunkType(androidx.exifinterface.media.ExifInterface$ByteOrderedDataInputStream,androidx.exifinterface.media.ExifInterface$ByteOrderedDataOutputStream,byte[],byte[])
     public static void copyWebPChunk(androidx.exifinterface.media.ExifInterface$ByteOrderedDataInputStream,androidx.exifinterface.media.ExifInterface$ByteOrderedDataOutputStream,byte[])
     public static double getAltitude()
@@ -85112,6 +85074,8 @@ androidx.exifinterface.media.ExifInterface:
     public static double[] getLatLong()
     public final void getStandaloneAttributes(androidx.exifinterface.media.ExifInterface$SeekableByteOrderedDataInputStream)
     public static byte[] getThumbnail()
+    public final byte[] getThumbnailBytes()
+    public static android.util.Pair guessDataFormat(java.lang.String)
     public static void handleThumbnailFromStrips()
     public static void initForFilename()
     public static boolean isHeifFormat()
@@ -85122,13 +85086,22 @@ androidx.exifinterface.media.ExifInterface:
     public static boolean isSeekableFD(java.io.FileDescriptor)
     public static boolean isSupportedDataType()
     public static boolean isWebpFormat()
+    public final void removeAttribute(java.lang.String)
     public static void retrieveJpegImageSize()
     public static void saveAttributes()
+    public final void saveJpegAttributes(java.io.BufferedInputStream,java.io.BufferedOutputStream)
+    public final void savePngAttributes(java.io.BufferedInputStream,java.io.BufferedOutputStream)
+    public final void saveWebpAttributes(java.io.BufferedInputStream,java.io.BufferedOutputStream)
     public static void setAltitude()
+    public final void setAttribute(java.lang.String,java.lang.String)
     public static void setGpsInfo()
     public static void setLatLong()
+    public final void writeExifSegment(androidx.exifinterface.media.ExifInterface$ByteOrderedDataOutputStream)
 androidx.exifinterface.media.ExifInterfaceUtils:
     public static void closeFileDescriptor(java.io.FileDescriptor)
+    public static void closeQuietly(java.io.Closeable)
+    public static void copy(androidx.exifinterface.media.ExifInterface$ByteOrderedDataInputStream,androidx.exifinterface.media.ExifInterface$ByteOrderedDataOutputStream,int)
+    public static void copy(java.io.InputStream,java.io.OutputStream)
     public static boolean startsWith(byte[],byte[])
 androidx.fragment.R$animator
 androidx.fragment.R$id
@@ -85747,7 +85720,7 @@ androidx.lifecycle.RepeatOnLifecycleKt$repeatOnLifecycle$3:
     public final java.lang.Object invoke$2()
 androidx.lifecycle.RepeatOnLifecycleKt
 androidx.lifecycle.ReportFragment$ActivityInitializationListener
-androidx.lifecycle.ReportFragment$Companion$$InternalSyntheticThrowCCEIfNotNull$150$6606f6a9d6c00feabd13f693204c7c685bcfd577a1c056fdbb01af5d22a24ba7$0
+androidx.lifecycle.ReportFragment$Companion$$InternalSyntheticThrowCCEIfNotNull$152$6606f6a9d6c00feabd13f693204c7c685bcfd577a1c056fdbb01af5d22a24ba7$0
 androidx.lifecycle.ReportFragment$Companion:
     public static androidx.lifecycle.ReportFragment get()
 androidx.lifecycle.ReportFragment$LifecycleCallbacks$Companion:
@@ -85938,7 +85911,7 @@ androidx.navigation.NavBackStackEntryState:
     public static final androidx.navigation.NavBackStackEntryState$Companion Companion
     public static int getDestinationId()
     public static java.lang.String getId()
-androidx.navigation.NavController$$InternalSyntheticThrowCCEIfNotNull$238$a7c0768a11104642817dfbb7507cd4f37a4e5cf342a9e25645a379b09e2096cc$0
+androidx.navigation.NavController$$InternalSyntheticThrowCCEIfNotNull$240$a7c0768a11104642817dfbb7507cd4f37a4e5cf342a9e25645a379b09e2096cc$0
 androidx.navigation.NavController$Companion
 androidx.navigation.NavController$NavControllerNavigatorState$pop$1
 androidx.navigation.NavController$NavControllerNavigatorState:
@@ -86028,7 +86001,7 @@ androidx.navigation.NavControllerViewModel:
 androidx.navigation.NavDeepLink$Builder$Companion
 androidx.navigation.NavDeepLink$Builder
 androidx.navigation.NavDeepLink$Companion
-androidx.navigation.NavDeepLink$MimeType$$InternalSyntheticThrowCCEIfNotNull$330$07cbdf7f8d66286e60ed3c6c38c341e678307fb03d9a7537a089498cfde1511f$0
+androidx.navigation.NavDeepLink$MimeType$$InternalSyntheticThrowCCEIfNotNull$333$07cbdf7f8d66286e60ed3c6c38c341e678307fb03d9a7537a089498cfde1511f$0
 androidx.navigation.NavDeepLink$MimeType
 androidx.navigation.NavDeepLink$ParamQuery:
     public static void addArgumentName()
@@ -87296,9 +87269,9 @@ androidx.room.AutoClosingRoomOpenHelper:
     public final androidx.sqlite.db.SupportSQLiteDatabase getWritableDatabase()
     public final void setWriteAheadLoggingEnabled(boolean)
 androidx.room.AutoClosingRoomOpenHelperFactory
-androidx.room.CoroutinesRoom$Companion$$InternalSyntheticThrowCCEIfNotNull$162$c3f6f6a99347746ba3f3275f3155a5a3813929a15409c137ea178b7b96938044$0
-androidx.room.CoroutinesRoom$Companion$$InternalSyntheticThrowCCEIfNotNull$167$7585e4ccac50cf261cc018c53bc820eb0135e9e5aaeb99229d35ee8d3a5c8a61$0
-androidx.room.CoroutinesRoom$Companion$createFlow$1$1$$InternalSyntheticThrowCCEIfNotNull$236$8d90a933deb753ecdbd5d628f30cc89c435df6dac4f82b9d30a968ed416b5fc6$0
+androidx.room.CoroutinesRoom$Companion$$InternalSyntheticThrowCCEIfNotNull$164$c3f6f6a99347746ba3f3275f3155a5a3813929a15409c137ea178b7b96938044$0
+androidx.room.CoroutinesRoom$Companion$$InternalSyntheticThrowCCEIfNotNull$169$7585e4ccac50cf261cc018c53bc820eb0135e9e5aaeb99229d35ee8d3a5c8a61$0
+androidx.room.CoroutinesRoom$Companion$createFlow$1$1$$InternalSyntheticThrowCCEIfNotNull$238$8d90a933deb753ecdbd5d628f30cc89c435df6dac4f82b9d30a968ed416b5fc6$0
 androidx.room.CoroutinesRoom$Companion$createFlow$1$1$1:
     public final java.lang.Object invoke$2()
 androidx.room.CoroutinesRoom$Companion$createFlow$1$1:
@@ -87413,7 +87386,7 @@ androidx.room.QueryInterceptorStatement$$InternalSyntheticLambda$1$1844265daa252
 androidx.room.QueryInterceptorStatement$$InternalSyntheticLambda$1$ed3cef0d548ef1d616f7b0506ee1fce4cfb55226669666f7ecaabb61239fa2e2$0
 androidx.room.QueryInterceptorStatement
 androidx.room.Room
-androidx.room.RoomDatabase$$InternalSyntheticThrowCCEIfNotNull$330$128ccbc799a1cd5e75b20d876941bffd53767f470c75810d6e15855ae8166944$0
+androidx.room.RoomDatabase$$InternalSyntheticThrowCCEIfNotNull$333$128ccbc799a1cd5e75b20d876941bffd53767f470c75810d6e15855ae8166944$0
 androidx.room.RoomDatabase$$InternalSyntheticThrowCCEIfNotNull$47$b6c847f18e0755597698e26eed83d49e5e3c94864247cebdeb50e74893b617ee$0
 androidx.room.RoomDatabase$$InternalSyntheticThrowCCEIfNotNull$47$b6c847f18e0755597698e26eed83d49e5e3c94864247cebdeb50e74893b617ee$1
 androidx.room.RoomDatabase$$InternalSyntheticThrowCCEIfNotNull$47$b6c847f18e0755597698e26eed83d49e5e3c94864247cebdeb50e74893b617ee$2
@@ -88474,10 +88447,10 @@ com.google.android.gms.common.api.Api:
 com.google.android.gms.common.api.ApiException:
     public static com.google.android.gms.common.api.Status getStatus()
 com.google.android.gms.common.api.CommonStatusCodes
-com.google.android.gms.common.api.GoogleApi$$InternalSyntheticThrowCCEIfNotNull$227$daa842e2bcf2f19cc0f90a7d36350410075fb86372360aff956ed17b5fc08fc9$0
-com.google.android.gms.common.api.GoogleApi$$InternalSyntheticThrowCCEIfNotNull$227$daa842e2bcf2f19cc0f90a7d36350410075fb86372360aff956ed17b5fc08fc9$1
-com.google.android.gms.common.api.GoogleApi$$InternalSyntheticThrowCCEIfNotNull$227$daa842e2bcf2f19cc0f90a7d36350410075fb86372360aff956ed17b5fc08fc9$2
-com.google.android.gms.common.api.GoogleApi$$InternalSyntheticThrowCCEIfNotNull$229$cbd6e37ea8225c7e7b675d4c0db7054199d7019f9410f22dd419e488a84996a0$0
+com.google.android.gms.common.api.GoogleApi$$InternalSyntheticThrowCCEIfNotNull$229$daa842e2bcf2f19cc0f90a7d36350410075fb86372360aff956ed17b5fc08fc9$0
+com.google.android.gms.common.api.GoogleApi$$InternalSyntheticThrowCCEIfNotNull$229$daa842e2bcf2f19cc0f90a7d36350410075fb86372360aff956ed17b5fc08fc9$1
+com.google.android.gms.common.api.GoogleApi$$InternalSyntheticThrowCCEIfNotNull$229$daa842e2bcf2f19cc0f90a7d36350410075fb86372360aff956ed17b5fc08fc9$2
+com.google.android.gms.common.api.GoogleApi$$InternalSyntheticThrowCCEIfNotNull$231$cbd6e37ea8225c7e7b675d4c0db7054199d7019f9410f22dd419e488a84996a0$0
 com.google.android.gms.common.api.GoogleApi$Settings$Builder
 com.google.android.gms.common.api.GoogleApi$Settings:
     public final android.os.Looper zab
@@ -88529,8 +88502,8 @@ com.google.android.gms.common.api.internal.BackgroundDetector:
     public static boolean readCurrentStateIfPossible()
 com.google.android.gms.common.api.internal.BasePendingResult
 com.google.android.gms.common.api.internal.ConnectionCallbacks
-com.google.android.gms.common.api.internal.GoogleApiManager$$InternalSyntheticThrowCCEIfNotNull$244$176a2ecec2e201424803a5fc985d9d742a2e18976d4340f9044d3126d8ef36fa$0
-com.google.android.gms.common.api.internal.GoogleApiManager$$InternalSyntheticThrowCCEIfNotNull$244$176a2ecec2e201424803a5fc985d9d742a2e18976d4340f9044d3126d8ef36fa$1
+com.google.android.gms.common.api.internal.GoogleApiManager$$InternalSyntheticThrowCCEIfNotNull$246$176a2ecec2e201424803a5fc985d9d742a2e18976d4340f9044d3126d8ef36fa$0
+com.google.android.gms.common.api.internal.GoogleApiManager$$InternalSyntheticThrowCCEIfNotNull$246$176a2ecec2e201424803a5fc985d9d742a2e18976d4340f9044d3126d8ef36fa$1
 com.google.android.gms.common.api.internal.GoogleApiManager:
     public com.google.android.gms.common.api.internal.zaae zao
     public final void zaA(com.google.android.gms.common.api.internal.zaae)
@@ -88629,7 +88602,7 @@ com.google.android.gms.common.api.internal.zabl:
     public static void onBackgroundStateChanged()
 com.google.android.gms.common.api.internal.zabp:
     public static void onSignOutComplete()
-com.google.android.gms.common.api.internal.zabq$$InternalSyntheticThrowCCEIfNotNull$233$6e59dd714f23b8788d809f7a1ddb855157feafdba66a5fd0e46484d88534a2db$0
+com.google.android.gms.common.api.internal.zabq$$InternalSyntheticThrowCCEIfNotNull$235$6e59dd714f23b8788d809f7a1ddb855157feafdba66a5fd0e46484d88534a2db$0
 com.google.android.gms.common.api.internal.zabq:
     public static boolean zaA()
     public static boolean zaB()
@@ -90584,7 +90557,7 @@ com.google.android.gms.internal.mlkit_vision_barcode_bundled.zzfp:
     public static float zzn(java.lang.Object,long)
     public final int zzp(int)
     public final java.lang.Object zzw(int)
-com.google.android.gms.internal.mlkit_vision_barcode_bundled.zzfq$$InternalSyntheticThrowCCEIfNotNull$85$7eab5d25e53e6ed49e73e11044d147f46547d41261bfebcf99dceb8058ee4396$0
+com.google.android.gms.internal.mlkit_vision_barcode_bundled.zzfq$$InternalSyntheticThrowCCEIfNotNull$86$7eab5d25e53e6ed49e73e11044d147f46547d41261bfebcf99dceb8058ee4396$0
 com.google.android.gms.internal.mlkit_vision_barcode_bundled.zzfq:
     public final com.google.android.gms.internal.mlkit_vision_barcode_bundled.zzdu zzd
 com.google.android.gms.internal.mlkit_vision_barcode_bundled.zzfr
@@ -92526,7 +92499,7 @@ com.google.android.material.bottomsheet.BottomSheetBehavior:
     public static boolean shouldSkipHalfExpandedStateWhenDragging()
     public final boolean shouldSkipSmoothAnimation()
     public final void updateAccessibilityActions(android.view.View)
-com.google.android.material.button.MaterialButton$$InternalSyntheticThrowCCEIfNotNull$90$6669efef3cdb4fadbbfe03e9570c054a7f84ff1fdbc612ba59f6bda9750bcb8e$0
+com.google.android.material.button.MaterialButton$$InternalSyntheticThrowCCEIfNotNull$91$6669efef3cdb4fadbbfe03e9570c054a7f84ff1fdbc612ba59f6bda9750bcb8e$0
 com.google.android.material.button.MaterialButton$OnCheckedChangeListener
 com.google.android.material.button.MaterialButton$OnPressedChangeListener:
     public abstract void onPressedChanged()
@@ -92738,8 +92711,8 @@ com.google.android.material.carousel.MultiBrowseCarouselStrategy:
     public final com.google.android.material.carousel.KeylineState onFirstChildMeasuredWithMargins()
     public final boolean shouldRefreshKeylineState()
 com.google.android.material.checkbox.MaterialCheckBox$$InternalSyntheticLambda$1$a66ca6c6de65b4f256ca2f0a8ce6032afe507a77d8c42ef3015c9db612807b7a$0
-com.google.android.material.checkbox.MaterialCheckBox$$InternalSyntheticThrowCCEIfNotNull$88$64230ef508535390da37e035104af999ccafcbc3346ffbad5268c7d7cc5ad2a9$0
-com.google.android.material.checkbox.MaterialCheckBox$$InternalSyntheticThrowCCEIfNotNull$88$aa0500c7b5fb81cb553ac89573852bdeadab87567d8c6dd741e4dc2fb74c3bfa$0
+com.google.android.material.checkbox.MaterialCheckBox$$InternalSyntheticThrowCCEIfNotNull$89$64230ef508535390da37e035104af999ccafcbc3346ffbad5268c7d7cc5ad2a9$0
+com.google.android.material.checkbox.MaterialCheckBox$$InternalSyntheticThrowCCEIfNotNull$89$aa0500c7b5fb81cb553ac89573852bdeadab87567d8c6dd741e4dc2fb74c3bfa$0
 com.google.android.material.checkbox.MaterialCheckBox$1:
     public final android.graphics.drawable.Animatable2$AnimationCallback getPlatformCallback()
     public final void onAnimationEnd(android.graphics.drawable.Drawable)
@@ -93012,7 +92985,7 @@ com.google.android.material.datepicker.MaterialCalendarGridView:
 com.google.android.material.datepicker.MaterialDatePicker$$InternalSyntheticThrowCCEIfNotNull$29$6f9012f149ef32ee9a67cbfe32c48b15f6aac2dda686c51d0d808efe178f2b7f$0
 com.google.android.material.datepicker.MaterialDatePicker$$InternalSyntheticThrowCCEIfNotNull$61$bda0d98b3cbf8cb5d502e9d97dd349e14cb6aff4142636fd41860955b0102acd$0
 com.google.android.material.datepicker.MaterialDatePicker$$InternalSyntheticThrowCCEIfNotNull$61$bda0d98b3cbf8cb5d502e9d97dd349e14cb6aff4142636fd41860955b0102acd$1
-com.google.android.material.datepicker.MaterialDatePicker$1$$InternalSyntheticThrowCCEIfNotNull$251$fa1d04f1d21baf893c4683b5052f5e1a3880949fd73761df9abbfd4297b09909$0
+com.google.android.material.datepicker.MaterialDatePicker$1$$InternalSyntheticThrowCCEIfNotNull$253$fa1d04f1d21baf893c4683b5052f5e1a3880949fd73761df9abbfd4297b09909$0
 com.google.android.material.datepicker.MaterialDatePicker$1
 com.google.android.material.datepicker.MaterialDatePicker$2
 com.google.android.material.datepicker.MaterialDatePicker$3:
@@ -94578,8 +94551,6 @@ com.google.photos.vision.barhopper.zzan
 com.google.photos.vision.barhopper.zzb:
     public static com.google.photos.vision.barhopper.zzb zza()
 com.google.photos.vision.barhopper.zzu
-com.googlecode.leptonica.android.Pixa-IA
-com.googlecode.tesseract.android.TessBaseAPI$$InternalSyntheticBackport$1$a730b08065f38c1bbf5c730010ea49c79adc9f7fff1f36479050f6c3b6cb2c84$0
 com.healthyscan.app.HealthyScanApp:
     public static final int $stable
     static void <clinit>()
@@ -94651,10 +94622,12 @@ com.healthyscan.app.data.repository.ContributionResult:
 com.healthyscan.app.data.repository.ProductLookupResult$Error
 com.healthyscan.app.data.repository.ProductLookupResult$Found:
     public static final int $stable
+    static void <clinit>()
     public final com.healthyscan.app.data.model.Product getProduct()
     public static com.healthyscan.app.data.model.HealthScoreResult getScore()
 com.healthyscan.app.data.repository.ProductLookupResult$FoundBasicInfo:
     public static final int $stable
+    static void <clinit>()
     public final com.healthyscan.app.data.model.Product getProduct()
 com.healthyscan.app.data.repository.ProductLookupResult:
     static void <clinit>()
@@ -94708,23 +94681,6 @@ com.healthyscan.app.data.repository.SettingsRepository:
     public final java.lang.Object setOffCredentials(java.lang.String,java.lang.String,kotlin.coroutines.jvm.internal.ContinuationImpl)
     public final java.lang.Object setOnboardingDone(boolean,kotlin.coroutines.jvm.internal.ContinuationImpl)
 com.healthyscan.app.locale.LocaleManager
-com.healthyscan.app.ocr.TesseractOcrHelper$Attempt:
-    public static int getConfidence()
-    public static java.lang.String getText()
-com.healthyscan.app.ocr.TesseractOcrHelper$recognizeLines$2:
-    public int label
-    public final java.lang.Object invoke$2()
-com.healthyscan.app.ocr.TesseractOcrHelper:
-    public static final int $stable
-    public static final com.healthyscan.app.ocr.TesseractOcrHelper INSTANCE
-    public static int[] adaptiveBinarize()
-    public static void ensureTrainedDataExtracted()
-    public static android.graphics.Bitmap grayscaleToBitmap()
-    public static int[] illuminationNormalize()
-    public static android.graphics.Bitmap loadUprightBitmap()
-    public static java.lang.Object recognizeLines()
-    public static com.healthyscan.app.ocr.TesseractOcrHelper$Attempt runTesseract()
-    public static int[] toGrayscale()
 com.healthyscan.app.scoring.ExplanationGenerator:
     public static final com.healthyscan.app.scoring.ExplanationGenerator INSTANCE
     static void <clinit>()
@@ -94775,8 +94731,6 @@ com.healthyscan.app.ui.navigation.NavGraphKt$HealthyScanNavHost$2$1$1$14:
 com.healthyscan.app.ui.navigation.NavGraphKt$HealthyScanNavHost$2$1$1$15:
     public final void invoke$97()
 com.healthyscan.app.ui.navigation.NavGraphKt$HealthyScanNavHost$2$1$1$16:
-    public final void invoke$97()
-com.healthyscan.app.ui.navigation.NavGraphKt$HealthyScanNavHost$2$1$1$17:
     public final void invoke$97()
 com.healthyscan.app.ui.navigation.NavGraphKt$HealthyScanNavHost$2$1$1$1:
     public final void invoke$97()
@@ -94954,13 +94908,11 @@ com.healthyscan.app.ui.screens.home.HomeScreenKt$HomeScreen$2$1$1$1:
     public final void invoke$101()
 com.healthyscan.app.ui.screens.home.HomeScreenKt$HomeScreen$2$1$1$2:
     public final void invoke$101()
-com.healthyscan.app.ui.screens.home.HomeScreenKt$HomeScreen$2$1$1$3:
-    public final void invoke$101()
-com.healthyscan.app.ui.screens.home.HomeScreenKt$HomeScreen$2$1$1$5$1$1:
+com.healthyscan.app.ui.screens.home.HomeScreenKt$HomeScreen$2$1$1$4$1$1:
     public final void invoke()
-com.healthyscan.app.ui.screens.home.HomeScreenKt$HomeScreen$2$1$1$5$2$1$1:
+com.healthyscan.app.ui.screens.home.HomeScreenKt$HomeScreen$2$1$1$4$2$1$1:
     public final java.lang.Object invoke$2()
-com.healthyscan.app.ui.screens.home.HomeScreenKt$HomeScreen$2$1$1$5$2$1:
+com.healthyscan.app.ui.screens.home.HomeScreenKt$HomeScreen$2$1$1$4$2$1:
     public final void invoke()
 com.healthyscan.app.ui.screens.home.HomeScreenKt$HomeScreen$2$invoke$lambda$5$lambda$4$$inlined$items$default$1
 com.healthyscan.app.ui.screens.home.HomeScreenKt$HomeScreen$2$invoke$lambda$5$lambda$4$$inlined$items$default$2:
@@ -95104,8 +95056,6 @@ com.healthyscan.app.ui.screens.premium.PremiumScreenKt$PremiumScreen$2:
     public final void invoke$100()
 com.healthyscan.app.ui.screens.product.ComposableSingletons$ProductResultScreenKt$lambda-1$1:
     public final void invoke$2()
-com.healthyscan.app.ui.screens.product.ComposableSingletons$ProductResultScreenKt$lambda-10$1:
-    public final void invoke$101()
 com.healthyscan.app.ui.screens.product.ComposableSingletons$ProductResultScreenKt$lambda-2$1:
     public final void invoke$2()
 com.healthyscan.app.ui.screens.product.ComposableSingletons$ProductResultScreenKt$lambda-3$1:
@@ -95115,18 +95065,15 @@ com.healthyscan.app.ui.screens.product.ComposableSingletons$ProductResultScreenK
 com.healthyscan.app.ui.screens.product.ComposableSingletons$ProductResultScreenKt$lambda-5$1:
     public final void invoke$39()
 com.healthyscan.app.ui.screens.product.ComposableSingletons$ProductResultScreenKt$lambda-6$1:
-    public final void invoke$39()
+    public final void invoke$101()
 com.healthyscan.app.ui.screens.product.ComposableSingletons$ProductResultScreenKt$lambda-7$1:
-    public final void invoke$39()
+    public final void invoke$14()
 com.healthyscan.app.ui.screens.product.ComposableSingletons$ProductResultScreenKt$lambda-8$1:
     public final void invoke$101()
-com.healthyscan.app.ui.screens.product.ComposableSingletons$ProductResultScreenKt$lambda-9$1:
-    public final void invoke$14()
 com.healthyscan.app.ui.screens.product.ComposableSingletons$ProductResultScreenKt:
     public static final com.healthyscan.app.ui.screens.product.ComposableSingletons$ProductResultScreenKt INSTANCE
     public static androidx.compose.runtime.internal.ComposableLambdaImpl lambda-3
     public static kotlin.jvm.functions.Function2 getLambda-1$app_release()
-    public static kotlin.jvm.functions.Function3 getLambda-10$app_release()
     public static kotlin.jvm.functions.Function2 getLambda-2$app_release()
     public static kotlin.jvm.functions.Function3 getLambda-3$app_release()
     public static kotlin.jvm.functions.Function3 getLambda-4$app_release()
@@ -95134,7 +95081,6 @@ com.healthyscan.app.ui.screens.product.ComposableSingletons$ProductResultScreenK
     public static kotlin.jvm.functions.Function3 getLambda-6$app_release()
     public static kotlin.jvm.functions.Function3 getLambda-7$app_release()
     public static kotlin.jvm.functions.Function3 getLambda-8$app_release()
-    public static kotlin.jvm.functions.Function3 getLambda-9$app_release()
 com.healthyscan.app.ui.screens.product.ProductResultScreenKt$$InternalSyntheticLambda$8$cc021f3bf9321925205b26dc39cea67eb710ff8289be9b99830314cc2b486be2$0
 com.healthyscan.app.ui.screens.product.ProductResultScreenKt$ProductFound$1$1$1:
     public final void invoke$101()
@@ -95249,38 +95195,11 @@ com.healthyscan.app.ui.screens.profile.ProfileScreenKt$ThemeChoiceButton$1:
 com.healthyscan.app.ui.screens.profile.ProfileScreenKt:
     public static final void access$ProfileScreen$lambda$5(androidx.compose.runtime.MutableIntState,int)
     public static final void access$ProfileScreen$lambda$8(androidx.compose.runtime.MutableIntState,int)
-com.healthyscan.app.ui.screens.scan.ComposableSingletons$LabelScanScreenKt$lambda-1$1:
-    public final void invoke$39()
-com.healthyscan.app.ui.screens.scan.ComposableSingletons$LabelScanScreenKt$lambda-2$1:
-    public final void invoke$39()
-com.healthyscan.app.ui.screens.scan.ComposableSingletons$LabelScanScreenKt$lambda-3$1:
-    public final void invoke$39()
-com.healthyscan.app.ui.screens.scan.ComposableSingletons$LabelScanScreenKt:
-    public static final com.healthyscan.app.ui.screens.scan.ComposableSingletons$LabelScanScreenKt INSTANCE
-    public static kotlin.jvm.functions.Function3 getLambda-1$app_release()
-    public static kotlin.jvm.functions.Function3 getLambda-2$app_release()
-    public static kotlin.jvm.functions.Function3 getLambda-3$app_release()
 com.healthyscan.app.ui.screens.scan.ComposableSingletons$ScanScreenKt$lambda-1$1:
     public final void invoke$39()
 com.healthyscan.app.ui.screens.scan.ComposableSingletons$ScanScreenKt:
     public static final com.healthyscan.app.ui.screens.scan.ComposableSingletons$ScanScreenKt INSTANCE
     public static kotlin.jvm.functions.Function3 getLambda-1$app_release()
-com.healthyscan.app.ui.screens.scan.LabelScanScreenKt$LabelCaptureView$2$3$1$1$1:
-    public static void onImageSaved()
-com.healthyscan.app.ui.screens.scan.LabelScanScreenKt$LabelReviewList$lambda$22$lambda$21$lambda$20$$inlined$items$default$1
-com.healthyscan.app.ui.screens.scan.LabelScanScreenKt$LabelReviewList$lambda$22$lambda$21$lambda$20$$inlined$items$default$3:
-    public final synthetic com.healthyscan.app.ui.screens.scan.LabelScanScreenKt$LabelReviewList$lambda$22$lambda$21$lambda$20$$inlined$items$default$1 $contentType
-    public final java.lang.Object invoke$15()
-com.healthyscan.app.ui.screens.scan.LabelScanScreenKt$LabelReviewList$lambda$22$lambda$21$lambda$20$$inlined$items$default$4:
-    public final void invoke$20()
-com.healthyscan.app.ui.screens.scan.LabelScanScreenKt$LabelScanScreen$1$1:
-    public int label
-    public final java.lang.Object invoke$2()
-com.healthyscan.app.ui.screens.scan.LabelScanScreenKt$LabelScanScreen$2$2$1$1:
-    public final java.lang.Object invoke$2()
-com.healthyscan.app.ui.screens.scan.LabelScanScreenKt:
-    public static final boolean LabelScanScreen$lambda$1(androidx.compose.runtime.MutableState)
-    public static final void LabelScanScreen$lambda$11(androidx.compose.runtime.MutableState,boolean)
 com.healthyscan.app.ui.screens.scan.ScanScreenKt$ScanScreen$1$1:
     public int label
     public final java.lang.Object invoke$2()
@@ -95618,6 +95537,7 @@ kotlin.internal.jdk7.JDK7PlatformImplementations
 kotlin.internal.jdk8.JDK8PlatformImplementations$ReflectSdkVersion:
     public static final kotlin.internal.jdk8.JDK8PlatformImplementations$ReflectSdkVersion INSTANCE
 kotlin.internal.jdk8.JDK8PlatformImplementations
+kotlin.io.ByteStreamsKt
 kotlin.io.FilesKt
 kotlin.io.FilesKt__FilePathComponentsKt
 kotlin.io.FilesKt__FileReadWriteKt
@@ -95933,7 +95853,7 @@ kotlinx.coroutines.CoroutineExceptionHandler:
     static void <clinit>()
 kotlinx.coroutines.CoroutineExceptionHandlerKt:
     public static final java.lang.Throwable handlerException(java.lang.Throwable,java.lang.Throwable)
-kotlinx.coroutines.CoroutineId$$InternalSyntheticThrowCCEIfNotNull$330$a7d8b984f14ef6811fc36f0d030a1c8a7f27075d192601697212118d266ca07a$0
+kotlinx.coroutines.CoroutineId$$InternalSyntheticThrowCCEIfNotNull$333$a7d8b984f14ef6811fc36f0d030a1c8a7f27075d192601697212118d266ca07a$0
 kotlinx.coroutines.CoroutineId$$InternalSyntheticThrowCCEIfNotNull$43$db4fcf294f73e0414b61d779f72a560fad56831e560e6b71def36fecaf64a8d1$0
 kotlinx.coroutines.CoroutineId$Key
 kotlinx.coroutines.CoroutineId
@@ -96168,9 +96088,9 @@ kotlinx.coroutines.channels.BufferedChannel$$InternalSyntheticThrowCCEIfNotNull$
 kotlinx.coroutines.channels.BufferedChannel$$InternalSyntheticThrowCCEIfNotNull$77$1bb6e5cf839f3124517897dcbfa0502b9b5985320d9fac2dcb2d5f0b0cf2bdf9$1
 kotlinx.coroutines.channels.BufferedChannel$$InternalSyntheticThrowCCEIfNotNull$77$1bb6e5cf839f3124517897dcbfa0502b9b5985320d9fac2dcb2d5f0b0cf2bdf9$2
 kotlinx.coroutines.channels.BufferedChannel$$InternalSyntheticThrowCCEIfNotNull$77$1bb6e5cf839f3124517897dcbfa0502b9b5985320d9fac2dcb2d5f0b0cf2bdf9$3
-kotlinx.coroutines.channels.BufferedChannel$$InternalSyntheticThrowCCEIfNotNull$88$477558f47305b46a97e98327e82dc157ded03b2c689ba9650782ad95656735aa$0
-kotlinx.coroutines.channels.BufferedChannel$$InternalSyntheticThrowCCEIfNotNull$88$477558f47305b46a97e98327e82dc157ded03b2c689ba9650782ad95656735aa$1
-kotlinx.coroutines.channels.BufferedChannel$$InternalSyntheticThrowCCEIfNotNull$88$477558f47305b46a97e98327e82dc157ded03b2c689ba9650782ad95656735aa$2
+kotlinx.coroutines.channels.BufferedChannel$$InternalSyntheticThrowCCEIfNotNull$89$477558f47305b46a97e98327e82dc157ded03b2c689ba9650782ad95656735aa$0
+kotlinx.coroutines.channels.BufferedChannel$$InternalSyntheticThrowCCEIfNotNull$89$477558f47305b46a97e98327e82dc157ded03b2c689ba9650782ad95656735aa$1
+kotlinx.coroutines.channels.BufferedChannel$$InternalSyntheticThrowCCEIfNotNull$89$477558f47305b46a97e98327e82dc157ded03b2c689ba9650782ad95656735aa$2
 kotlinx.coroutines.channels.BufferedChannel$BufferedChannelIterator:
     public static java.lang.Object hasNextOnNoWaiterSuspend()
     public static boolean onClosedHasNext()
@@ -96319,7 +96239,7 @@ kotlinx.coroutines.flow.ReadonlyStateFlow:
     public final kotlinx.coroutines.Job job
 kotlinx.coroutines.flow.SafeFlow:
     public static java.lang.Object collectSafely()
-kotlinx.coroutines.flow.SharedFlowImpl$$InternalSyntheticThrowCCEIfNotNull$231$8a81ae7abf994ef8d5da0c3a1e1fcc00bff1251b789a1cb954e12c66d854807b$0
+kotlinx.coroutines.flow.SharedFlowImpl$$InternalSyntheticThrowCCEIfNotNull$233$8a81ae7abf994ef8d5da0c3a1e1fcc00bff1251b789a1cb954e12c66d854807b$0
 kotlinx.coroutines.flow.SharedFlowImpl$WhenMappings
 kotlinx.coroutines.flow.SharedFlowImpl:
     public static void cancelEmitter()
@@ -96361,7 +96281,7 @@ kotlinx.coroutines.flow.StartedWhileSubscribed$command$2:
     public final java.lang.Object invoke$56()
 kotlinx.coroutines.flow.StartedWhileSubscribed:
     public final kotlinx.coroutines.flow.Flow command(kotlinx.coroutines.flow.internal.SubscriptionCountStateFlow)
-kotlinx.coroutines.flow.StateFlowImpl$$InternalSyntheticThrowCCEIfNotNull$231$f1d1f40a1c8fc04c0a8d71575b6c25dc238f9224ed939db2b509a92e2c81cbda$0
+kotlinx.coroutines.flow.StateFlowImpl$$InternalSyntheticThrowCCEIfNotNull$233$f1d1f40a1c8fc04c0a8d71575b6c25dc238f9224ed939db2b509a92e2c81cbda$0
 kotlinx.coroutines.flow.StateFlowImpl:
     public final boolean compareAndSet(java.lang.Object,java.lang.Object)
     public static kotlinx.coroutines.flow.StateFlowSlot createSlot()
@@ -96543,7 +96463,7 @@ kotlinx.coroutines.internal.ThreadContextKt$countAll$1:
     public static java.lang.Object invoke$58()
 kotlinx.coroutines.internal.ThreadContextKt$findOne$1:
     public static void invoke$103()
-kotlinx.coroutines.internal.ThreadContextKt$updateState$1$$InternalSyntheticThrowCCEIfNotNull$330$3ff7ef4e574584d34e294bf8ac548819e9de353a79a9bbbdd8ea1b7dd939fd97$0
+kotlinx.coroutines.internal.ThreadContextKt$updateState$1$$InternalSyntheticThrowCCEIfNotNull$333$3ff7ef4e574584d34e294bf8ac548819e9de353a79a9bbbdd8ea1b7dd939fd97$0
 kotlinx.coroutines.internal.ThreadContextKt$updateState$1:
     public static kotlinx.coroutines.internal.ThreadState invoke()
 kotlinx.coroutines.internal.ThreadContextKt:

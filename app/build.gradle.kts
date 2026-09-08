@@ -65,12 +65,6 @@ android {
         buildConfig = true
     }
 
-    androidResources {
-        // Trained data files for the offline Tesseract OCR (Greek + English)
-        // are copied faster from assets when left uncompressed in the APK.
-        noCompress += "traineddata"
-    }
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -117,13 +111,6 @@ dependencies {
 
     // ML Kit barcode scanning (on-device)
     implementation("com.google.mlkit:barcode-scanning:17.3.0")
-
-    // Tesseract OCR (used by the "scan nutrition label" feature).
-    // Runs fully on-device, free forever, and — unlike ML Kit's text
-    // recognizer — has a real Greek-language model (see assets/tessdata/).
-    implementation("cz.adaptech.tesseract4android:tesseract4android:4.9.0")
-    // Reads photo orientation (EXIF) so the OCR sees the label right-side up
-    implementation("androidx.exifinterface:exifinterface:1.3.7")
 
     // Networking (Open Food Facts product lookup)
     implementation("com.squareup.retrofit2:retrofit:2.11.0")

@@ -1955,12 +1955,11 @@
     <string name="abc_toolbar_collapse_description">Collapse</string>
     <string name="action_add_product">Add this product</string>
     <string name="action_continue">Continue</string>
-    <string name="action_photograph_label">Photograph the label</string>
     <string name="action_skip">Skip</string>
     <string name="add_product_barcode">Barcode</string>
     <string name="add_product_brand">Brand</string>
     <string name="add_product_error">Couldn\'t submit the product. Check your account details and try again.</string>
-    <string name="add_product_ingredients">Ingredients (paste from label scan or type)</string>
+    <string name="add_product_ingredients">Ingredients</string>
     <string name="add_product_missing_credentials">Enter your Open Food Facts username and password first.</string>
     <string name="add_product_name">Product name</string>
     <string name="add_product_off_account_body">Free forever — create one at world.openfoodfacts.org if you don\'t have one yet. Saved on this device only.</string>
@@ -1997,7 +1996,7 @@
     <string name="app_name">Healthy Scan</string>
     <string name="app_tagline">Scan it. Understand it. Choose better.</string>
     <string name="appbar_scrolling_view_behavior" translatable="false">com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior</string>
-    <string name="basic_info_body">We found the product name, but no nutrition data exists for it yet anywhere. You can scan the label or add it manually.</string>
+    <string name="basic_info_body">We found the product name, but no nutrition data exists for it yet anywhere. You can add it manually.</string>
     <string name="basic_info_title">Basic info found</string>
     <string name="basket_improve_body">Replace this item with one of these 3 alternatives.</string>
     <string name="basket_improve_title">You can improve your basket</string>
@@ -2048,8 +2047,6 @@
     <string name="common_signin_button_text_long">Sign in with Google</string>
     <string name="compare_all">Compare all</string>
     <string name="comparison_title">Comparison</string>
-    <string name="confirm_details">Confirm the details</string>
-    <string name="confirm_details_body">Here is what we read. You can correct anything that looks wrong to improve accuracy.</string>
     <string name="cta_or_search">Or search for a product</string>
     <string name="cta_scan_product">SCAN PRODUCT</string>
     <string name="default_error_message">"Invalid input"</string>
@@ -2093,8 +2090,6 @@
     <string name="home_recent_scans">Your recent scans</string>
     <string name="home_scan_barcode_subtitle">Scan a product</string>
     <string name="home_scan_barcode_title">Scan Barcode</string>
-    <string name="home_scan_label_subtitle">Photograph the nutrition label</string>
-    <string name="home_scan_label_title">Scan Label</string>
     <string name="home_search_subtitle">Look up a product</string>
     <string name="home_search_title">Search</string>
     <string name="home_subtitle">What would you like to check?</string>
@@ -2110,14 +2105,6 @@
     <string name="ingredients_title">Ingredients</string>
     <string name="is_it_good_for_me">❤️ Is it a good choice for me?</string>
     <string name="item_view_role_description">Tab</string>
-    <string name="label_check_calories">Calories</string>
-    <string name="label_check_fat">Fat</string>
-    <string name="label_check_fiber">Fiber</string>
-    <string name="label_check_ingredients">Ingredients</string>
-    <string name="label_check_protein">Protein</string>
-    <string name="label_check_sugar">Sugar</string>
-    <string name="label_reading">Reading the label…</string>
-    <string name="label_scan_tip">Fill the frame with the ingredients text, avoiding glare — works on curved jars/bottles too</string>
     <string name="level_good">Good</string>
     <string name="level_high">High</string>
     <string name="level_low">Low</string>

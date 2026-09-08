@@ -24,7 +24,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -65,7 +64,6 @@ fun ProductResultScreen(
     shouldRecordScan: Boolean,
     onBack: () -> Unit,
     onOpenAlternative: (String) -> Unit,
-    onScanLabel: () -> Unit,
     onAddProduct: (name: String, brand: String) -> Unit
 ) {
     var state by remember { mutableStateOf<ProductLookupResult?>(null) }
@@ -108,12 +106,10 @@ fun ProductResultScreen(
                     }
                 })
                 is ProductLookupResult.NotFound -> UnknownProductState(
-                    onScanLabel = onScanLabel,
                     onAddProduct = { onAddProduct("", "") }
                 )
                 is ProductLookupResult.FoundBasicInfo -> BasicInfoState(
                     product = s.product,
-                    onScanLabel = onScanLabel,
                     onAddProduct = { onAddProduct(s.product.name, s.product.brand ?: "") }
                 )
                 is ProductLookupResult.Found -> ProductFound(
@@ -165,7 +161,6 @@ private fun ErrorState(onRetry: () -> Unit) {
 
 @Composable
 private fun UnknownProductState(
-    onScanLabel: () -> Unit,
     onAddProduct: () -> Unit
 ) {
     Column(
@@ -185,14 +180,9 @@ private fun UnknownProductState(
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.padding(top = 8.dp, bottom = 16.dp)
         )
-        Button(onClick = onScanLabel, modifier = Modifier.fillMaxWidth()) {
-            Text(stringResource(R.string.action_photograph_label))
-        }
-        OutlinedButton(
+        Button(
             onClick = onAddProduct,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp)
+            modifier = Modifier.fillMaxWidth()
         ) {
             Text(stringResource(R.string.action_add_product))
         }
@@ -202,7 +192,6 @@ private fun UnknownProductState(
 @Composable
 private fun BasicInfoState(
     product: Product,
-    onScanLabel: () -> Unit,
     onAddProduct: () -> Unit
 ) {
     Column(
@@ -227,14 +216,9 @@ private fun BasicInfoState(
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.padding(top = 8.dp, bottom = 16.dp)
         )
-        Button(onClick = onScanLabel, modifier = Modifier.fillMaxWidth()) {
-            Text(stringResource(R.string.action_photograph_label))
-        }
-        OutlinedButton(
+        Button(
             onClick = onAddProduct,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp)
+            modifier = Modifier.fillMaxWidth()
         ) {
             Text(stringResource(R.string.action_add_product))
         }

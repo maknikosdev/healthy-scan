@@ -10,8 +10,6 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        // JitPack hosts the Tesseract4Android OCR library used by the label scanner
-        maven { url = uri("https://jitpack.io") }
     }
 }
 

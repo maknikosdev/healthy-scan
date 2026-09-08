@@ -34,11 +34,10 @@ transition ορισμένο στο `res/anim/fade_in.xml` / `fade_out.xml` κα�
 - Αναζήτηση προϊόντος από το Open Food Facts, με δωρεάν fallback στο UPCitemdb + δυνατότητα συνεισφοράς προϊόντος (βλ. ενότητα παρακάτω)
 - Health Scoring Engine (0-100) βασισμένο σε ζάχαρη / κορεσμένα / αλάτι / ίνες / πρωτεΐνη, με διαφορετικά thresholds ανά κατηγορία προϊόντος
 - Προσωποποιημένο score βάσει των προτιμήσεων που δηλώνει ο χρήστης στο onboarding
-- Ανάλυση συστατικών, αλλεργιογόνα (με προσωπική προειδοποίηση), πρόσθετα (E-numbers)
-- **AI Label Scanner**: φωτογράφιση ετικέτας + OCR εξ ολοκλήρου offline με **Tesseract** (βλ. ενότητα παρακάτω)
+- Ανάλυση συστατικών, αλλεργιογόνα (με προσωπική προειδοποίηση βάσει των περιορισμών που έχει ορίσει ο χρήστης), πρόσθετα (E-numbers)
 - Ιστορικό (με δυνατότητα διαγραφής ανά scan), Αγαπημένα, Καλάθι (Room database, offline-first)
 - **Εξαγωγή/Εισαγωγή δεδομένων σε JSON** — μεταφορά ιστορικού, αγαπημένων, καλαθιού και προτιμήσεων σε άλλη συσκευή (βλ. ενότητα παρακάτω)
-- Onboarding με τις προτιμήσεις διατροφής
+- Onboarding με διατροφικές προτιμήσεις και περιορισμούς/αλλεργιογόνα προς αποφυγή — επεξεργάσιμα οποτεδήποτε
 - Premium οθόνη
 - App icon και splash screen από το logo που δόθηκε (κρατά τουλάχιστον ~1.2 δευτερόλεπτα στην οθόνη· δείχνει το **πλήρες logo, χωρίς μάσκα** — βλ. σημείωση παρακάτω)
 
@@ -90,9 +89,8 @@ theme που να το απενεργοποιεί πλήρως. Αντί να π
    - Όταν το Open Food Facts έχει τα διατροφικά στοιχεία αλλά λείπει η
      φωτογραφία προϊόντος — συμπληρώνεται αυτόματα.
 3. **Συνεισφορά πίσω στο Open Food Facts** (οθόνη "Πρόσθεσε το προϊόν") — ο
-   χρήστης μπορεί να στείλει όνομα/μάρκα/συστατικά (π.χ. αυτά που διάβασε το
-   Tesseract OCR από την ετικέτα) κατευθείαν στο Open Food Facts, μέσω ενός
-   **δωρεάν για πάντα** λογαριασμού
+   χρήστης μπορεί να στείλει όνομα/μάρκα/συστατικά κατευθείαν στο Open Food
+   Facts, μέσω ενός **δωρεάν για πάντα** λογαριασμού
    ([δημιουργία εδώ](https://world.openfoodfacts.org/cgi/user.pl)). Αυτό
    βελτιώνει μόνιμα την κάλυψη για όλους — όχι μόνο για τον συγκεκριμένο
    χρήστη — και είναι υλοποιημένο στο `ProductRepository.submitProductToOpenFoodFacts()`.
@@ -120,62 +118,6 @@ theme που να το απενεργοποιεί πλήρως. Αντί να π
 
 Υλοποίηση: `data/backup/BackupManager.kt`.
 
-### Σάρωση ετικέτας (OCR) — Tesseract αντί για ML Kit
-
-Το ML Kit Text Recognition **δεν έχει καθόλου μοντέλο ελληνικού αλφαβήτου**
-(υποστηρίζει μόνο Latin, Κινέζικα, Ιαπωνικά, Κορεατικά, Devanagari) — γι' αυτό
-παρερμήνευε ελληνικό κείμενο σε τυχαία λατινικά σύμβολα. Αντικαταστάθηκε με το
-**Tesseract OCR** (μέσω της βιβλιοθήκης
-[Tesseract4Android](https://github.com/adaptech-cz/Tesseract4Android)), που:
-
-- Τρέχει **εξ ολοκλήρου μέσα στη συσκευή**, καμία κλήση δικτύου
-- Είναι **δωρεάν για πάντα**, καμία χρέωση ανά σάρωση, κανένα Google Cloud API key
-- **Έχει πραγματικό μοντέλο ελληνικών** (`ell.traineddata`) μαζί με αγγλικά (`eng.traineddata`)
-
-Τα δύο αρχεία γλώσσας (~1.4MB + ~4MB, "fast" variant) είναι ήδη μέσα στο
-project, στο `app/src/main/assets/tessdata/`. Η πρώτη φορά που ο χρήστης
-χρησιμοποιεί το "Σάρωση Ετικέτας", η εφαρμογή τα αντιγράφει αυτόματα από τα
-assets στον ιδιωτικό φάκελο της εφαρμογής (`ocr/TesseractOcrHelper.kt`) —
-καμία ενέργεια χρειάζεται από τον χρήστη.
-
-**Οδηγίες σωστής φωτογράφισης για καλύτερη ακρίβεια:**
-1. Φωτογράφισε **μόνο την παράγραφο των συστατικών**, όχι ολόκληρη την
-   ετικέτα — αν υπάρχει δίπλα πίνακας διατροφικών τιμών σε άλλη στήλη, το OCR
-   μπερδεύει τις δύο στήλες.
-2. Κράτησε την ετικέτα **όσο πιο ίσια/επίπεδη** γίνεται μέσα στο κάδρο —
-   καμπυλωτές επιφάνειες (βάζα, μπουκάλια) μειώνουν σημαντικά την ακρίβεια.
-3. **Καλός, ομοιόμορφος φωτισμός**, χωρίς αντανακλάσεις πάνω στο πλαστικό/γυαλί.
-4. Γέμισε το πλαίσιο-οδηγό που εμφανίζεται στην οθόνη με το κείμενο, χωρίς
-   περιττό περιθώριο γύρω του.
-5. Σε δίγλωσσες ετικέτες (Ελληνικά + Αγγλικά), λειτουργεί καλύτερα αν
-   φωτογραφίσεις ένα μόνο γλωσσικό μπλοκ κάθε φορά.
-
-**Preprocessing pipeline για κυρτές/γυαλιστερές ετικέτες:** το πραγματικό
-πρόβλημα στις κυρτές επιφάνειες (βάζα, μπουκάλια) δεν είναι τόσο η καμπυλότητα
-όσο ο **ανομοιόμορφος φωτισμός/αντανακλάσεις** που προκαλεί. Το
-`ocr/TesseractOcrHelper.kt` τώρα κάνει:
-1. **Local illumination normalization** (integral image / summed-area-table
-   τεχνική) — συγκρίνει κάθε pixel με τη γειτονιά του αντί για ένα καθολικό
-   επίπεδο φωτεινότητας, εξισορροπώντας φωτεινές/σκοτεινές περιοχές.
-2. **Διπλό πέρασμα OCR**: αν το πρώτο πέρασμα (εξομαλυμένο grayscale) έχει
-   χαμηλό confidence score, δοκιμάζει αυτόματα και μια δεύτερη, adaptive
-   binarized εκδοχή (αλγόριθμος Bradley) της ίδιας φωτογραφίας, και κρατάει
-   όποιο από τα δύο πέρασε με καλύτερο confidence.
-3. **Μοντέλα "best" ποιότητας** αντί για "fast" (μεγαλύτερα σε μέγεθος —
-   βλ. παρακάτω — αλλά αισθητά πιο ακριβή).
-4. `PSM_SINGLE_BLOCK` page segmentation mode, ταιριασμένο με το πλαίσιο-οδηγό
-   που ήδη λέει στον χρήστη να γεμίσει το κάδρο με μία παράγραφο κειμένου.
-
-**Τι δεν κάνει ακόμα:** πραγματική γεωμετρική "ξεκύρτωση" μιας κυλινδρικής
-επιφάνειας (π.χ. reprojection) χρειάζεται πραγματική computer-vision
-βιβλιοθήκη (OpenCV) και είναι πολύ μεγαλύτερη προσθήκη. Το preprocessing
-πιο πάνω καλύπτει το κύριο πραγματικό πρόβλημα (φωτισμός), όχι την καθαρή
-γεωμετρία — σε ακραία γωνία λήψης η ακρίβεια πάντα θα είναι χειρότερη.
-
-**Μέγεθος:** τα μοντέλα "best" είναι ~8.6MB (ελληνικά) + ~15MB (αγγλικά) =
-~24MB μέσα στο APK/AAB (αυξημένο από ~5.4MB της "fast" έκδοσης) — trade-off
-για την καλύτερη ακρίβεια.
-
 ### Άνοιγμα στο Android Studio
 
 1. Άνοιξε το Android Studio → **Open** → επίλεξε τον φάκελο `HealthyScan`.
@@ -186,11 +128,11 @@ assets στον ιδιωτικό φάκελο της εφαρμογής (`ocr/Te
    gradle wrapper --gradle-version 8.9
    ```
 3. Περίμενε να τελειώσει το sync (κατεβάζει AGP, Compose, CameraX, ML Kit,
-   Tesseract4Android (από JitPack), Retrofit, Room από το Maven — χρειάζεται
-   internet). Αν βλέπεις "Gradle JDK" λάθος έκδοση Java (π.χ. σφάλμα
-   "Unsupported class file major version"), άλλαξέ το σε **File ▸ Settings ▸
-   Build, Execution, Deployment ▸ Build Tools ▸ Gradle ▸ Gradle JDK** στο
-   ενσωματωμένο `jbr` του Android Studio.
+   Retrofit, Room από το Maven — χρειάζεται internet). Αν βλέπεις "Gradle
+   JDK" λάθος έκδοση Java (π.χ. σφάλμα "Unsupported class file major
+   version"), άλλαξέ το σε **File ▸ Settings ▸ Build, Execution, Deployment ▸
+   Build Tools ▸ Gradle ▸ Gradle JDK** στο ενσωματωμένο `jbr` του Android
+   Studio.
 4. Run σε συσκευή ή emulator με camera.
 
 ### Build
@@ -221,26 +163,24 @@ HealthyScan/
 │   ├── build.gradle.kts
 │   ├── src/main/
 │   │   ├── AndroidManifest.xml
-│   │   ├── assets/
-│   │   │   └── tessdata/           # ell.traineddata + eng.traineddata (Tesseract OCR)
 │   │   ├── java/com/healthyscan/app/
 │   │   │   ├── MainActivity.kt
 │   │   │   ├── HealthyScanApp.kt
 │   │   │   ├── data/
 │   │   │   │   ├── model/        # Product, NutritionFacts, HealthScoreResult
-│   │   │   │   ├── remote/       # Open Food Facts API + mapper
+│   │   │   │   ├── remote/       # Open Food Facts API, UPCitemdb API + mappers
 │   │   │   │   ├── local/        # Room entities/DAOs/DB
+│   │   │   │   ├── backup/       # BackupManager.kt (JSON export/import)
 │   │   │   │   └── repository/   # ProductRepository, SettingsRepository
-│   │   │   ├── ocr/               # TesseractOcrHelper.kt
 │   │   │   ├── scoring/          # HealthScoreEngine, ExplanationGenerator
-│   │   │   │                     # (data/remote: OpenFoodFactsApi, UpcItemDbApi, mappers)
 │   │   │   ├── locale/           # LocaleManager (EL/EN toggle)
 │   │   │   └── ui/
 │   │   │       ├── theme/        # Color.kt, Theme.kt
 │   │   │       ├── navigation/   # NavGraph.kt, Screen.kt
 │   │   │       ├── components/   # BottomBar, TopBar, ScoreRing, ScorePill
 │   │   │       └── screens/      # onboarding, home, scan, product, history,
-│   │   │                         # favorites, profile, premium
+│   │   │                         # favorites, profile, preferences, premium,
+│   │   │                         # addproduct
 │   │   └── res/
 │   │       ├── values/strings.xml       (English)
 │   │       ├── values-el/strings.xml    (Greek)
@@ -249,14 +189,14 @@ HealthyScan/
 │   │       ├── mipmap-*/                (launcher icons)
 │   │       └── drawable/splash_logo.png
 ├── build.gradle.kts
-├── settings.gradle.kts             (includes JitPack repository for Tesseract4Android)
+├── settings.gradle.kts
 └── gradle.properties
 ```
 
 ### Πηγή δεδομένων
 
 Χρησιμοποιείται το Open Food Facts (`https://world.openfoodfacts.org`), δωρεάν,
-χωρίς API key.
+χωρίς API key, με UPCitemdb ως fallback (βλ. ενότητα πιο πάνω).
 
 ---
 
@@ -288,13 +228,22 @@ Full strings live in `values/strings.xml` (English) and `values-el/strings.xml`
 - Product lookup from Open Food Facts, with a free UPCitemdb fallback + product contribution flow (see section below)
 - Health Scoring Engine (0-100) based on sugar / saturated fat / salt / fiber / protein, with category-specific thresholds
 - Personalized score based on preferences set during onboarding
-- Ingredient breakdown, allergens (with personal warning), additives (E-numbers)
-- **AI Label Scanner**: photograph the label + fully offline OCR with **Tesseract** (see section below)
+- Ingredient breakdown, allergens (with a personal warning based on restrictions the user has set), additives (E-numbers)
 - History (with per-item delete), Favorites, Basket (Room database, offline-first)
 - **Export/Import data as JSON** — transfer history, favorites, basket and preferences to another device (see section below)
-- Onboarding with dietary preferences
+- Onboarding with dietary preferences and allergens/restrictions to avoid — editable anytime
 - Premium screen
 - App icon and splash screen built from the provided logo (stays on screen at least ~1.2 second; shows the **full, unmasked logo** — see note below)
+
+### Splash screen — why it isn't the platform's built-in "icon" slot
+
+On Android 12 (API 31) and up, the platform SplashScreen API **always** crops
+the splash icon into a circle/squircle — there's no theme setting that
+disables that. Instead of fighting it, the OS splash is intentionally left
+blank (just the brand background, see `res/drawable/splash_placeholder.xml` +
+`themes.xml`), and right after, `MainActivity` shows its own Compose splash
+(`SplashContent()`) with the **full logo**, no masking, for at least 1.2
+seconds, before switching to the real app.
 
 ### Dietary preferences & restrictions (editable anytime)
 
@@ -334,8 +283,8 @@ To get the most complete possible analysis for every scanned product, at zero co
    - When Open Food Facts has the nutrition data but is missing a product
      photo — it gets filled in automatically.
 3. **Contributing back to Open Food Facts** (the "Add this product" screen) —
-   the user can send name/brand/ingredients (e.g. what Tesseract OCR read off
-   the label) directly to Open Food Facts, through a **free forever** account
+   the user can send name/brand/ingredients directly to Open Food Facts,
+   through a **free forever** account
    ([create one here](https://world.openfoodfacts.org/cgi/user.pl)). This
    permanently improves coverage for everyone, not just that user, and is
    implemented in `ProductRepository.submitProductToOpenFoodFacts()`.
@@ -362,61 +311,6 @@ Profile now has a **"Backup & transfer"** section with two buttons:
 
 Implementation: `data/backup/BackupManager.kt`.
 
-### Label scanning (OCR) — Tesseract instead of ML Kit
-
-ML Kit's Text Recognition **has no Greek-script model at all** (it only
-supports Latin, Chinese, Japanese, Korean, Devanagari) — that's why it was
-misreading Greek text as random Latin-looking characters. It was replaced
-with **Tesseract OCR** (via the
-[Tesseract4Android](https://github.com/adaptech-cz/Tesseract4Android)
-library), which:
-
-- Runs **entirely on-device**, no network call
-- Is **free forever**, no per-scan charge, no Google Cloud API key
-- **Has a real Greek model** (`ell.traineddata`) alongside English (`eng.traineddata`)
-
-Both language files (~1.4MB + ~4MB, "fast" variant) already ship inside the
-project, in `app/src/main/assets/tessdata/`. The first time someone uses
-"Scan Label", the app copies them from assets into its private storage
-(`ocr/TesseractOcrHelper.kt`) — no action needed from the user.
-
-**Tips for accurate photos:**
-1. Photograph **only the ingredients paragraph**, not the whole label — if a
-   nutrition-facts table sits in a column right next to it, the OCR mixes
-   the two columns together.
-2. Keep the label **as flat/straight as possible** inside the frame — curved
-   surfaces (jars, bottles) noticeably reduce accuracy.
-3. **Good, even lighting**, avoiding glare on plastic/glass.
-4. Fill the on-screen guide frame with the text, without excess margin
-   around it.
-5. On bilingual labels (Greek + English), it works best if you photograph
-   one language block at a time.
-
-**Preprocessing pipeline for curved/glossy labels:** the real problem with
-curved surfaces (jars, bottles) is usually not the curvature itself but the
-**uneven lighting/glare** it causes. `ocr/TesseractOcrHelper.kt` now does:
-1. **Local illumination normalization** (integral image / summed-area-table
-   technique) — compares each pixel to its own neighborhood instead of a
-   single global brightness level, evening out bright/dark patches.
-2. **Two-pass OCR**: if the first pass (normalized grayscale) scores a low
-   confidence, it automatically retries on an adaptive-binarized version of
-   the same photo (Bradley's algorithm) and keeps whichever pass scored
-   higher confidence.
-3. **"Best"-quality models** instead of "fast" (bigger — see below — but
-   noticeably more accurate).
-4. `PSM_SINGLE_BLOCK` page segmentation mode, matched to the on-screen guide
-   frame that already tells the user to fill it with one paragraph of text.
-
-**What this doesn't do yet:** true geometric "un-warping" of a cylindrical
-surface (proper reprojection) needs a real computer-vision library (OpenCV)
-and is a much bigger addition. The preprocessing above targets the dominant
-real-world failure mode (lighting), not pure geometry — at an extreme
-shooting angle, accuracy will still suffer.
-
-**Size:** the "best" models are ~8.6MB (Greek) + ~15MB (English) = ~24MB
-inside the APK/AAB (up from ~5.4MB with the "fast" variant) — the trade-off
-for better accuracy.
-
 ### Opening in Android Studio
 
 1. Open Android Studio → **Open** → select the `HealthyScan` folder.
@@ -425,12 +319,11 @@ for better accuracy.
    ```bash
    gradle wrapper --gradle-version 8.9
    ```
-3. Wait for sync to finish (pulls AGP, Compose, CameraX, ML Kit,
-   Tesseract4Android (from JitPack), Retrofit, Room from Maven — needs
-   internet). If you see a wrong Java version error ("Unsupported class file
-   major version"), change it under **File ▸ Settings ▸ Build, Execution,
-   Deployment ▸ Build Tools ▸ Gradle ▸ Gradle JDK** to Android Studio's
-   bundled `jbr`.
+3. Wait for sync to finish (pulls AGP, Compose, CameraX, ML Kit, Retrofit,
+   Room from Maven — needs internet). If you see a wrong Java version error
+   ("Unsupported class file major version"), change it under **File ▸
+   Settings ▸ Build, Execution, Deployment ▸ Build Tools ▸ Gradle ▸ Gradle
+   JDK** to Android Studio's bundled `jbr`.
 4. Run on a device or emulator with a camera.
 
 ### Build
@@ -461,26 +354,24 @@ HealthyScan/
 │   ├── build.gradle.kts
 │   ├── src/main/
 │   │   ├── AndroidManifest.xml
-│   │   ├── assets/
-│   │   │   └── tessdata/           # ell.traineddata + eng.traineddata (Tesseract OCR)
 │   │   ├── java/com/healthyscan/app/
 │   │   │   ├── MainActivity.kt
 │   │   │   ├── HealthyScanApp.kt
 │   │   │   ├── data/
 │   │   │   │   ├── model/        # Product, NutritionFacts, HealthScoreResult
-│   │   │   │   ├── remote/       # Open Food Facts API + mapper
+│   │   │   │   ├── remote/       # Open Food Facts API, UPCitemdb API + mappers
 │   │   │   │   ├── local/        # Room entities/DAOs/DB
+│   │   │   │   ├── backup/       # BackupManager.kt (JSON export/import)
 │   │   │   │   └── repository/   # ProductRepository, SettingsRepository
-│   │   │   ├── ocr/               # TesseractOcrHelper.kt
 │   │   │   ├── scoring/          # HealthScoreEngine, ExplanationGenerator
-│   │   │   │                     # (data/remote: OpenFoodFactsApi, UpcItemDbApi, mappers)
 │   │   │   ├── locale/           # LocaleManager (EL/EN toggle)
 │   │   │   └── ui/
 │   │   │       ├── theme/        # Color.kt, Theme.kt
 │   │   │       ├── navigation/   # NavGraph.kt, Screen.kt
 │   │   │       ├── components/   # BottomBar, TopBar, ScoreRing, ScorePill
 │   │   │       └── screens/      # onboarding, home, scan, product, history,
-│   │   │                         # favorites, profile, premium
+│   │   │                         # favorites, profile, preferences, premium,
+│   │   │                         # addproduct
 │   │   └── res/
 │   │       ├── values/strings.xml       (English)
 │   │       ├── values-el/strings.xml    (Greek)
@@ -489,10 +380,11 @@ HealthyScan/
 │   │       ├── mipmap-*/                (launcher icons)
 │   │       └── drawable/splash_logo.png
 ├── build.gradle.kts
-├── settings.gradle.kts             (includes JitPack repository for Tesseract4Android)
+├── settings.gradle.kts
 └── gradle.properties
 ```
 
 ### Data source
 
-Uses Open Food Facts (`https://world.openfoodfacts.org`), free, no API key.
+Uses Open Food Facts (`https://world.openfoodfacts.org`), free, no API key,
+with UPCitemdb as a fallback (see section above).

@@ -224,12 +224,6 @@
 # --- ML Kit ---
 -keep class com.google.mlkit.** { *; }
 
-# --- Tesseract4Android (JNI bindings, must not be renamed/stripped) ---
--keep class com.googlecode.tesseract.android.** { *; }
--keep class com.googlecode.leptonica.android.** { *; }
--dontwarn com.googlecode.tesseract.android.**
--dontwarn com.googlecode.leptonica.android.**
-
 # End of content from C:\Users\makni\Desktop\HealthyScan\app\proguard-rules.pro
 # The proguard configuration file for the following section is C:\Users\makni\.gradle\caches\8.9\transforms\e4d29a0b4c25ea3d59e61e23f4c86cf6\transformed\material-1.12.0\proguard.txt
 # Copyright (C) 2015 The Android Open Source Project
