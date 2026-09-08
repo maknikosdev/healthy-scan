@@ -1,6 +1,7 @@
 package com.healthyscan.app.data.local;
 
 import android.database.Cursor;
+import android.os.CancellationSignal;
 import androidx.annotation.NonNull;
 import androidx.room.CoroutinesRoom;
 import androidx.room.EntityInsertionAdapter;
@@ -191,6 +192,51 @@ public final class BasketDao_Impl implements BasketDao {
         _statement.release();
       }
     });
+  }
+
+  @Override
+  public Object getAllOnce(final Continuation<? super List<BasketItemEntity>> $completion) {
+    final String _sql = "SELECT * FROM basket_items ORDER BY addedAtMillis DESC";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
+    final CancellationSignal _cancellationSignal = DBUtil.createCancellationSignal();
+    return CoroutinesRoom.execute(__db, false, _cancellationSignal, new Callable<List<BasketItemEntity>>() {
+      @Override
+      @NonNull
+      public List<BasketItemEntity> call() throws Exception {
+        final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+        try {
+          final int _cursorIndexOfBarcode = CursorUtil.getColumnIndexOrThrow(_cursor, "barcode");
+          final int _cursorIndexOfName = CursorUtil.getColumnIndexOrThrow(_cursor, "name");
+          final int _cursorIndexOfImageUrl = CursorUtil.getColumnIndexOrThrow(_cursor, "imageUrl");
+          final int _cursorIndexOfScore = CursorUtil.getColumnIndexOrThrow(_cursor, "score");
+          final int _cursorIndexOfAddedAtMillis = CursorUtil.getColumnIndexOrThrow(_cursor, "addedAtMillis");
+          final List<BasketItemEntity> _result = new ArrayList<BasketItemEntity>(_cursor.getCount());
+          while (_cursor.moveToNext()) {
+            final BasketItemEntity _item;
+            final String _tmpBarcode;
+            _tmpBarcode = _cursor.getString(_cursorIndexOfBarcode);
+            final String _tmpName;
+            _tmpName = _cursor.getString(_cursorIndexOfName);
+            final String _tmpImageUrl;
+            if (_cursor.isNull(_cursorIndexOfImageUrl)) {
+              _tmpImageUrl = null;
+            } else {
+              _tmpImageUrl = _cursor.getString(_cursorIndexOfImageUrl);
+            }
+            final int _tmpScore;
+            _tmpScore = _cursor.getInt(_cursorIndexOfScore);
+            final long _tmpAddedAtMillis;
+            _tmpAddedAtMillis = _cursor.getLong(_cursorIndexOfAddedAtMillis);
+            _item = new BasketItemEntity(_tmpBarcode,_tmpName,_tmpImageUrl,_tmpScore,_tmpAddedAtMillis);
+            _result.add(_item);
+          }
+          return _result;
+        } finally {
+          _cursor.close();
+          _statement.release();
+        }
+      }
+    }, $completion);
   }
 
   @NonNull

@@ -37,6 +37,7 @@ transition ορισμένο στο `res/anim/fade_in.xml` / `fade_out.xml` κα�
 - Ανάλυση συστατικών, αλλεργιογόνα (με προσωπική προειδοποίηση), πρόσθετα (E-numbers)
 - **AI Label Scanner**: φωτογράφιση ετικέτας + OCR εξ ολοκλήρου offline με **Tesseract** (βλ. ενότητα παρακάτω)
 - Ιστορικό (με δυνατότητα διαγραφής ανά scan), Αγαπημένα, Καλάθι (Room database, offline-first)
+- **Εξαγωγή/Εισαγωγή δεδομένων σε JSON** — μεταφορά ιστορικού, αγαπημένων, καλαθιού και προτιμήσεων σε άλλη συσκευή (βλ. ενότητα παρακάτω)
 - Onboarding με τις προτιμήσεις διατροφής
 - Premium οθόνη
 - App icon και splash screen από το logo που δόθηκε (κρατά τουλάχιστον ~1.2 δευτερόλεπτα στην οθόνη· δείχνει το **πλήρες logo, χωρίς μάσκα** — βλ. σημείωση παρακάτω)
@@ -51,6 +52,28 @@ theme που να το απενεργοποιεί πλήρως. Αντί να π
 `MainActivity` δείχνει το δικό της Compose splash (`SplashContent()`) με το
 **ολόκληρο logo**, χωρίς καμία μάσκα, για τουλάχιστον 1.2 δευτερόλεπτα, πριν
 περάσει στην κανονική εφαρμογή.
+
+### Προτιμήσεις & περιορισμοί διατροφής (επεξεργάσιμα οποτεδήποτε)
+
+Στο πρώτο άνοιγμα της εφαρμογής (onboarding), ο χρήστης επιλέγει:
+1. **Διατροφικούς στόχους** (λιγότερη ζάχαρη, vegan, χωρίς γλουτένη κ.λπ.) —
+   επηρεάζουν το προσωποποιημένο Health Score.
+2. **Τι πρέπει να αποφεύγει** (γαλακτοκομικά, γλουτένη, ξηροί καρποί, σόγια
+   κ.λπ.) — αν ένα σκαναρισμένο προϊόν περιέχει κάτι από αυτά, εμφανίζεται
+   προειδοποίηση στην οθόνη αποτελέσματος (ενότητα "Αλλεργιογόνα").
+
+Και τα δύο **επεξεργάζονται οποτεδήποτε** από το Προφίλ → "Επεξεργασία
+προτιμήσεων" (`ui/screens/preferences/EditPreferencesScreen.kt`), χωρίς να
+χρειάζεται να ξαναπεράσει κανείς από το onboarding.
+
+### Άνοιγμα ήδη-σκαναρισμένου προϊόντος δεν δημιουργεί διπλή εγγραφή
+
+Όταν πατάς πάνω σε ένα προϊόν μέσα από το **Ιστορικό**, τα **Αγαπημένα**, ή τη
+λίστα "τελευταία scans" στην **Αρχική**, η εφαρμογή το ανοίγει από την ήδη
+αποθηκευμένη (cached) έκδοση — **όχι** σαν νέο barcode scan. Μόνο μια
+πραγματική σάρωση με την κάμερα (ή επιλογή από αναζήτηση) προσθέτει νέα
+εγγραφή στο ιστορικό. Υλοποίηση: `ProductRepository.openCachedOrLookup()` +
+το route param `record` στο `Screen.ProductResult`.
 
 ### Πηγές δεδομένων προϊόντος — συνδυασμός δωρεάν πηγών
 
@@ -76,6 +99,26 @@ theme που να το απενεργοποιεί πλήρως. Αντί να π
 
 Ο συνδυασμός αυτός γίνεται αυτόματα στο `ProductRepository.lookupByBarcode()` —
 δεν χρειάζεται καμία ενέργεια από τον χρήστη πέρα από τη σάρωση.
+
+### Backup / μεταφορά σε άλλη συσκευή
+
+Στο Προφίλ υπάρχει ενότητα **"Αντίγραφο ασφαλείας & μεταφορά"** με δύο κουμπιά:
+
+- **Εξαγωγή σε αρχείο** — δημιουργεί ένα `healthyscan_backup.json` με το
+  ιστορικό, τα αγαπημένα, το καλάθι και τις προτιμήσεις (θέμα, γλωσσικές
+  προτιμήσεις διατροφής, avoided allergens). Χρησιμοποιεί το native Android
+  file picker (Storage Access Framework) — ο χρήστης επιλέγει ο ίδιος πού θα
+  αποθηκευτεί (π.χ. Downloads, Google Drive), χωρίς να χρειάζεται κανένα
+  ειδικό permission.
+- **Εισαγωγή από αρχείο** — διαβάζει ένα τέτοιο αρχείο (από αυτή ή άλλη
+  συσκευή) και ενσωματώνει τα δεδομένα: αγαπημένα/καλάθι γίνονται merge
+  (χωρίς διπλότυπα, matched by barcode), ιστορικό προστίθεται σαν νέες
+  εγγραφές.
+- Ο **κωδικός** του λογαριασμού Open Food Facts **δεν συμπεριλαμβάνεται
+  ποτέ** στο αρχείο (μόνο το username) — μετά την εισαγωγή σε νέα συσκευή,
+  θα χρειαστεί να τον ξαναβάλεις μία φορά στο "Πρόσθεσε το προϊόν".
+
+Υλοποίηση: `data/backup/BackupManager.kt`.
 
 ### Σάρωση ετικέτας (OCR) — Tesseract αντί για ML Kit
 
@@ -107,13 +150,31 @@ assets στον ιδιωτικό φάκελο της εφαρμογής (`ocr/Te
 5. Σε δίγλωσσες ετικέτες (Ελληνικά + Αγγλικά), λειτουργεί καλύτερα αν
    φωτογραφίσεις ένα μόνο γλωσσικό μπλοκ κάθε φορά.
 
-**Σημαντικός περιορισμός να το ξέρεις:** ακόμα και με σωστό μοντέλο γλώσσας,
-το Tesseract είναι αισθητά λιγότερο ακριβές από επί πληρωμή cloud λύσεις
-(π.χ. Google Cloud Vision) σε δύσκολες φωτογραφίες — καμπυλωτές ετικέτες,
-μικρή γραμματοσειρά, κακός φωτισμός. Αν στο μέλλον χρειαστείς καλύτερη
-ακρίβεια και είσαι ok με μηνιαίο κόστος + ανάγκη για δικό σου backend
-(για να μην εκτεθεί το API key μέσα στην εφαρμογή), η εναλλακτική λύση με
-Cloud Vision παραμένει διαθέσιμη ως αναβάθμιση.
+**Preprocessing pipeline για κυρτές/γυαλιστερές ετικέτες:** το πραγματικό
+πρόβλημα στις κυρτές επιφάνειες (βάζα, μπουκάλια) δεν είναι τόσο η καμπυλότητα
+όσο ο **ανομοιόμορφος φωτισμός/αντανακλάσεις** που προκαλεί. Το
+`ocr/TesseractOcrHelper.kt` τώρα κάνει:
+1. **Local illumination normalization** (integral image / summed-area-table
+   τεχνική) — συγκρίνει κάθε pixel με τη γειτονιά του αντί για ένα καθολικό
+   επίπεδο φωτεινότητας, εξισορροπώντας φωτεινές/σκοτεινές περιοχές.
+2. **Διπλό πέρασμα OCR**: αν το πρώτο πέρασμα (εξομαλυμένο grayscale) έχει
+   χαμηλό confidence score, δοκιμάζει αυτόματα και μια δεύτερη, adaptive
+   binarized εκδοχή (αλγόριθμος Bradley) της ίδιας φωτογραφίας, και κρατάει
+   όποιο από τα δύο πέρασε με καλύτερο confidence.
+3. **Μοντέλα "best" ποιότητας** αντί για "fast" (μεγαλύτερα σε μέγεθος —
+   βλ. παρακάτω — αλλά αισθητά πιο ακριβή).
+4. `PSM_SINGLE_BLOCK` page segmentation mode, ταιριασμένο με το πλαίσιο-οδηγό
+   που ήδη λέει στον χρήστη να γεμίσει το κάδρο με μία παράγραφο κειμένου.
+
+**Τι δεν κάνει ακόμα:** πραγματική γεωμετρική "ξεκύρτωση" μιας κυλινδρικής
+επιφάνειας (π.χ. reprojection) χρειάζεται πραγματική computer-vision
+βιβλιοθήκη (OpenCV) και είναι πολύ μεγαλύτερη προσθήκη. Το preprocessing
+πιο πάνω καλύπτει το κύριο πραγματικό πρόβλημα (φωτισμός), όχι την καθαρή
+γεωμετρία — σε ακραία γωνία λήψης η ακρίβεια πάντα θα είναι χειρότερη.
+
+**Μέγεθος:** τα μοντέλα "best" είναι ~8.6MB (ελληνικά) + ~15MB (αγγλικά) =
+~24MB μέσα στο APK/AAB (αυξημένο από ~5.4MB της "fast" έκδοσης) — trade-off
+για την καλύτερη ακρίβεια.
 
 ### Άνοιγμα στο Android Studio
 
@@ -230,9 +291,32 @@ Full strings live in `values/strings.xml` (English) and `values-el/strings.xml`
 - Ingredient breakdown, allergens (with personal warning), additives (E-numbers)
 - **AI Label Scanner**: photograph the label + fully offline OCR with **Tesseract** (see section below)
 - History (with per-item delete), Favorites, Basket (Room database, offline-first)
+- **Export/Import data as JSON** — transfer history, favorites, basket and preferences to another device (see section below)
 - Onboarding with dietary preferences
 - Premium screen
 - App icon and splash screen built from the provided logo (stays on screen at least ~1.2 second; shows the **full, unmasked logo** — see note below)
+
+### Dietary preferences & restrictions (editable anytime)
+
+On first launch (onboarding), the person picks:
+1. **Dietary goals** (less sugar, vegan, gluten-free, etc.) — feed into the
+   personalized Health Score.
+2. **What to avoid** (dairy, gluten, tree nuts, soy, etc.) — if a scanned
+   product contains one of these, a warning shows up on the result screen
+   (the "Allergens" section).
+
+Both are **editable anytime** from Profile → "Edit preferences"
+(`ui/screens/preferences/EditPreferencesScreen.kt`), no need to go back
+through onboarding.
+
+### Reopening an already-scanned product doesn't create a duplicate
+
+Tapping a product from **History**, **Favorites**, or the "recent scans"
+list on **Home** opens it from the already-saved (cached) copy — **not** as
+a new barcode scan. Only an actual camera scan (or picking a result from
+search) adds a new History row. Implementation:
+`ProductRepository.openCachedOrLookup()` + the `record` route parameter on
+`Screen.ProductResult`.
 
 ### Product data sources — combining free sources
 
@@ -259,6 +343,24 @@ To get the most complete possible analysis for every scanned product, at zero co
 This combination happens automatically inside
 `ProductRepository.lookupByBarcode()` — no action needed from the user beyond
 scanning.
+
+### Backup / transfer to another device
+
+Profile now has a **"Backup & transfer"** section with two buttons:
+
+- **Export to file** — creates a `healthyscan_backup.json` with history,
+  favorites, basket, and preferences (theme, dietary preferences, avoided
+  allergens). Uses Android's native file picker (Storage Access Framework) —
+  the person chooses where to save it (Downloads, Google Drive, etc.), no
+  special storage permission needed.
+- **Import from file** — reads such a file (from this device or another one)
+  and merges the data in: favorites/basket are matched by barcode (no
+  duplicates), history entries get appended as new rows.
+- The Open Food Facts **password is never included** in the file (only the
+  username) — after importing on a new device, you'll need to re-enter it
+  once in "Add this product".
+
+Implementation: `data/backup/BackupManager.kt`.
 
 ### Label scanning (OCR) — Tesseract instead of ML Kit
 
@@ -290,12 +392,30 @@ project, in `app/src/main/assets/tessdata/`. The first time someone uses
 5. On bilingual labels (Greek + English), it works best if you photograph
    one language block at a time.
 
-**Important limitation to be aware of:** even with the right language model,
-Tesseract is noticeably less accurate than paid cloud solutions (e.g. Google
-Cloud Vision) on difficult photos — curved labels, small print, poor
-lighting. If you later need better accuracy and are fine with a monthly cost
-plus needing your own backend (so the API key isn't exposed inside the app),
-the Cloud Vision alternative remains available as an upgrade path.
+**Preprocessing pipeline for curved/glossy labels:** the real problem with
+curved surfaces (jars, bottles) is usually not the curvature itself but the
+**uneven lighting/glare** it causes. `ocr/TesseractOcrHelper.kt` now does:
+1. **Local illumination normalization** (integral image / summed-area-table
+   technique) — compares each pixel to its own neighborhood instead of a
+   single global brightness level, evening out bright/dark patches.
+2. **Two-pass OCR**: if the first pass (normalized grayscale) scores a low
+   confidence, it automatically retries on an adaptive-binarized version of
+   the same photo (Bradley's algorithm) and keeps whichever pass scored
+   higher confidence.
+3. **"Best"-quality models** instead of "fast" (bigger — see below — but
+   noticeably more accurate).
+4. `PSM_SINGLE_BLOCK` page segmentation mode, matched to the on-screen guide
+   frame that already tells the user to fill it with one paragraph of text.
+
+**What this doesn't do yet:** true geometric "un-warping" of a cylindrical
+surface (proper reprojection) needs a real computer-vision library (OpenCV)
+and is a much bigger addition. The preprocessing above targets the dominant
+real-world failure mode (lighting), not pure geometry — at an extreme
+shooting angle, accuracy will still suffer.
+
+**Size:** the "best" models are ~8.6MB (Greek) + ~15MB (English) = ~24MB
+inside the APK/AAB (up from ~5.4MB with the "fast" variant) — the trade-off
+for better accuracy.
 
 ### Opening in Android Studio
 

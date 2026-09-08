@@ -49,7 +49,7 @@ class ProductRepository(context: Context) {
      *      product photo when Open Food Facts has the nutrition data but no
      *      image on file.
      */
-    suspend fun lookupByBarcode(barcode: String): ProductLookupResult {
+    suspend fun lookupByBarcode(barcode: String, recordHistory: Boolean = true): ProductLookupResult {
         val offResult = try {
             val response = RetrofitClient.openFoodFactsApi.getProduct(barcode)
             if (response.status == 1 && response.product != null) response.product else null
@@ -70,7 +70,7 @@ class ProductRepository(context: Context) {
             }
 
             val score = HealthScoreEngine.score(product)
-            recordScan(product, score)
+            if (recordHistory) recordScan(product, score)
             return ProductLookupResult.Found(product, score)
         }
 
@@ -88,6 +88,40 @@ class ProductRepository(context: Context) {
         } else {
             ProductLookupResult.NotFound
         }
+    }
+
+    /**
+     * Reopens a product the person already saw before (tapped from History,
+     * Favorites, or the Home "recent scans" list) WITHOUT treating it as a
+     * brand new scan: no network call if we already have it cached locally,
+     * and — crucially — no new History row gets created. Only an actual
+     * barcode scan (see [lookupByBarcode] with its default `recordHistory =
+     * true`) should ever add a History entry.
+     */
+    suspend fun openCachedOrLookup(barcode: String): ProductLookupResult {
+        val cachedProduct = getCachedProduct(barcode)
+        if (cachedProduct != null) {
+            return if (cachedProduct.hasNutritionData) {
+                ProductLookupResult.Found(cachedProduct, HealthScoreEngine.score(cachedProduct))
+            } else {
+                ProductLookupResult.FoundBasicInfo(cachedProduct)
+            }
+        }
+        // Nothing cached (shouldn't normally happen when opened from
+        // History/Favorites) — fetch it, but still don't record a new scan.
+        return lookupByBarcode(barcode, recordHistory = false)
+    }
+
+    /** Looks for this barcode in Favorites first, then the most recent
+     *  History entry — both already store the full [Product] as JSON. */
+    private suspend fun getCachedProduct(barcode: String): Product? {
+        db.favoriteDao().getByBarcode(barcode)?.let {
+            return runCatching { gson.fromJson(it.productJson, Product::class.java) }.getOrNull()
+        }
+        db.scanHistoryDao().getMostRecentByBarcode(barcode)?.let {
+            return runCatching { gson.fromJson(it.productJson, Product::class.java) }.getOrNull()
+        }
+        return null
     }
 
     private suspend fun fetchUpcItemDbImage(barcode: String): String? = try {

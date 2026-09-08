@@ -62,6 +62,7 @@ fun ProductResultScreen(
     productRepository: ProductRepository,
     avoidedAllergens: Set<String>,
     userDietaryPreferences: Set<String>,
+    shouldRecordScan: Boolean,
     onBack: () -> Unit,
     onOpenAlternative: (String) -> Unit,
     onScanLabel: () -> Unit,
@@ -71,7 +72,11 @@ fun ProductResultScreen(
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(barcode) {
-        state = productRepository.lookupByBarcode(barcode)
+        state = if (shouldRecordScan) {
+            productRepository.lookupByBarcode(barcode)
+        } else {
+            productRepository.openCachedOrLookup(barcode)
+        }
     }
 
     Scaffold(
@@ -94,7 +99,13 @@ fun ProductResultScreen(
             when (val s = state) {
                 null -> LoadingSequence()
                 is ProductLookupResult.Error -> ErrorState(onRetry = {
-                    scope.launch { state = productRepository.lookupByBarcode(barcode) }
+                    scope.launch {
+                        state = if (shouldRecordScan) {
+                            productRepository.lookupByBarcode(barcode)
+                        } else {
+                            productRepository.openCachedOrLookup(barcode)
+                        }
+                    }
                 })
                 is ProductLookupResult.NotFound -> UnknownProductState(
                     onScanLabel = onScanLabel,

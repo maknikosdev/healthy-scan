@@ -40,6 +40,24 @@
     <string name="action_continue">Συνέχεια</string>
     <string name="action_skip">Παράλειψη</string>
 
+    <!-- Onboarding: allergens/restrictions to avoid -->
+    <string name="onboarding_allergens_question">Υπάρχει κάτι που πρέπει να αποφεύγεις;</string>
+    <string name="onboarding_allergens_subtitle">Θα σε προειδοποιούμε αν ένα σκαναρισμένο προϊόν το περιέχει.</string>
+    <string name="allergen_milk">Γάλα / γαλακτοκομικά</string>
+    <string name="allergen_gluten">Γλουτένη</string>
+    <string name="allergen_eggs">Αυγά</string>
+    <string name="allergen_peanuts">Φιστίκια</string>
+    <string name="allergen_tree_nuts">Ξηροί καρποί</string>
+    <string name="allergen_soy">Σόγια</string>
+    <string name="allergen_fish">Ψάρι</string>
+    <string name="allergen_shellfish">Οστρακοειδή (μαλακόστρακα)</string>
+    <string name="allergen_sesame">Σουσάμι</string>
+    <string name="allergen_mustard">Μουστάρδα</string>
+    <string name="allergen_celery">Σέλινο</string>
+    <string name="allergen_sulphites">Θειώδη</string>
+    <string name="allergen_lupin">Λούπινο</string>
+    <string name="allergen_molluscs">Μαλάκια</string>
+
     <!-- Profile goals -->
     <string name="profile_goal_question">Τι θέλεις να πετύχεις;</string>
     <string name="goal_better_nutrition">Καλύτερη διατροφή</string>
@@ -166,7 +184,7 @@
     <string name="add_product_missing_credentials">Συμπλήρωσε πρώτα το όνομα χρήστη και τον κωδικό σου στο Open Food Facts.</string>
 
     <!-- AI Label scanner -->
-    <string name="label_scan_tip">Γέμισε το πλαίσιο μόνο με το κείμενο των συστατικών, ίσιο και καλά φωτισμένο, για καλύτερη ακρίβεια</string>
+    <string name="label_scan_tip">Γέμισε το πλαίσιο με το κείμενο των συστατικών, απόφυγε τις αντανακλάσεις — δουλεύει και σε κυρτά βάζα/μπουκάλια</string>
     <string name="label_reading">Διαβάζουμε την ετικέτα…</string>
     <string name="label_check_calories">Θερμίδες</string>
     <string name="label_check_sugar">Σάκχαρα</string>
@@ -201,6 +219,8 @@
     <!-- Profile -->
     <string name="profile_title">Το προφίλ μου</string>
     <string name="profile_my_preferences">Οι προτιμήσεις μου</string>
+    <string name="profile_my_allergens">Τι αποφεύγεις</string>
+    <string name="profile_edit_preferences">Επεξεργασία προτιμήσεων</string>
     <string name="profile_my_goals">Οι στόχοι μου</string>
     <string name="profile_my_stats">Τα στατιστικά μου</string>
     <string name="profile_products_scanned">%1$d προϊόντα σκαναρισμένα</string>
@@ -212,6 +232,16 @@
     <string name="theme_system">Ακολούθησε το σύστημα</string>
     <string name="theme_light">Φωτεινό</string>
     <string name="theme_dark">Σκοτεινό</string>
+
+    <!-- Backup / restore -->
+    <string name="profile_backup_title">Αντίγραφο ασφαλείας &amp; μεταφορά</string>
+    <string name="profile_backup_body">Εξάγαγε τα πάντα (ιστορικό, αγαπημένα, καλάθι, προτιμήσεις) σε αρχείο JSON, και εισάγαγέ το σε άλλη συσκευή για να μεταφέρεις τα δεδομένα σου. Ο κωδικός σου στο Open Food Facts δεν συμπεριλαμβάνεται ποτέ.</string>
+    <string name="profile_backup_export">Εξαγωγή σε αρχείο</string>
+    <string name="profile_backup_import">Εισαγωγή από αρχείο</string>
+    <string name="profile_backup_export_success">Το αντίγραφο ασφαλείας αποθηκεύτηκε.</string>
+    <string name="profile_backup_export_error">Δεν μπορέσαμε να αποθηκεύσουμε το αρχείο.</string>
+    <string name="profile_backup_import_success">Εισήχθησαν %1$d στοιχεία ιστορικού και %2$d αγαπημένα.</string>
+    <string name="profile_backup_import_error">Δεν μπορέσαμε να διαβάσουμε αυτό το αρχείο. Βεβαιώσου ότι είναι εξαγωγή από το Healthy Scan.</string>
 
     <!-- Premium -->
     <string name="premium_title">Healthy Scan Premium</string>
@@ -240,4 +270,9 @@
     <string name="cd_app_logo">Λογότυπο Healthy Scan</string>
     <string name="cd_switch_language">Αλλαγή γλώσσας</string>
     <string name="cd_toggle_theme">Εναλλαγή σκοτεινού / φωτεινού θέματος</string>
+
+    <!-- Edit preferences (accessible anytime from Profile) -->
+    <string name="edit_preferences_title">Επεξεργασία προτιμήσεων</string>
+    <string name="edit_preferences_save">Αποθήκευση</string>
+    <string name="edit_preferences_saved">Αποθηκεύτηκε</string>
 </resources>

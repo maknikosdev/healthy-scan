@@ -15,8 +15,16 @@ interface ScanHistoryDao {
     @Query("SELECT * FROM scan_history ORDER BY timestampMillis DESC")
     fun observeAll(): Flow<List<ScanHistoryEntity>>
 
+    @Query("SELECT * FROM scan_history ORDER BY timestampMillis DESC")
+    suspend fun getAllOnce(): List<ScanHistoryEntity>
+
     @Query("SELECT * FROM scan_history ORDER BY timestampMillis DESC LIMIT :limit")
     fun observeRecent(limit: Int): Flow<List<ScanHistoryEntity>>
+
+    /** Most recent cached entry for this barcode, if any — used to reopen a
+     *  product from History/Favorites/Home without re-scanning it. */
+    @Query("SELECT * FROM scan_history WHERE barcode = :barcode ORDER BY timestampMillis DESC LIMIT 1")
+    suspend fun getMostRecentByBarcode(barcode: String): ScanHistoryEntity?
 
     @Query("SELECT AVG(score) FROM scan_history WHERE timestampMillis >= :sinceMillis")
     suspend fun averageScoreSince(sinceMillis: Long): Double?
@@ -45,6 +53,12 @@ interface FavoriteDao {
     @Query("SELECT * FROM favorites ORDER BY addedAtMillis DESC")
     fun observeAll(): Flow<List<FavoriteEntity>>
 
+    @Query("SELECT * FROM favorites ORDER BY addedAtMillis DESC")
+    suspend fun getAllOnce(): List<FavoriteEntity>
+
+    @Query("SELECT * FROM favorites WHERE barcode = :barcode LIMIT 1")
+    suspend fun getByBarcode(barcode: String): FavoriteEntity?
+
     @Query("SELECT EXISTS(SELECT 1 FROM favorites WHERE barcode = :barcode)")
     fun isFavorite(barcode: String): Flow<Boolean>
 }
@@ -59,6 +73,9 @@ interface BasketDao {
 
     @Query("SELECT * FROM basket_items ORDER BY addedAtMillis DESC")
     fun observeAll(): Flow<List<BasketItemEntity>>
+
+    @Query("SELECT * FROM basket_items ORDER BY addedAtMillis DESC")
+    suspend fun getAllOnce(): List<BasketItemEntity>
 
     @Query("DELETE FROM basket_items")
     suspend fun clear()

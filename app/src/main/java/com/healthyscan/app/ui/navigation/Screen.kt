@@ -9,8 +9,11 @@ sealed class Screen(val route: String) {
     object History : Screen("history")
     object Profile : Screen("profile")
 
-    object ProductResult : Screen("product/{barcode}") {
-        fun createRoute(barcode: String) = "product/$barcode"
+    object ProductResult : Screen("product/{barcode}?record={record}") {
+        /** [record] = true for an actual fresh barcode scan (adds a History
+         *  row). Pass false when reopening a product the person already saw
+         *  before (History/Favorites/Home) so it doesn't count as a new scan. */
+        fun createRoute(barcode: String, record: Boolean = true) = "product/$barcode?record=$record"
     }
 
     object AddProduct : Screen("add_product/{barcode}?name={name}&brand={brand}") {
@@ -24,11 +27,13 @@ sealed class Screen(val route: String) {
     object Basket : Screen("basket")
     object Compare : Screen("compare")
     object Premium : Screen("premium")
+    object EditPreferences : Screen("edit_preferences")
 
     companion object {
         const val ARG_BARCODE = "barcode"
         const val ARG_NAME = "name"
         const val ARG_BRAND = "brand"
+        const val ARG_RECORD = "record"
     }
 }
 

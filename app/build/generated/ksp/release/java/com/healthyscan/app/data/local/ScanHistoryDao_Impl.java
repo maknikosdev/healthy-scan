@@ -217,6 +217,64 @@ public final class ScanHistoryDao_Impl implements ScanHistoryDao {
   }
 
   @Override
+  public Object getAllOnce(final Continuation<? super List<ScanHistoryEntity>> $completion) {
+    final String _sql = "SELECT * FROM scan_history ORDER BY timestampMillis DESC";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
+    final CancellationSignal _cancellationSignal = DBUtil.createCancellationSignal();
+    return CoroutinesRoom.execute(__db, false, _cancellationSignal, new Callable<List<ScanHistoryEntity>>() {
+      @Override
+      @NonNull
+      public List<ScanHistoryEntity> call() throws Exception {
+        final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+        try {
+          final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
+          final int _cursorIndexOfBarcode = CursorUtil.getColumnIndexOrThrow(_cursor, "barcode");
+          final int _cursorIndexOfName = CursorUtil.getColumnIndexOrThrow(_cursor, "name");
+          final int _cursorIndexOfBrand = CursorUtil.getColumnIndexOrThrow(_cursor, "brand");
+          final int _cursorIndexOfImageUrl = CursorUtil.getColumnIndexOrThrow(_cursor, "imageUrl");
+          final int _cursorIndexOfScore = CursorUtil.getColumnIndexOrThrow(_cursor, "score");
+          final int _cursorIndexOfTimestampMillis = CursorUtil.getColumnIndexOrThrow(_cursor, "timestampMillis");
+          final int _cursorIndexOfProductJson = CursorUtil.getColumnIndexOrThrow(_cursor, "productJson");
+          final List<ScanHistoryEntity> _result = new ArrayList<ScanHistoryEntity>(_cursor.getCount());
+          while (_cursor.moveToNext()) {
+            final ScanHistoryEntity _item;
+            final long _tmpId;
+            _tmpId = _cursor.getLong(_cursorIndexOfId);
+            final String _tmpBarcode;
+            _tmpBarcode = _cursor.getString(_cursorIndexOfBarcode);
+            final String _tmpName;
+            _tmpName = _cursor.getString(_cursorIndexOfName);
+            final String _tmpBrand;
+            if (_cursor.isNull(_cursorIndexOfBrand)) {
+              _tmpBrand = null;
+            } else {
+              _tmpBrand = _cursor.getString(_cursorIndexOfBrand);
+            }
+            final String _tmpImageUrl;
+            if (_cursor.isNull(_cursorIndexOfImageUrl)) {
+              _tmpImageUrl = null;
+            } else {
+              _tmpImageUrl = _cursor.getString(_cursorIndexOfImageUrl);
+            }
+            final int _tmpScore;
+            _tmpScore = _cursor.getInt(_cursorIndexOfScore);
+            final long _tmpTimestampMillis;
+            _tmpTimestampMillis = _cursor.getLong(_cursorIndexOfTimestampMillis);
+            final String _tmpProductJson;
+            _tmpProductJson = _cursor.getString(_cursorIndexOfProductJson);
+            _item = new ScanHistoryEntity(_tmpId,_tmpBarcode,_tmpName,_tmpBrand,_tmpImageUrl,_tmpScore,_tmpTimestampMillis,_tmpProductJson);
+            _result.add(_item);
+          }
+          return _result;
+        } finally {
+          _cursor.close();
+          _statement.release();
+        }
+      }
+    }, $completion);
+  }
+
+  @Override
   public Flow<List<ScanHistoryEntity>> observeRecent(final int limit) {
     final String _sql = "SELECT * FROM scan_history ORDER BY timestampMillis DESC LIMIT ?";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
@@ -277,6 +335,67 @@ public final class ScanHistoryDao_Impl implements ScanHistoryDao {
         _statement.release();
       }
     });
+  }
+
+  @Override
+  public Object getMostRecentByBarcode(final String barcode,
+      final Continuation<? super ScanHistoryEntity> $completion) {
+    final String _sql = "SELECT * FROM scan_history WHERE barcode = ? ORDER BY timestampMillis DESC LIMIT 1";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
+    int _argIndex = 1;
+    _statement.bindString(_argIndex, barcode);
+    final CancellationSignal _cancellationSignal = DBUtil.createCancellationSignal();
+    return CoroutinesRoom.execute(__db, false, _cancellationSignal, new Callable<ScanHistoryEntity>() {
+      @Override
+      @Nullable
+      public ScanHistoryEntity call() throws Exception {
+        final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+        try {
+          final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
+          final int _cursorIndexOfBarcode = CursorUtil.getColumnIndexOrThrow(_cursor, "barcode");
+          final int _cursorIndexOfName = CursorUtil.getColumnIndexOrThrow(_cursor, "name");
+          final int _cursorIndexOfBrand = CursorUtil.getColumnIndexOrThrow(_cursor, "brand");
+          final int _cursorIndexOfImageUrl = CursorUtil.getColumnIndexOrThrow(_cursor, "imageUrl");
+          final int _cursorIndexOfScore = CursorUtil.getColumnIndexOrThrow(_cursor, "score");
+          final int _cursorIndexOfTimestampMillis = CursorUtil.getColumnIndexOrThrow(_cursor, "timestampMillis");
+          final int _cursorIndexOfProductJson = CursorUtil.getColumnIndexOrThrow(_cursor, "productJson");
+          final ScanHistoryEntity _result;
+          if (_cursor.moveToFirst()) {
+            final long _tmpId;
+            _tmpId = _cursor.getLong(_cursorIndexOfId);
+            final String _tmpBarcode;
+            _tmpBarcode = _cursor.getString(_cursorIndexOfBarcode);
+            final String _tmpName;
+            _tmpName = _cursor.getString(_cursorIndexOfName);
+            final String _tmpBrand;
+            if (_cursor.isNull(_cursorIndexOfBrand)) {
+              _tmpBrand = null;
+            } else {
+              _tmpBrand = _cursor.getString(_cursorIndexOfBrand);
+            }
+            final String _tmpImageUrl;
+            if (_cursor.isNull(_cursorIndexOfImageUrl)) {
+              _tmpImageUrl = null;
+            } else {
+              _tmpImageUrl = _cursor.getString(_cursorIndexOfImageUrl);
+            }
+            final int _tmpScore;
+            _tmpScore = _cursor.getInt(_cursorIndexOfScore);
+            final long _tmpTimestampMillis;
+            _tmpTimestampMillis = _cursor.getLong(_cursorIndexOfTimestampMillis);
+            final String _tmpProductJson;
+            _tmpProductJson = _cursor.getString(_cursorIndexOfProductJson);
+            _result = new ScanHistoryEntity(_tmpId,_tmpBarcode,_tmpName,_tmpBrand,_tmpImageUrl,_tmpScore,_tmpTimestampMillis,_tmpProductJson);
+          } else {
+            _result = null;
+          }
+          return _result;
+        } finally {
+          _cursor.close();
+          _statement.release();
+        }
+      }
+    }, $completion);
   }
 
   @Override

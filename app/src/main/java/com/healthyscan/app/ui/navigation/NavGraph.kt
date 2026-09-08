@@ -29,6 +29,7 @@ import com.healthyscan.app.ui.screens.home.HomeScreen
 import com.healthyscan.app.ui.screens.home.SearchScreen
 import com.healthyscan.app.ui.screens.onboarding.OnboardingScreen
 import com.healthyscan.app.ui.screens.premium.PremiumScreen
+import com.healthyscan.app.ui.screens.preferences.EditPreferencesScreen
 import com.healthyscan.app.ui.screens.product.ProductResultScreen
 import com.healthyscan.app.ui.screens.profile.ProfileScreen
 import com.healthyscan.app.ui.screens.scan.LabelScanScreen
@@ -88,9 +89,10 @@ fun HealthyScanNavHost(
             modifier = Modifier.padding(padding)
         ) {
             composable(Screen.Onboarding.route) {
-                OnboardingScreen(onFinished = { selectedPrefs ->
+                OnboardingScreen(onFinished = { selectedPrefs, selectedAllergens ->
                     scope.launch {
                         settingsRepository.setDietaryPreferences(selectedPrefs)
+                        settingsRepository.setAvoidedAllergens(selectedAllergens)
                         settingsRepository.setOnboardingDone(true)
                     }
                     navController.navigate(Screen.Home.route) {
@@ -110,7 +112,7 @@ fun HealthyScanNavHost(
                     onSearch = { navController.navigate("search") },
                     onScanLabel = { navController.navigate("label_scan") },
                     onOpenProduct = { barcode ->
-                        navController.navigate(Screen.ProductResult.createRoute(barcode))
+                        navController.navigate(Screen.ProductResult.createRoute(barcode, record = false))
                     }
                 )
             }
@@ -130,7 +132,7 @@ fun HealthyScanNavHost(
                     currentLanguage = currentLanguage,
                     onToggleTheme = onToggleTheme,
                     onToggleLanguage = onToggleLanguage,
-                    onOpenProduct = { barcode -> navController.navigate(Screen.ProductResult.createRoute(barcode)) }
+                    onOpenProduct = { barcode -> navController.navigate(Screen.ProductResult.createRoute(barcode, record = false)) }
                 )
             }
 
@@ -141,7 +143,7 @@ fun HealthyScanNavHost(
                     currentLanguage = currentLanguage,
                     onToggleTheme = onToggleTheme,
                     onToggleLanguage = onToggleLanguage,
-                    onOpenProduct = { barcode -> navController.navigate(Screen.ProductResult.createRoute(barcode)) }
+                    onOpenProduct = { barcode -> navController.navigate(Screen.ProductResult.createRoute(barcode, record = false)) }
                 )
             }
 
@@ -153,20 +155,33 @@ fun HealthyScanNavHost(
                     currentLanguage = currentLanguage,
                     onToggleTheme = onToggleTheme,
                     onToggleLanguage = onToggleLanguage,
-                    onOpenPremium = { navController.navigate(Screen.Premium.route) }
+                    onOpenPremium = { navController.navigate(Screen.Premium.route) },
+                    onEditPreferences = { navController.navigate(Screen.EditPreferences.route) }
+                )
+            }
+
+            composable(Screen.EditPreferences.route) {
+                EditPreferencesScreen(
+                    settingsRepository = settingsRepository,
+                    onBack = { navController.popBackStack() }
                 )
             }
 
             composable(
                 route = Screen.ProductResult.route,
-                arguments = listOf(navArgument(Screen.ARG_BARCODE) { type = NavType.StringType })
+                arguments = listOf(
+                    navArgument(Screen.ARG_BARCODE) { type = NavType.StringType },
+                    navArgument(Screen.ARG_RECORD) { type = NavType.BoolType; defaultValue = true }
+                )
             ) { entry ->
                 val barcode = entry.arguments?.getString(Screen.ARG_BARCODE).orEmpty()
+                val shouldRecordScan = entry.arguments?.getBoolean(Screen.ARG_RECORD) ?: true
                 ProductResultScreen(
                     barcode = barcode,
                     productRepository = productRepository,
                     avoidedAllergens = avoidedAllergens,
                     userDietaryPreferences = dietaryPreferences,
+                    shouldRecordScan = shouldRecordScan,
                     onBack = { navController.popBackStack() },
                     onOpenAlternative = { altBarcode ->
                         navController.navigate(Screen.ProductResult.createRoute(altBarcode))

@@ -40,6 +40,24 @@
     <string name="action_continue">Continue</string>
     <string name="action_skip">Skip</string>
 
+    <!-- Onboarding: allergens/restrictions to avoid -->
+    <string name="onboarding_allergens_question">Is there something you need to avoid?</string>
+    <string name="onboarding_allergens_subtitle">We\'ll warn you if a scanned product contains it.</string>
+    <string name="allergen_milk">Milk / dairy</string>
+    <string name="allergen_gluten">Gluten</string>
+    <string name="allergen_eggs">Eggs</string>
+    <string name="allergen_peanuts">Peanuts</string>
+    <string name="allergen_tree_nuts">Tree nuts</string>
+    <string name="allergen_soy">Soy</string>
+    <string name="allergen_fish">Fish</string>
+    <string name="allergen_shellfish">Shellfish (crustaceans)</string>
+    <string name="allergen_sesame">Sesame</string>
+    <string name="allergen_mustard">Mustard</string>
+    <string name="allergen_celery">Celery</string>
+    <string name="allergen_sulphites">Sulphites</string>
+    <string name="allergen_lupin">Lupin</string>
+    <string name="allergen_molluscs">Molluscs</string>
+
     <!-- Profile goals -->
     <string name="profile_goal_question">What do you want to achieve?</string>
     <string name="goal_better_nutrition">Better nutrition overall</string>
@@ -166,7 +184,7 @@
     <string name="add_product_missing_credentials">Enter your Open Food Facts username and password first.</string>
 
     <!-- AI Label scanner -->
-    <string name="label_scan_tip">Fill the frame with the ingredients text only, flat and well lit, for best accuracy</string>
+    <string name="label_scan_tip">Fill the frame with the ingredients text, avoiding glare — works on curved jars/bottles too</string>
     <string name="label_reading">Reading the label…</string>
     <string name="label_check_calories">Calories</string>
     <string name="label_check_sugar">Sugar</string>
@@ -201,6 +219,8 @@
     <!-- Profile -->
     <string name="profile_title">My profile</string>
     <string name="profile_my_preferences">My preferences</string>
+    <string name="profile_my_allergens">What you avoid</string>
+    <string name="profile_edit_preferences">Edit preferences</string>
     <string name="profile_my_goals">My goals</string>
     <string name="profile_my_stats">My stats</string>
     <string name="profile_products_scanned">%1$d products scanned</string>
@@ -212,6 +232,16 @@
     <string name="theme_system">Follow system</string>
     <string name="theme_light">Light</string>
     <string name="theme_dark">Dark</string>
+
+    <!-- Backup / restore -->
+    <string name="profile_backup_title">Backup &amp; transfer</string>
+    <string name="profile_backup_body">Export everything (history, favorites, basket, preferences) to a JSON file, then import it on another device to bring your data across. Your Open Food Facts password is never included.</string>
+    <string name="profile_backup_export">Export to file</string>
+    <string name="profile_backup_import">Import from file</string>
+    <string name="profile_backup_export_success">Backup saved successfully.</string>
+    <string name="profile_backup_export_error">Couldn\'t save the backup file.</string>
+    <string name="profile_backup_import_success">Imported %1$d history items and %2$d favorites.</string>
+    <string name="profile_backup_import_error">Couldn\'t read this backup file. Make sure it\'s a Healthy Scan export.</string>
 
     <!-- Premium -->
     <string name="premium_title">Healthy Scan Premium</string>
@@ -240,4 +270,9 @@
     <string name="cd_app_logo">Healthy Scan logo</string>
     <string name="cd_switch_language">Switch language</string>
     <string name="cd_toggle_theme">Toggle dark / light mode</string>
+
+    <!-- Edit preferences (accessible anytime from Profile) -->
+    <string name="edit_preferences_title">Edit preferences</string>
+    <string name="edit_preferences_save">Save</string>
+    <string name="edit_preferences_saved">Saved</string>
 </resources>

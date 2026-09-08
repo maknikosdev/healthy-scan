@@ -199,6 +199,7 @@
 -keep class com.healthyscan.app.data.model.** { *; }
 -keep class com.healthyscan.app.data.remote.** { *; }
 -keep class com.healthyscan.app.data.local.** { *; }
+-keep class com.healthyscan.app.data.backup.** { *; }
 -keepattributes Signature
 -keepattributes *Annotation*
 -keepattributes EnclosingMethod

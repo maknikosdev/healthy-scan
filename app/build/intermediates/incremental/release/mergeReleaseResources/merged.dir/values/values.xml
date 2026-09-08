@@ -1975,8 +1975,22 @@
     <string name="additives_title">Additives</string>
     <string name="ai_explain_simply">🤖 Explain it simply</string>
     <string name="ai_explanation_intro">In plain terms:</string>
+    <string name="allergen_celery">Celery</string>
+    <string name="allergen_eggs">Eggs</string>
+    <string name="allergen_fish">Fish</string>
+    <string name="allergen_gluten">Gluten</string>
+    <string name="allergen_lupin">Lupin</string>
+    <string name="allergen_milk">Milk / dairy</string>
+    <string name="allergen_molluscs">Molluscs</string>
+    <string name="allergen_mustard">Mustard</string>
+    <string name="allergen_peanuts">Peanuts</string>
     <string name="allergen_personal_warning_body">This product contains an ingredient you have chosen to avoid.</string>
     <string name="allergen_personal_warning_title">PERSONAL WARNING</string>
+    <string name="allergen_sesame">Sesame</string>
+    <string name="allergen_shellfish">Shellfish (crustaceans)</string>
+    <string name="allergen_soy">Soy</string>
+    <string name="allergen_sulphites">Sulphites</string>
+    <string name="allergen_tree_nuts">Tree nuts</string>
     <string name="allergens_contains">This product contains:</string>
     <string name="allergens_title">Allergens</string>
     <string name="androidx_startup" translatable="false">androidx.startup</string>
@@ -2042,6 +2056,9 @@
     <string name="default_popup_window_title" ns1:ignore="ExtraTranslation">"Pop-Up Window"</string>
     <string name="disclaimer_not_medical">Healthy Scan does not provide a medical diagnosis and does not replace a doctor or dietitian.</string>
     <string name="dropdown_menu">"Dropdown menu"</string>
+    <string name="edit_preferences_save">Save</string>
+    <string name="edit_preferences_saved">Saved</string>
+    <string name="edit_preferences_title">Edit preferences</string>
     <string description="Screen reader announcement for when a checkbox is on error. [CHAR LIMIT=NONE]" name="error_a11y_label">
     Error: invalid
   </string>
@@ -2100,7 +2117,7 @@
     <string name="label_check_protein">Protein</string>
     <string name="label_check_sugar">Sugar</string>
     <string name="label_reading">Reading the label…</string>
-    <string name="label_scan_tip">Fill the frame with the ingredients text only, flat and well lit, for best accuracy</string>
+    <string name="label_scan_tip">Fill the frame with the ingredients text, avoiding glare — works on curved jars/bottles too</string>
     <string name="level_good">Good</string>
     <string name="level_high">High</string>
     <string name="level_low">Low</string>
@@ -2292,6 +2309,8 @@
     <string name="nutrient_saturated">Saturated</string>
     <string name="nutrient_sugars">Sugars</string>
     <string name="nutrition_facts_title">Nutrition facts</string>
+    <string name="onboarding_allergens_question">Is there something you need to avoid?</string>
+    <string name="onboarding_allergens_subtitle">We\'ll warn you if a scanned product contains it.</string>
     <string name="onboarding_intro">We want to help you make more informed choices at the supermarket.</string>
     <string name="onboarding_question">What matters most to you?</string>
     <string name="onboarding_welcome">Welcome to Healthy Scan 👋</string>
@@ -2334,9 +2353,19 @@
     <string name="product_update_body">A product you saved appears to have a different nutrition declaration now.</string>
     <string name="product_update_title">Updated product recipe</string>
     <string name="profile_avg_score">Average score: %1$d/100</string>
+    <string name="profile_backup_body">Export everything (history, favorites, basket, preferences) to a JSON file, then import it on another device to bring your data across. Your Open Food Facts password is never included.</string>
+    <string name="profile_backup_export">Export to file</string>
+    <string name="profile_backup_export_error">Couldn\'t save the backup file.</string>
+    <string name="profile_backup_export_success">Backup saved successfully.</string>
+    <string name="profile_backup_import">Import from file</string>
+    <string name="profile_backup_import_error">Couldn\'t read this backup file. Make sure it\'s a Healthy Scan export.</string>
+    <string name="profile_backup_import_success">Imported %1$d history items and %2$d favorites.</string>
+    <string name="profile_backup_title">Backup &amp; transfer</string>
     <string name="profile_better_alternatives_picked">%1$d better alternatives chosen</string>
+    <string name="profile_edit_preferences">Edit preferences</string>
     <string name="profile_goal_question">What do you want to achieve?</string>
     <string name="profile_language">Language</string>
+    <string name="profile_my_allergens">What you avoid</string>
     <string name="profile_my_goals">My goals</string>
     <string name="profile_my_preferences">My preferences</string>
     <string name="profile_my_stats">My stats</string>
