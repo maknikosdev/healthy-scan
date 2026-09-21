@@ -94622,12 +94622,10 @@ com.healthyscan.app.data.repository.ContributionResult:
 com.healthyscan.app.data.repository.ProductLookupResult$Error
 com.healthyscan.app.data.repository.ProductLookupResult$Found:
     public static final int $stable
-    static void <clinit>()
     public final com.healthyscan.app.data.model.Product getProduct()
     public static com.healthyscan.app.data.model.HealthScoreResult getScore()
 com.healthyscan.app.data.repository.ProductLookupResult$FoundBasicInfo:
     public static final int $stable
-    static void <clinit>()
     public final com.healthyscan.app.data.model.Product getProduct()
 com.healthyscan.app.data.repository.ProductLookupResult:
     static void <clinit>()

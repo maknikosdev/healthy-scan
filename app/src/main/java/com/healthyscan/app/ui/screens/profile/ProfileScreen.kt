@@ -74,7 +74,7 @@ fun ProfileScreen(
 
     LaunchedEffect(Unit) {
         totalScanned = productRepository.totalScanned()
-        avgScore = productRepository.averageScoreLast7Days()
+        avgScore = productRepository.averageScore()
     }
 
     // Lets the person choose WHERE to save the backup file (Downloads, a
@@ -117,7 +117,7 @@ fun ProfileScreen(
                         importMessage = "${result.historyCount}|${result.favoritesCount}"
                         backupStatus = BackupStatus.NONE // success message shown via importMessage below
                         totalScanned = productRepository.totalScanned()
-                        avgScore = productRepository.averageScoreLast7Days()
+                        avgScore = productRepository.averageScore()
                     }
                     is BackupImportResult.Failure -> {
                         backupStatus = BackupStatus.IMPORT_ERROR

@@ -29,6 +29,12 @@ interface ScanHistoryDao {
     @Query("SELECT AVG(score) FROM scan_history WHERE timestampMillis >= :sinceMillis")
     suspend fun averageScoreSince(sinceMillis: Long): Double?
 
+    /** All-time average — what "My stats" in Profile actually shows, so it
+     *  never silently reads as 0 just because the scans happened more than
+     *  a week ago. */
+    @Query("SELECT AVG(score) FROM scan_history")
+    suspend fun averageScoreAllTime(): Double?
+
     @Query("SELECT COUNT(*) FROM scan_history")
     suspend fun totalScanned(): Int
 

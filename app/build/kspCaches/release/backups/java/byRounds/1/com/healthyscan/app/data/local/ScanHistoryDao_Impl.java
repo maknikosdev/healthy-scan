@@ -434,6 +434,38 @@ public final class ScanHistoryDao_Impl implements ScanHistoryDao {
   }
 
   @Override
+  public Object averageScoreAllTime(final Continuation<? super Double> $completion) {
+    final String _sql = "SELECT AVG(score) FROM scan_history";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
+    final CancellationSignal _cancellationSignal = DBUtil.createCancellationSignal();
+    return CoroutinesRoom.execute(__db, false, _cancellationSignal, new Callable<Double>() {
+      @Override
+      @Nullable
+      public Double call() throws Exception {
+        final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+        try {
+          final Double _result;
+          if (_cursor.moveToFirst()) {
+            final Double _tmp;
+            if (_cursor.isNull(0)) {
+              _tmp = null;
+            } else {
+              _tmp = _cursor.getDouble(0);
+            }
+            _result = _tmp;
+          } else {
+            _result = null;
+          }
+          return _result;
+        } finally {
+          _cursor.close();
+          _statement.release();
+        }
+      }
+    }, $completion);
+  }
+
+  @Override
   public Object totalScanned(final Continuation<? super Integer> $completion) {
     final String _sql = "SELECT COUNT(*) FROM scan_history";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);

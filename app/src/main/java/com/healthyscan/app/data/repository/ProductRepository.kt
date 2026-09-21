@@ -192,10 +192,12 @@ class ProductRepository(context: Context) {
 
     suspend fun deleteHistoryItem(id: Long) = db.scanHistoryDao().deleteById(id)
 
-    suspend fun averageScoreLast7Days(): Int {
-        val since = System.currentTimeMillis() - 7L * 24 * 60 * 60 * 1000
-        return (db.scanHistoryDao().averageScoreSince(since) ?: 0.0).toInt()
-    }
+    /** All-time average Health Score across every recorded scan. Kept
+     *  simple and unfiltered on purpose — a 7-days-only window read as a
+     *  confusing "0/100" for anyone who hadn't scanned anything that week
+     *  despite having plenty of history overall. */
+    suspend fun averageScore(): Int =
+        (db.scanHistoryDao().averageScoreAllTime() ?: 0.0).toInt()
 
     // --- Favorites ---
 
